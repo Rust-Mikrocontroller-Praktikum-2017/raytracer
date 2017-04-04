@@ -1,0 +1,5 @@
+[package]
+authors = ["Philipp Krones", "Reiner Dolp"]
+name = "Rost"
+version = "0.1.0"
+license = ""
