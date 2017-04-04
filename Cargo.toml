@@ -1,6 +1,6 @@
 [package]
 authors = ["Philipp Krones", "Reiner Dolp"]
-name = "Rost"
+name = "rost"
 version = "0.0.0"
 license = "MIT/Apache-2.0"
 

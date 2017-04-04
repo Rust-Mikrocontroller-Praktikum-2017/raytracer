@@ -6,7 +6,7 @@
 #![no_main]
 
 #[macro_use]
-extern crate stm32f7_discovery as stm32f7;
+extern crate rost as stm32f7;
 
 // initialization routines for .data and .bss
 extern crate r0;
