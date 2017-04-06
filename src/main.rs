@@ -15,6 +15,7 @@ use stm32f7::{system_clock, sdram, lcd, board, embedded};
 extern crate collections;
 
 mod vector;
+mod math;
 mod camera;
 mod scene;
 mod render;

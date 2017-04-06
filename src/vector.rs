@@ -1,4 +1,4 @@
-use core::intrinsics;
+use math::sqrt;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vec3 {
@@ -27,7 +27,7 @@ impl Vec3 {
     }
 
     pub fn length(&self) -> f64 {
-        unsafe{intrinsics::sqrtf64(self.length_squared())}
+        sqrt(self.length_squared())
     }
 
     pub fn normalize(&mut self) -> &mut Self {
@@ -144,7 +144,7 @@ impl Vec2 {
     }
 
     pub fn length(&self) -> f64 {
-        unsafe{intrinsics::sqrtf64(self.length_squared())}
+        sqrt(self.length_squared())
     }
 
     pub fn normalize(&mut self) -> &mut Self {
