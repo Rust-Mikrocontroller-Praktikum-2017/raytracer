@@ -25,10 +25,10 @@ pub fn gen_primary_ray(cam :&Camera, uv :&Vec2) -> Ray {
     Ray::new(cam.pos, dir)
 }
 
-pub fn make_uv(buff :&RenderBuffer, cam :&Camera) -> Vec2 {
+pub fn make_uv(buff :&RenderBuffer, cam :&Camera, x: f32, y: f32) -> Vec2 {
     Vec2 {
-        u: ((cam.frame_left + (cam.frame_right - cam.frame_left)) as f32)  / (buff.width as f32),
-        v: ((cam.frame_left + (cam.frame_right - cam.frame_left)) as f32)  / (buff.width as f32),
+        u: cam.frame_left as f32 + ((cam.frame_right - cam.frame_left) as f32 * (x+0.5)) / (buff.width as f32),
+        v: cam.frame_top as f32 + ((cam.frame_bottom - cam.frame_top) as f32 * (y+0.5)) / (buff.height as f32),
     }
 }
 
@@ -36,12 +36,9 @@ pub fn render(lcd :&mut Lcd, buff :&RenderBuffer, cam :&Camera, scene :&Scene) {
     assert_eq!(cam.frame_left - cam.frame_right, buff.width);
     assert_eq!(cam.frame_top - cam.frame_bottom, buff.height);
 
-    let uv = make_uv(buff, cam);
-
     for x in 0..(buff.width) {
         for y in 0..(buff.height) {
-            let pixel_center = Vec2::new(x as f32 + 0.5, y as f32 + 0.5);
-            let pixel_uv = uv.mult_vec(&pixel_center);
+            let pixel_uv = make_uv(buff, cam, x as f32, y as f32);
             let primary_ray = gen_primary_ray(cam, &pixel_uv);
 
             let mut isect :Option<Intersection> = None;
@@ -56,17 +53,10 @@ pub fn render(lcd :&mut Lcd, buff :&RenderBuffer, cam :&Camera, scene :&Scene) {
                 }
             }
 
-            if let Some(actual_isect) = isect {
-                lcd.print_point_color_at(x as u16,y as u16, conv_color(&actual_isect.material));
+            match isect {
+                Some(actual_isect) => lcd.print_point_color_at(x as u16, y as u16, actual_isect.material.to_argb1555()),
+                None               => lcd.print_point_color_at(x as u16, y as u16, Color::rgb(0,0,255).to_argb1555())
             }
         }
     }
-}
-
-fn conv_color(cool :&Color) -> u16 {
-    let mut hex :u16 = 1 << 15;
-    hex = hex | (((cool.red   >> 3) as u16) << 10)
-              | (((cool.green >> 3) as u16) << 5)
-              | ((cool.blue >> 3) as u16);
-    hex
 }

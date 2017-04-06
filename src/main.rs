@@ -1,5 +1,5 @@
 #![allow(dead_code)]
-#![feature(collections, core_intrinsics)]
+#![feature(core_intrinsics)]
 
 #![no_std]
 #![no_main]
@@ -10,8 +10,6 @@ extern crate stm32f7_discovery as stm32f7;
 extern crate r0;
 
 use stm32f7::{system_clock, sdram, lcd, board, embedded};
-
-extern crate collections;
 
 mod vector;
 mod math;
@@ -110,13 +108,14 @@ fn main(hw: board::Hardware) -> ! {
     // lcd controller
     let mut lcd = lcd::init(ltdc, rcc, &mut gpio);
     lcd.clear_screen();
+    lcd.set_background_color(lcd::Color::rgb(0,0,0));
 
     let buff :&RenderBuffer = &RenderBuffer {
-        width: 450,
+        width: 480,
         height: 272
     };
 
-    let cam :&Camera = &Camera::new(&Vec3::new(-3.0,0.0,0.5), &Vec3::zero());
+    let cam :&Camera = &Camera::new(&Vec3::new(-10.0,0.0,0.5), &Vec3::zero());
 
     render(&mut lcd, buff, cam, &SCENE_SPHERE);
 

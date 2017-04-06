@@ -1,5 +1,5 @@
 use vector::Vec3;
-use math::{tan, PI};
+use math::{PI,tan};
 
 pub struct Camera {
 
@@ -26,21 +26,19 @@ const UP: Vec3 = Vec3 {x: 0.0, y: 0.0, z: 1.0};
 
 impl Camera {
     pub fn new(pos: &Vec3, target: &Vec3) -> Camera {
-        Camera::new_focal(pos, target, 64.0)
+        Camera::new_fov(pos, target, 90)
     }
-    pub fn new_focal(pos: &Vec3, target: &Vec3, focal_dist: f32) -> Camera {
-        Camera::new_focal_fov(pos, target, focal_dist, 90)
-    }
-    pub fn new_focal_fov(pos: &Vec3, target: &Vec3, focal_dist: f32, fov: u8) -> Camera {
-        let fov_rad = ((fov % 180) as f32) * PI / 180.0;
+    pub fn new_fov(pos: &Vec3, target: &Vec3, fov: u8) -> Camera {
+        let fov_rad = (fov % 180) as f32 / 180.0 * PI;
         let mut w = pos.sub(target);
         w.normalize();
         let u = UP.cross(&w);
         let v = w.cross(&u);
-        let t = (tan(fov_rad/2.0) * focal_dist) as i32;
+        let t = 136;
         let b = -t;
-        let r = 480/272 * t;
+        let r = 240;
         let l = -r;
+        let focal_dist = t as f32 / tan(fov_rad/2.0);
         Camera {
             pos: *pos,
             w: w,
