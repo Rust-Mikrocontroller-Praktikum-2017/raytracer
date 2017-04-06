@@ -2,15 +2,15 @@ use math::sqrt;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vec3 {
-    pub x: f64,
-    pub y: f64,
-    pub z: f64,
+    pub x: f32,
+    pub y: f32,
+    pub z: f32,
 }
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vec2 {
-    pub u: f64,
-    pub v: f64,
+    pub u: f32,
+    pub v: f32,
 }
 
 impl Vec3 {
@@ -22,7 +22,7 @@ impl Vec3 {
         Self::new(1.0,1.0,1.0)
     }
 
-    pub fn new(x :f64, y :f64, z :f64) -> Vec3 {
+    pub fn new(x :f32, y :f32, z :f32) -> Vec3 {
         Vec3 {
             x: x,
             y: y,
@@ -30,11 +30,11 @@ impl Vec3 {
         }
     }
 
-    pub fn length_squared(&self) -> f64 {
+    pub fn length_squared(&self) -> f32 {
         self.x * self.x + self.y * self.y + self.z * self.z
     }
 
-    pub fn length(&self) -> f64 {
+    pub fn length(&self) -> f32 {
         sqrt(self.length_squared())
     }
 
@@ -78,7 +78,7 @@ impl Vec3 {
         }
     }
 
-    pub fn mult(&self, other :f64) -> Self {
+    pub fn mult(&self, other :f32) -> Self {
         Vec3 { 
             x: self.x * other,
             y: self.y * other,
@@ -86,14 +86,14 @@ impl Vec3 {
         }
     }
 
-    pub fn inplace_mult(&mut self, other :f64) -> &mut Self {
+    pub fn inplace_mult(&mut self, other :f32) -> &mut Self {
         self.x = self.x * other;
         self.y = self.y * other;
         self.z = self.z * other;
         self
     }
 
-    pub fn dot(&self, other :&Self) -> f64 {
+    pub fn dot(&self, other :&Self) -> f32 {
         self.x*other.x + self.y*other.y + self.z*other.z
     }
 
@@ -140,18 +140,18 @@ fn can_reflect_vector() {
 }
 
 impl Vec2 {
-    pub fn new(u :f64, v :f64) -> Vec2 {
+    pub fn new(u :f32, v :f32) -> Vec2 {
         Vec2 {
             u: u,
             v: v,
         }
     }
 
-    pub fn length_squared(&self) -> f64 {
+    pub fn length_squared(&self) -> f32 {
         self.u * self.u + self.v * self.v
     }
 
-    pub fn length(&self) -> f64 {
+    pub fn length(&self) -> f32 {
         sqrt(self.length_squared())
     }
 
@@ -190,7 +190,7 @@ impl Vec2 {
         }
     }
 
-    pub fn mult(&self, other :f64) -> Self {
+    pub fn mult(&self, other :f32) -> Self {
         Vec2 { 
             u: self.u * other,
             v: self.v * other,
@@ -204,7 +204,7 @@ impl Vec2 {
         }
     }
 
-    pub fn inplace_mult(&mut self, other :f64) -> &mut Self {
+    pub fn inplace_mult(&mut self, other :f32) -> &mut Self {
         self.u = self.u * other;
         self.v = self.v * other;
         self

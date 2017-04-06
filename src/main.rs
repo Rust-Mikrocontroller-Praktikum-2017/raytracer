@@ -47,13 +47,9 @@ pub unsafe extern "C" fn reset() -> ! {
     // zeroes the .bss section
     r0::zero_bss(bss_start, bss_end);
 
-    /*
-     * // enable floating point unit
-     * unsafe {
-     *     let scb = stm32f7::cortex_m::peripheral::scb_mut();
-     *     scb.cpacr.modify(|v| v | 0b1111 << 20);
-     * }
-     */
+    // enable floating point unit
+    let scb = stm32f7::cortex_m::peripheral::scb_mut();
+    scb.cpacr.modify(|v| v | 0b1111 << 20);
 
     main(board::hw());
 }

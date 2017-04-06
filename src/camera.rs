@@ -14,7 +14,7 @@ pub struct Camera {
 
     // distance between camera and image plane
     // (focal length)
-    pub focal_dist   :f64,
+    pub focal_dist   :f32,
 
     pub frame_left   :i32,
     pub frame_right  :i32,
@@ -28,11 +28,11 @@ impl Camera {
     pub fn new(pos: &Vec3, target: &Vec3) -> Camera {
         Camera::new_focal(pos, target, 64.0)
     }
-    pub fn new_focal(pos: &Vec3, target: &Vec3, focal_dist: f64) -> Camera {
+    pub fn new_focal(pos: &Vec3, target: &Vec3, focal_dist: f32) -> Camera {
         Camera::new_focal_fov(pos, target, focal_dist, 90)
     }
-    pub fn new_focal_fov(pos: &Vec3, target: &Vec3, focal_dist: f64, fov: u8) -> Camera {
-        let fov_rad = ((fov % 180) as f64) * PI / 180.0;
+    pub fn new_focal_fov(pos: &Vec3, target: &Vec3, focal_dist: f32, fov: u8) -> Camera {
+        let fov_rad = ((fov % 180) as f32) * PI / 180.0;
         let mut w = pos.sub(target);
         w.normalize();
         let u = UP.cross(&w);

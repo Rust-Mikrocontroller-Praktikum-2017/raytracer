@@ -27,8 +27,8 @@ pub fn gen_primary_ray(cam :&Camera, uv :&Vec2) -> Ray {
 
 pub fn make_uv(buff :&RenderBuffer, cam :&Camera) -> Vec2 {
     Vec2 {
-        u: ((cam.frame_left + (cam.frame_right - cam.frame_left)) as f64)  / (buff.width as f64),
-        v: ((cam.frame_left + (cam.frame_right - cam.frame_left)) as f64)  / (buff.width as f64),
+        u: ((cam.frame_left + (cam.frame_right - cam.frame_left)) as f32)  / (buff.width as f32),
+        v: ((cam.frame_left + (cam.frame_right - cam.frame_left)) as f32)  / (buff.width as f32),
     }
 }
 
@@ -40,7 +40,7 @@ pub fn render(lcd :&mut Lcd, buff :&RenderBuffer, cam :&Camera, scene :&Scene) {
 
     for x in 0..(buff.width) {
         for y in 0..(buff.height) {
-            let pixel_center = Vec2::new(x as f64 + 0.5, y as f64 + 0.5);
+            let pixel_center = Vec2::new(x as f32 + 0.5, y as f32 + 0.5);
             let pixel_uv = uv.mult_vec(&pixel_center);
             let primary_ray = gen_primary_ray(cam, &pixel_uv);
 

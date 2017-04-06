@@ -11,19 +11,19 @@ pub trait Intersectable {
 
 #[derive(Debug, Clone, Copy)]
 pub struct Intersection {
-    pub t :f64,
+    pub t :f32,
     pub normal :Vec3,
     pub material : Color,
 }
 
 pub struct Sphere {
     pub center: Vec3,
-    pub radius: f64,
+    pub radius: f32,
     pub material: Color,
 }
 
 impl Sphere {
-    fn make_intersection(&self, t :f64, ray :&Ray) -> Intersection {
+    fn make_intersection(&self, t :f32, ray :&Ray) -> Intersection {
         let mut normal = self.center.sub(&(ray.origin.add(&(ray.direction.mult(t)))));
         normal.normalize();
 
