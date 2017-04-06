@@ -54,7 +54,7 @@ impl Vec3 {
         self
     }
 
-    pub fn sub(&self, other :&Self) -> &mut Self {
+    pub fn sub(&self, other :&Self) -> Self {
         Vec3 { 
             x: self.x - other.x,
             y: self.y - other.y,
@@ -62,7 +62,7 @@ impl Vec3 {
         }
     }
 
-    pub fn add(&self, other :&Self) -> &mut Self {
+    pub fn add(&self, other :&Self) -> Self {
         Vec3 { 
             x: self.x + other.x,
             y: self.y + other.y,
@@ -70,7 +70,7 @@ impl Vec3 {
         }
     }
 
-    pub fn mult(&self, other :f64) -> &mut Self {
+    pub fn mult(&self, other :f64) -> Self {
         Vec3 { 
             x: self.x * other,
             y: self.y * other,
@@ -89,7 +89,7 @@ impl Vec3 {
         self.x*other.x + self.y*other.y + self.z*other.z
     }
 
-    pub fn cross(&self, other :&Self) -> f64 {
+    pub fn cross(&self, other :&Self) -> Vec3 {
         Vec3 {
             x: self.y*other.z - other.z*self.y,
             y: self.z*other.x - other.x*self.z,
@@ -168,24 +168,31 @@ impl Vec2 {
         self
     }
 
-    pub fn sub(&self, other :&Self) -> &mut Self {
+    pub fn sub(&self, other :&Self) -> Self {
         Vec2 { 
             u: self.u - other.u,
             v: self.v - other.v,
         }
     }
 
-    pub fn add(&self, other :&Self) -> &mut Self {
+    pub fn add(&self, other :&Self) -> Self {
         Vec2 { 
             u: self.u + other.u,
             v: self.v + other.v,
         }
     }
 
-    pub fn mult(&self, other :f64) -> &mut Self {
+    pub fn mult(&self, other :f64) -> Self {
         Vec2 { 
             u: self.u * other,
             v: self.v * other,
+        }
+    }
+
+    pub fn mult_vec(&self, other :&Self) -> Self {
+        Vec2 { 
+            u: self.u * other.u,
+            v: self.v * other.v,
         }
     }
 

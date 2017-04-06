@@ -17,7 +17,9 @@ pub struct RenderBuffer {
 ///     - r(0) is the camera position
 ///     - r(1) is the center of the pixel
 pub fn gen_primary_ray(cam :&Camera, uv :&Vec2) -> Ray {
-    let mut dir = cam.u * uv.u + cam.v * uv.v - cam.w * cam.d;
+    let mut dir = (cam.u.mult(uv.u))
+            .add(&(cam.v.mult(uv.v)))
+            .sub(&(cam.w.mult(cam.focal_dist)));
     dir.normalize();
     Ray::new(cam.pos, dir)
 }
@@ -38,7 +40,7 @@ pub fn render(buff :&RenderBuffer, cam :&Camera, scene :&Scene) {
     for x in 0..(buff.width) {
         for y in 0..(buff.height) {
             let pixel_center = Vec2::new(x as f64 + 0.5, y as f64 + 0.5);
-            let pixel_uv = uv * pixel_center;
+            let pixel_uv = uv.mult_vec(&pixel_center);
             let primary_ray = gen_primary_ray(cam, &pixel_uv);
 
             let mut isect :&mut Option<Intersection> = &mut None;
