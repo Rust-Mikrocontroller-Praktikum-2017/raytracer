@@ -10,7 +10,7 @@ pub struct RenderBuffer {
 }
 /// Generate a ray from the eye/camera through
 /// the center of a pixel in the image buffer.
-/// 
+///
 /// Ray Equation r(t) is given by r(t) = cam.pos + t*s
 /// where
 ///     - s is the return of this function
@@ -41,12 +41,12 @@ pub fn render(buff :&RenderBuffer, cam :&Camera, scene :&Scene) {
             let pixel_uv = uv * pixel_center;
             let primary_ray = gen_primary_ray(cam, &pixel_uv);
 
-            let mut isect :Option<Intersection> = None;
+            let mut isect :&mut Option<Intersection> = &mut None;
 
             for intersectable in scene.objects.iter() {
-                let tentative_isect = primary_ray.intersect(&intersectable);
+                let tentative_isect = intersectable.intersect(&primary_ray);
 
-                if let Some(curr_isect) = tentative_isect {
+                if let &mut Some(curr_isect) = tentative_isect {
                     if curr_isect.t > 0.0 && (isect.is_none() || curr_isect.t < isect.unwrap().t) {
                         isect = tentative_isect;
                     }

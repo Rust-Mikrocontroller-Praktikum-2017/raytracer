@@ -1,4 +1,5 @@
 use ray::Ray;
+use vector::Vec3;
 
 pub trait Intersectable {
     //fn intersects_enveloping_body(&self, &Ray) -> bool;
@@ -11,12 +12,13 @@ pub struct Intersection {
     pub t :f64
 }
 
-struct Sphere {
-
+pub struct Sphere {
+    center: Vec3,
+    radius: f64
 }
 
 impl Intersectable for Sphere {
     fn intersect(&self, ray :&Ray) -> &mut Option<Intersection> {
-        None
+        &mut None
     }
 }

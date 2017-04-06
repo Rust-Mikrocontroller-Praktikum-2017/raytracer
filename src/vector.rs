@@ -1,4 +1,4 @@
-use std::ops::{Add,Div,Mul,Sub};
+use core::intrinsics;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vec3 {
@@ -13,76 +13,6 @@ pub struct Vec2 {
     pub v: f64,
 }
 
-impl Add<Vec3> for Vec3 {
-    type Output = Vec3;
-
-    fn add(self, rhs: Vec3) -> Vec3 {
-        Vec3 {
-            x: self.x + rhs.x,
-            y: self.y + rhs.y,
-            z: self.z + rhs.z,
-        }
-    }
-}
-
-impl Sub<Vec3> for Vec3 {
-    type Output = Vec3;
-
-    fn sub(self, rhs: Vec3) -> Vec3 {
-        Vec3 {
-            x: self.x - rhs.x,
-            y: self.y - rhs.y,
-            z: self.z - rhs.z,
-        }
-    }
-}
-
-impl Div for Vec3 {
-    type Output = Vec3;
-
-    fn div(self, rhs: Vec3) -> Vec3 {
-        Vec3 {
-            x: self.x / rhs.x,
-            y: self.y / rhs.y,
-            z: self.z / rhs.z,
-        }
-    }
-}
-
-impl Mul<Vec2> for Vec2 {
-    type Output = Vec2;
-
-    fn mul(self, rhs: Vec2) -> Vec2 {
-        Vec2 {
-            u: self.u * rhs.u,
-            v: self.v * rhs.v,
-        }
-    }
-}
-
-impl Mul<Vec3> for Vec3 {
-    type Output = Vec3;
-
-    fn mul(self, rhs: Vec3) -> Vec3 {
-        Vec3 {
-            x: self.x * rhs.x,
-            y: self.y * rhs.y,
-            z: self.z * rhs.z,
-        }
-    }
-}
-
-impl Mul<f64> for Vec3 {
-    type Output = Vec3;
-
-    fn mul(self, rhs: f64) -> Vec3 {
-        Vec3 {
-            x: self.x * rhs,
-            y: self.y * rhs,
-            z: self.z * rhs,
-        }
-    }
-}
 
 impl Vec2 {
     pub fn new(u :f64, v :f64) -> Vec2 {
@@ -103,11 +33,11 @@ impl Vec3 {
     }
 
     pub fn length_squared(&self) -> f64 {
-        self.x * self.x + self.y * self.y + self.z *self.z
+        self.x * self.x + self.y * self.y + self.z * self.z
     }
 
     pub fn length(&self) -> f64 {
-        self.length_squared().sqrt()
+        unsafe{intrinsics::sqrtf64(self.length_squared())}
     }
 
     pub fn normalize(&mut self) -> &mut Self {
@@ -151,7 +81,7 @@ impl Vec3 {
 
 
         //*(reflected.inplace_mult(2.0*cos).inplace_sub(self))
-        
+
         //let ret = reflected.inplace_mult(2.0*cos).inplace_sub(self);
         //*ret
 

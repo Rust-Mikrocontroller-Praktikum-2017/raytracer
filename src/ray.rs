@@ -14,8 +14,4 @@ impl Ray {
             direction: direction
         }
     }
-
-    pub fn intersect(&self, obj :&Box<Intersectable>) -> Option<Intersection> {
-        None
-    }
 }
