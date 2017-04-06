@@ -33,9 +33,16 @@ pub fn sqrt(x : f32) -> f32 {
     }
 }
 
+/// computes the remainder. Equals c % d in C or Rust.
+/// Directly using % produces a linker error on the used hardware.
+#[inline]
+pub fn rem(c :f32, m :f32) -> f32 {
+    c-(((c/m)+0.5) as u32 as f32 * m)
+}
+
 #[inline]
 pub fn modulo(x :f32, d :f32) -> f32 {
-    ((x % d) + d) % d
+    rem(rem(x,d) + d, d)
 }
 
 pub fn sin(x :f32) -> f32 {
@@ -48,7 +55,7 @@ pub fn sin(x :f32) -> f32 {
 /// Accurate to about 3.2 decimal digits. Input argument is in radians.
 pub fn cos(_x :f32) -> f32 {
 
-    let mut x = _x % TWOPI;
+    let mut x = rem(_x, TWOPI);
     if x < 0.0 { x -= x; }
 
     let quadrant = (x / HALFPI) as u32;
@@ -72,7 +79,7 @@ fn cos_32s(x :f32) -> f32 {
 }
 
 pub fn tan(_x :f32) -> f32 {
-    let x = _x % TWOPI;
+    let x = rem(_x, TWOPI);
     let octant = (x / QTRPI) as u32;
 
     match octant {
