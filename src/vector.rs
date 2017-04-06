@@ -169,21 +169,21 @@ impl Vec2 {
     }
 
     pub fn sub(&self, other :&Self) -> &mut Self {
-        Vec3 { 
+        Vec2 { 
             u: self.u - other.u,
             v: self.v - other.v,
         }
     }
 
     pub fn add(&self, other :&Self) -> &mut Self {
-        Vec3 { 
+        Vec2 { 
             u: self.u + other.u,
             v: self.v + other.v,
         }
     }
 
     pub fn mult(&self, other :f64) -> &mut Self {
-        Vec3 { 
+        Vec2 { 
             u: self.u * other,
             v: self.v * other,
         }
