@@ -3,10 +3,11 @@ use vector::Vec2;
 use scene::Scene;
 use intersection::Intersection;
 use ray::Ray;
+use lcd::{Lcd,Color};
 
 pub struct RenderBuffer {
-    width  :i32,
-    height :i32,
+    pub width  :i32,
+    pub height :i32,
 }
 /// Generate a ray from the eye/camera through
 /// the center of a pixel in the image buffer.
@@ -31,7 +32,7 @@ pub fn make_uv(buff :&RenderBuffer, cam :&Camera) -> Vec2 {
     }
 }
 
-pub fn render(buff :&RenderBuffer, cam :&Camera, scene :&Scene) {
+pub fn render(lcd :&mut Lcd, buff :&RenderBuffer, cam :&Camera, scene :&Scene) {
     assert_eq!(cam.frame_left - cam.frame_right, buff.width);
     assert_eq!(cam.frame_top - cam.frame_bottom, buff.height);
 
@@ -43,17 +44,29 @@ pub fn render(buff :&RenderBuffer, cam :&Camera, scene :&Scene) {
             let pixel_uv = uv.mult_vec(&pixel_center);
             let primary_ray = gen_primary_ray(cam, &pixel_uv);
 
-            let mut isect :&mut Option<Intersection> = &mut None;
+            let mut isect :Option<Intersection> = None;
 
             for intersectable in scene.objects.iter() {
                 let tentative_isect = intersectable.intersect(&primary_ray);
 
-                if let &mut Some(curr_isect) = tentative_isect {
+                if let Some(curr_isect) = tentative_isect {
                     if curr_isect.t > 0.0 && (isect.is_none() || curr_isect.t < isect.unwrap().t) {
                         isect = tentative_isect;
                     }
                 }
             }
+
+            if let Some(actual_isect) = isect {
+                lcd.print_point_color_at(x as u16,y as u16, conv_color(&actual_isect.material));
+            }
         }
     }
+}
+
+fn conv_color(cool :&Color) -> u16 {
+    let mut hex :u16 = 1 << 15;
+    hex = hex | (((cool.red   >> 3) as u16) << 10)
+              | (((cool.green >> 3) as u16) << 5)
+              | ((cool.blue >> 3) as u16);
+    hex
 }

@@ -14,6 +14,14 @@ pub struct Vec2 {
 }
 
 impl Vec3 {
+    pub fn zero() -> Vec3 {
+        Self::new(0.0,0.0,0.0)
+    }
+
+    pub fn one() -> Vec3 {
+        Self::new(1.0,1.0,1.0)
+    }
+
     pub fn new(x :f64, y :f64, z :f64) -> Vec3 {
         Vec3 {
             x: x,

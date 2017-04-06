@@ -22,7 +22,7 @@ pub struct Camera {
     pub frame_top    :i32,
 }
 
-const UP: Vec3 = Vec3::new(0.0,0.0,1.0);
+const UP: Vec3 = Vec3 {x: 0.0, y: 0.0, z: 1.0};
 
 impl Camera {
     pub fn new(pos: &Vec3, target: &Vec3) -> Camera {
@@ -37,7 +37,7 @@ impl Camera {
         w.normalize();
         let u = UP.cross(&w);
         let v = w.cross(&u);
-        let t = (tan((fov/2) as f64) * focal_dist) as i32;
+        let t = (tan(fov_rad/2.0) * focal_dist) as i32;
         let b = -t;
         let r = 480/272 * t;
         let l = -r;

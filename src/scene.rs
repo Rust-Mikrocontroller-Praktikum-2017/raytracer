@@ -4,12 +4,12 @@ use intersection::Sphere;
 use lcd::Color;
 
 pub struct Scene {
-    pub objects : &'static [&'static Intersectable]
+    pub objects : &'static [&'static (Intersectable+Sync)]
 }
 
-static SCENE_SPHERE: Scene = Scene {
+pub static SCENE_SPHERE: Scene = Scene {
     objects: &[
-        &Sphere { center: Vec3::new(0.0,0.0,0.0), radius: 1.0, material: Color::rgb(255,0,0) },
-        &Sphere { center: Vec3::new(1.0,1.0,1.0), radius: 1.0, material: Color::rgb(0,0,255) },
+        &Sphere { center: Vec3 {x: 0.0, y: 0.0, z: 0.0}, radius: 0.0, material: Color {red: 255, green: 0, blue: 0, alpha: 0}},
+        &Sphere { center: Vec3 {x: 1.0, y: 1.0, z: 1.0}, radius: 1.0, material: Color {red: 0, green: 255, blue: 0, alpha: 0}},
     ]
 };

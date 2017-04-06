@@ -1,5 +1,4 @@
 use vector::Vec3;
-use intersection::{Intersectable, Intersection};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Ray {

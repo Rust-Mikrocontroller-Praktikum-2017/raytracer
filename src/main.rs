@@ -11,7 +11,6 @@ extern crate r0;
 
 use stm32f7::{system_clock, sdram, lcd, board, embedded};
 
-#[macro_use]
 extern crate collections;
 
 mod vector;
@@ -23,6 +22,9 @@ mod intersection;
 mod ray;
 
 use vector::Vec3;
+use render::{render, RenderBuffer};
+use camera::Camera;
+use scene::{SCENE_SPHERE};
 
 #[no_mangle]
 pub unsafe extern "C" fn reset() -> ! {
@@ -75,7 +77,7 @@ fn main(hw: board::Hardware) -> ! {
                           gpio_k,
                           .. } = hw;
 
-    use embedded::interfaces::gpio::{self, Gpio};
+    use embedded::interfaces::gpio::{Gpio};
 
     let mut gpio = Gpio::new(gpio_a,
                              gpio_b,
@@ -113,14 +115,15 @@ fn main(hw: board::Hardware) -> ! {
     let mut lcd = lcd::init(ltdc, rcc, &mut gpio);
     lcd.clear_screen();
 
-    let mut vec = Vec3::new(-1.0,1.0,0.0);
-    vec.normalize();
-    let mut normal = Vec3::new(0.0,1.0,0.0);
-    normal.normalize();
+    let buff :&RenderBuffer = &RenderBuffer {
+        width: 450,
+        height: 272
+    };
 
-    let reflected = vec.reflect(&normal);
+    let cam :&Camera = &Camera::new(&Vec3::new(-3.0,0.0,0.5), &Vec3::zero());
+
+    render(&mut lcd, buff, cam, &SCENE_SPHERE);
 
     loop {
-
     }
 }

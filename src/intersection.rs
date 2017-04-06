@@ -5,7 +5,7 @@ use lcd::Color;
 
 pub trait Intersectable {
     //fn intersects_enveloping_body(&self, &Ray) -> bool;
-    fn intersect(&self, &Ray) -> &mut Option<Intersection>;
+    fn intersect(&self, &Ray) -> Option<Intersection>;
     //fn add_to_aabb(&self);
 }
 
@@ -23,8 +23,8 @@ pub struct Sphere {
 }
 
 impl Sphere {
-    fn makeIntersection(&self, t :f64, ray :&Ray) -> Intersection {
-        let normal = self.center.sub(&(ray.origin.add(&(ray.direction.mult(t)))));
+    fn make_intersection(&self, t :f64, ray :&Ray) -> Intersection {
+        let mut normal = self.center.sub(&(ray.origin.add(&(ray.direction.mult(t)))));
         normal.normalize();
 
         Intersection {
@@ -36,7 +36,7 @@ impl Sphere {
 }
 
 impl Intersectable for Sphere {
-    fn intersect(&self, ray :&Ray) -> &mut Option<Intersection> {
+    fn intersect(&self, ray :&Ray) -> Option<Intersection> {
         let dist = ray.origin.sub(&self.center);
         let a = ray.direction.dot(&ray.direction);
         let b = 2.0 * ray.direction.dot(&dist);
@@ -44,23 +44,21 @@ impl Intersectable for Sphere {
         let discriminant = b*b - 4.0*a*c;
 
         if discriminant < 0.0 {
-            return &mut None;
+            return None;
         } 
-
-        let mut t;
 
         let t1 = (-b - sqrt(discriminant)) / (2.0*a);
 
         if discriminant == 0.0 {
-            return &mut Some(self.makeIntersection(t1,ray));
+            return Some(self.make_intersection(t1,ray));
         }
 
         let t2 = (-b + sqrt(discriminant)) / (2.0*a);
 
         if t1 < 0.0 && t2 > 0.0 {
-            return &mut Some(self.makeIntersection(t2,ray));
+            return Some(self.make_intersection(t2,ray));
         }
 
-        return &mut Some(self.makeIntersection(t1,ray));
+        return Some(self.make_intersection(t1,ray));
     }
 }
