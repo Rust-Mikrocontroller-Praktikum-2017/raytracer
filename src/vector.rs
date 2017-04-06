@@ -1,4 +1,4 @@
-use math::sqrt;
+use math::{min, max, sqrt};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vec3 {
@@ -111,6 +111,22 @@ impl Vec3 {
 
         reflected.inplace_mult(2.0*cos).inplace_sub(self);
         reflected
+    }
+
+    pub fn min(a :&Vec3, b :&Vec3) -> Vec3 {
+        Vec3 {
+            x: min(a.x, b.x),
+            y: min(a.y, b.y),
+            z: min(a.z, b.z)
+        }
+    }
+
+    pub fn max(a :&Vec3, b :&Vec3) -> Vec3 {
+        Vec3 {
+            x: max(a.x, b.x),
+            y: max(a.y, b.y),
+            z: max(a.z, b.z)
+        }
     }
 }
 

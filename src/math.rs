@@ -8,6 +8,22 @@ pub const THREEHALFPI: f32 = 1.5 * PI;
 pub const TWOPI: f32 = 2.0 * PI;
 pub const FOUR_OVER_PI: f32 = 4.0 / PI;
 
+pub fn min(a :f32, b :f32) -> f32 {
+    if a < b {
+        a
+    } else {
+        b
+    }
+}
+
+pub fn max(a :f32, b :f32) -> f32 {
+    if a > b {
+        a
+    } else {
+        b
+    }
+}
+
 #[inline]
 pub fn sqrt(x : f32) -> f32 {
     if x < 0.0 {
