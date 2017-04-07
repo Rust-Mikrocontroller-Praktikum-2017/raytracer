@@ -2,10 +2,13 @@ use ray::Ray;
 use vector::Vec3;
 use math::sqrt;
 use lcd::Color;
+use reflectionmodel::ModifiedPhongModel;
 
-pub trait Intersectable {
+pub trait Intersectable<'a> {
     //fn intersects_enveloping_body(&self, &Ray) -> bool;
     fn intersect(&self, &Ray) -> Option<Intersection>;
+    // TODO: use generics or something to make the material swappable
+    fn get_material() -> ModifiedPhongModel<'a>;
     //fn add_to_aabb(&self);
 }
 
@@ -35,7 +38,7 @@ impl Sphere {
     }
 }
 
-impl Intersectable for Sphere {
+impl<'a> Intersectable<'a> for Sphere {
     fn intersect(&self, ray :&Ray) -> Option<Intersection> {
         let dist = ray.origin.sub(&self.center);
         let a = ray.direction.dot(&ray.direction);

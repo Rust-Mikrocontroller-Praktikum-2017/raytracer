@@ -25,6 +25,11 @@ pub fn max(a :f32, b :f32) -> f32 {
 }
 
 #[inline]
+pub fn powf(x: f64, n: f64) -> f64 {
+    unsafe { intrinsics::powf64(x, n) }
+}
+
+#[inline]
 pub fn sqrt(x : f32) -> f32 {
     if x < 0.0 {
         NAN

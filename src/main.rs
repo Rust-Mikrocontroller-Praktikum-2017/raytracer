@@ -18,6 +18,7 @@ mod scene;
 mod render;
 mod intersection;
 mod ray;
+mod reflectionmodel;
 
 use vector::Vec3;
 use render::{render, RenderBuffer};

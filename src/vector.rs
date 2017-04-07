@@ -13,6 +13,9 @@ pub struct Vec2 {
     pub v: f32,
 }
 
+pub const VEC3_ZERO :Vec3 = Vec3 { x: 0.0, y: 0.0, z: 0.0 };
+pub const VEC3_ONE  :Vec3 = Vec3 { x: 1.0, y: 1.0, z: 1.0 };
+
 impl Vec3 {
     pub fn zero() -> Vec3 {
         Self::new(0.0,0.0,0.0)
