@@ -113,6 +113,25 @@ impl Vec3 {
         reflected
     }
 
+    pub fn refract(&self, n: &Self, ior: f32, inside: bool) -> Option<Vec3> {
+        assert!(self.length_squared() - 1.0 < 1.0e-3);
+        // self*n = cos(theta_1)
+        let (ior1, ior2, self_dot_n, nn): (f32,f32,f32,Vec3) = if !inside {
+            (1.0, ior, self.dot(n), *n)
+        } else {
+            (ior, 1.0, self.dot(n), n.mult(-1.0))
+        };
+
+        let ratio = ior1 / ior2;
+        let discriminant = 1.0 - ratio*ratio * (1.0 - self_dot_n*self_dot_n);
+
+        if discriminant < 0.0 {
+            None
+        } else {
+            Some(self.mult(-ratio).add(&nn.mult(self_dot_n*ratio-sqrt(discriminant))))
+        }
+    }
+
     pub fn min(a :&Vec3, b :&Vec3) -> Vec3 {
         Vec3 {
             x: min(a.x, b.x),
