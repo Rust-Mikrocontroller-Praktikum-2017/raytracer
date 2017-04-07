@@ -1,3 +1,6 @@
+#[cfg(test)]
+use std::intrinsics;
+#[cfg(not(test))]
 use core::intrinsics;
 
 pub const NAN: f32 = 0.0_f32/0.0_f32;

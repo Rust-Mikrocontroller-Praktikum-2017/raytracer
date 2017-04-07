@@ -171,7 +171,7 @@ impl Vec3 {
 fn can_compute_cross_product() {
     let vec1 = Vec3::new(1.0,2.0,3.0);
     let vec2 = Vec3::new(-7.0,8.0,9.0);
-    let res = vec1.cross(vec2);
+    let res = vec1.cross(&vec2);
 
     assert_eq!(res.x,  -6.0);
     assert_eq!(res.y, -30.0);

@@ -37,5 +37,19 @@ pub static SCENE_SPHERE: Scene = Scene {
                 transmitting: false
             }
         },
+        &Sphere {
+            center: Vec3 {x: 5.0, y: 5.0, z: 5.0},
+            radius: 0.5,
+            material: ModifiedPhongModel {
+                emission: VEC3_ONE,
+                k_specular: VEC3_ZERO,
+                k_diffus: VEC3_ZERO,
+                k_ambient: VEC3_ZERO,
+                phong_exponent: 1.0,
+                k_t: VEC3_ZERO,
+                ior: 0.0,
+                transmitting: false
+            }
+        },
     ]
 };
