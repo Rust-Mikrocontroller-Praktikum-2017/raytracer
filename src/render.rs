@@ -33,11 +33,11 @@ pub fn make_uv(buff :&RenderBuffer, cam :&Camera, x: f32, y: f32) -> Vec2 {
 }
 
 pub fn render(lcd :&mut Lcd, buff :&RenderBuffer, cam :&Camera, scene :&Scene) {
-    assert_eq!(cam.frame_left - cam.frame_right, buff.width);
+    assert_eq!(cam.frame_right - cam.frame_left, buff.width);
     assert_eq!(cam.frame_top - cam.frame_bottom, buff.height);
 
-    for x in 0..(buff.width) {
-        for y in 0..(buff.height) {
+    for y in 0..(buff.height) {
+        for x in 0..(buff.width) {
             let pixel_uv = make_uv(buff, cam, x as f32, y as f32);
             let primary_ray = gen_primary_ray(cam, &pixel_uv);
 
