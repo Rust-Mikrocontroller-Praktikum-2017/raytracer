@@ -1,4 +1,4 @@
-use math::{min, max, sqrt};
+use math::{min, max, sqrt, EPS};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vec3 {
@@ -125,14 +125,13 @@ impl Vec3 {
 
     pub fn reflect(&self, n :&Self) -> Self {
         let cos = self.dot(n);
-        let mut reflected = n.clone();
+        let reflected = n.mult(2.0*cos).sub(self);
 
-        reflected.inplace_mult(2.0*cos).inplace_sub(self);
         reflected
     }
 
     pub fn refract(&self, n: &Self, ior: f32, inside: bool) -> Option<Vec3> {
-        assert!(self.length_squared() - 1.0 < 1.0e-3);
+        assert!(self.length_squared() - 1.0 < EPS);
         // self*n = cos(theta_1)
         let (ior1, ior2, self_dot_n, nn): (f32,f32,f32,Vec3) = if !inside {
             (1.0, ior, self.dot(n), *n)
@@ -180,6 +179,7 @@ fn can_compute_cross_product() {
 
 #[test]
 fn can_reflect_vector() {
+    use math::EPS;
     let mut vec = Vec3::new(-1.0,1.0,0.0);
     vec.normalize();
     let mut normal = Vec3::new(0.0,1.0,0.0);
@@ -187,8 +187,8 @@ fn can_reflect_vector() {
 
     let reflected = vec.reflect(&normal);
 
-    assert_eq!(reflected.x, 1.0);
-    assert_eq!(reflected.y, 1.0);
+    assert!(reflected.x - sqrt(2.0) < EPS);
+    assert!(reflected.y - sqrt(2.0) < EPS);
     assert_eq!(reflected.z, 0.0);
 }
 

@@ -3,6 +3,7 @@ use std::intrinsics;
 #[cfg(not(test))]
 use core::intrinsics;
 
+pub const EPS: f32 = 1.0e-3;
 pub const NAN: f32 = 0.0_f32/0.0_f32;
 pub const PI: f32 = 3.14159265359;
 pub const QTRPI: f32 = 0.25 * PI;
@@ -27,10 +28,10 @@ pub fn max(a :f32, b :f32) -> f32 {
     }
 }
 
-#[inline]
-pub fn powf(x: f32, n: f32) -> f32 {
-    unsafe { intrinsics::powf32(x, n) }
-}
+//#[inline]
+//pub fn powf(x: f32, n: f32) -> f32 {
+//    unsafe { intrinsics::powf32(x, n) }
+//}
 
 #[inline]
 pub fn sqrt(x : f32) -> f32 {

@@ -128,3 +128,4 @@ fn main(hw: board::Hardware) -> ! {
     loop {
     }
 }
+

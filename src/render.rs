@@ -4,7 +4,9 @@ use scene::Scene;
 use intersection::Intersection;
 use ray::Ray;
 use lcd::Lcd;
-use reflectionmodel::{Material,vec3_to_argb1555};
+use reflectionmodel::Material;
+use math::EPS;
+use lcd::Color;
 
 pub fn render(lcd :&mut Lcd, cam :&Camera, scene :&Scene) {
 
@@ -19,8 +21,6 @@ pub fn render(lcd :&mut Lcd, cam :&Camera, scene :&Scene) {
 }
 
 fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene) -> Vec3 {
-    let mut color = Vec3::zero();
-
     let mut isect :Option<Intersection> = None;
 
     for intersectable in scene.objects.iter() {
@@ -33,33 +33,42 @@ fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene) -> Vec3 {
         }
     }
 
+    let mut color = Vec3::zero();
     if let Some(actual_isect) = isect {
         let material = actual_isect.material;
         color = color.add(&material.evaluate_color(cam, &actual_isect, scene));
 
         let new_origin = actual_isect.get_position();
         if material.is_specular() {
-            let new_dir = ray.direction.reflect(&actual_isect.normal);
-            let new_ray = Ray::new(new_origin, new_dir);
-            color = actual_isect.material.k_specular.mult_vec(&color.add(&raytrace(&new_ray,cam,scene)));
+            let mut new_dir = ray.direction.reflect(&actual_isect.normal);
+            new_dir.normalize();
+            let new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)), new_dir);
+            color.inplace_add(&actual_isect.material.k_specular.mult_vec(&raytrace(&new_ray,cam,scene)));
         }
         if material.transmitting {
             let refracted = ray.direction.refract(&actual_isect.normal, material.ior, false);
             match refracted {
-                Some(new_dir) => {
-                    let new_ray = Ray::new(new_origin,new_dir);
-                    color = color.add(&actual_isect.material.k_t.mult_vec(&raytrace(&new_ray,cam,scene)))
+                Some(mut new_dir) => {
+                    let new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)),new_dir);
+                    new_dir.normalize();
+                    color.inplace_add(&actual_isect.material.k_t.mult_vec(&raytrace(&new_ray,cam,scene)));
                 },
                 None          => {
-                    let new_dir = ray.direction.reflect(&actual_isect.normal);
-                    let new_ray = Ray::new(new_origin,new_dir);
-                    color = color.add(&actual_isect.material.k_specular.mult_vec(&raytrace(&new_ray,cam,scene)))
+                    let mut new_dir = ray.direction.reflect(&actual_isect.normal);
+                    new_dir.normalize();
+                    let new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)),new_dir);
+                    color.inplace_add(&actual_isect.material.k_specular.mult_vec(&raytrace(&new_ray,cam,scene)));
                 }
             }
         }
-
-        color
-    } else {
-        Vec3::new(0.0,0.0,1.0)
     }
+    color
+}
+
+pub fn vec3_to_argb1555(vec :&Vec3) -> u16 {
+    Color::rgb(
+        (vec.x*255.0 + 0.5) as u8,
+        (vec.y*255.0 + 0.5) as u8,
+        (vec.z*255.0 + 0.5) as u8,
+    ).to_argb1555()
 }

@@ -3,7 +3,7 @@ use vector::Vec3;
 use camera::Camera;
 use intersection::Intersection;
 use scene::Scene;
-use lcd::Color;
+//use lcd::Color;
 
 pub trait Material {
     /// True if this material is emitting light
@@ -13,13 +13,6 @@ pub trait Material {
     fn evaluate_color(&self, cam :&Camera, isect :&Intersection, scene :&Scene) -> Vec3;
 }
 
-pub fn vec3_to_argb1555(vec :&Vec3) -> u16 {
-    Color::rgb(
-        (vec.x*255.0 + 0.5) as u8,
-        (vec.y*255.0 + 0.5) as u8,
-        (vec.z*255.0 + 0.5) as u8,
-    ).to_argb1555()
-}
 
 #[derive(Debug, Clone, Copy)]
 pub struct ModifiedPhongModel {

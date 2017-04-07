@@ -7,3 +7,8 @@ fn main() {
 
 mod math;
 mod vector;
+mod intersection;
+mod ray;
+mod reflectionmodel;
+mod camera;
+mod scene;

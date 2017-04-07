@@ -15,7 +15,7 @@ pub static SCENE_SPHERE: Scene = Scene {
             material: ModifiedPhongModel {
                 emission: VEC3_ZERO,
                 k_specular: VEC3_ONE,
-                k_diffus: Vec3 { x: 0.50, y: 0.50, z: 0.00 },
+                k_diffus: Vec3 { x: 1.00, y: 1.00, z: 0.00 },
                 k_ambient: Vec3 { x: 0.25, y: 0.25, z: 0.00 },
                 phong_exponent: 1.0,
                 k_t: VEC3_ZERO,
@@ -29,7 +29,7 @@ pub static SCENE_SPHERE: Scene = Scene {
             material: ModifiedPhongModel {
                 emission: VEC3_ZERO,
                 k_specular: VEC3_ONE,
-                k_diffus: Vec3 { x: 0.00, y: 0.00, z: 0.50 },
+                k_diffus: Vec3 { x: 0.00, y: 0.00, z: 1.00 },
                 k_ambient: Vec3 { x: 0.00, y: 0.00, z: 0.25 },
                 phong_exponent: 1.0,
                 k_t: VEC3_ZERO,
