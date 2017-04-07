@@ -25,8 +25,8 @@ pub fn max(a :f32, b :f32) -> f32 {
 }
 
 #[inline]
-pub fn powf(x: f64, n: f64) -> f64 {
-    unsafe { intrinsics::powf64(x, n) }
+pub fn powf(x: f32, n: f32) -> f32 {
+    unsafe { intrinsics::powf32(x, n) }
 }
 
 #[inline]

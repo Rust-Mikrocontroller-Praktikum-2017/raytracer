@@ -4,25 +4,34 @@ use math::sqrt;
 use lcd::Color;
 use reflectionmodel::ModifiedPhongModel;
 
-pub trait Intersectable<'a> {
+pub trait Intersectable {
     //fn intersects_enveloping_body(&self, &Ray) -> bool;
     fn intersect(&self, &Ray) -> Option<Intersection>;
     // TODO: use generics or something to make the material swappable
-    fn get_material() -> ModifiedPhongModel<'a>;
+    fn get_material(&self) -> &ModifiedPhongModel;
     //fn add_to_aabb(&self);
+    fn reduce_to_point(&self) -> &Vec3;
 }
 
+
 #[derive(Debug, Clone, Copy)]
-pub struct Intersection {
+pub struct Intersection<'a> {
     pub t :f32,
     pub normal :Vec3,
-    pub material : Color,
+    pub material : &'a ModifiedPhongModel,
+    pub ray : Ray
+}
+
+impl<'a> Intersection<'a> {
+    pub fn get_position(&self) -> Vec3 {
+        *self.ray.direction.mult(self.t).inplace_add(&self.ray.origin)
+    }
 }
 
 pub struct Sphere {
     pub center: Vec3,
     pub radius: f32,
-    pub material: Color,
+    pub material: ModifiedPhongModel,
 }
 
 impl Sphere {
@@ -33,12 +42,14 @@ impl Sphere {
         Intersection {
             t: t,
             normal: normal,
-            material: self.material
+            material: &self.material,
+            ray: ray.clone()
         }
     }
 }
 
-impl<'a> Intersectable<'a> for Sphere {
+impl Intersectable for Sphere {
+
     fn intersect(&self, ray :&Ray) -> Option<Intersection> {
         let dist = ray.origin.sub(&self.center);
         let a = ray.direction.dot(&ray.direction);
@@ -63,5 +74,13 @@ impl<'a> Intersectable<'a> for Sphere {
         }
 
         return Some(self.make_intersection(t1,ray));
+    }
+
+    fn get_material(&self) -> &ModifiedPhongModel {
+        &self.material
+    }
+
+    fn reduce_to_point(&self) -> &Vec3 {
+        &self.center
     }
 }

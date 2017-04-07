@@ -1,9 +1,10 @@
 use camera::Camera;
-use vector::Vec2;
+use vector::{Vec3, Vec2};
 use scene::Scene;
 use intersection::Intersection;
 use ray::Ray;
 use lcd::{Lcd,Color};
+use reflectionmodel::vec3_to_argb1555;
 
 pub struct RenderBuffer {
     pub width  :i32,
@@ -53,10 +54,11 @@ pub fn render(lcd :&mut Lcd, buff :&RenderBuffer, cam :&Camera, scene :&Scene) {
                 }
             }
 
-            match isect {
-                Some(actual_isect) => lcd.print_point_color_at(x as u16, y as u16, actual_isect.material.to_argb1555()),
-                None               => lcd.print_point_color_at(x as u16, y as u16, Color::rgb(0,0,255).to_argb1555())
-            }
+            //match isect {
+                //// TODO(phil): whitted style ray trace
+                //Some(actual_isect) => lcd.print_point_color_at(x as u16, y as u16, vec3_to_argb1555(actual_isect.material)),
+                //None               => lcd.print_point_color_at(x as u16, y as u16, vec3_to_argb1555(&Vec3::new(0.0,0.0,1.0)))
+            //}
         }
     }
 }

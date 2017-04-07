@@ -89,6 +89,21 @@ impl Vec3 {
         }
     }
 
+    pub fn mult_vec(&self, other :&Vec3) -> Self {
+        Vec3 {
+            x: self.x * other.x,
+            y: self.y * other.y,
+            z: self.z * other.z,
+        }
+    }
+
+    pub fn inplace_mult_vec(&mut self, other :&Vec3) -> &mut Self {
+        self.x = self.x * other.x;
+        self.y = self.y * other.y;
+        self.z = self.z * other.z;
+        self
+    }
+
     pub fn inplace_mult(&mut self, other :f32) -> &mut Self {
         self.x = self.x * other;
         self.y = self.y * other;
