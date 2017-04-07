@@ -21,8 +21,8 @@ mod ray;
 mod reflectionmodel;
 
 use vector::Vec3;
-use render::{render, RenderBuffer};
-use camera::Camera;
+use render::render;
+use camera::{Film, PerspectiveCamera};
 use scene::{SCENE_SPHERE};
 
 #[no_mangle]
@@ -111,14 +111,19 @@ fn main(hw: board::Hardware) -> ! {
     lcd.clear_screen();
     lcd.set_background_color(lcd::Color::rgb(0,0,0));
 
-    let buff :&RenderBuffer = &RenderBuffer {
-        width: 480,
-        height: 272
+    let film :Film = Film {
+        x_resolution: 480,
+        y_resolution: 272,
+        color: Vec3::new(0.0,0.4,0.8)
     };
 
-    let cam :&Camera = &Camera::new(&Vec3::new(-10.0,0.0,0.5), &Vec3::zero());
+    let cam = PerspectiveCamera::new(
+        Vec3::new(-10.0,0.0,0.5),
+        Vec3::zero(),
+        film
+    );
 
-    render(&mut lcd, buff, cam, &SCENE_SPHERE);
+    render(&mut lcd, &cam, &SCENE_SPHERE);
 
     loop {
     }

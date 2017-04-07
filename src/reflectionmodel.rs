@@ -70,7 +70,7 @@ impl Material for ModifiedPhongModel {
 
                     let mut r = isect.normal.mult(2.0 * n_dot_l);
                     r.inplace_sub(&l);
-                    let mut v = cam.pos.sub(&isect_pos);
+                    let mut v = cam.get_position().sub(&isect_pos);
                     v.normalize();
 
                     let r_dot_v = r.dot(&v);

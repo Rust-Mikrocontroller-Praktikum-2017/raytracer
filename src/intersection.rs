@@ -1,7 +1,6 @@
 use ray::Ray;
 use vector::Vec3;
 use math::sqrt;
-use lcd::Color;
 use reflectionmodel::ModifiedPhongModel;
 
 pub trait Intersectable {
