@@ -1,5 +1,5 @@
 use vector::Vec3;
-use math::powf;
+//use math::powf;
 use camera::Camera;
 use intersection::Intersection;
 use scene::Scene;
@@ -10,7 +10,7 @@ pub trait Material {
     fn is_emitting(&self) -> bool;
     fn is_specular(&self) -> bool;
     fn is_transparent(&self) -> bool;
-    fn evaluate_color(&self, cam :&Camera, isect :&Intersection, scene :&Scene) -> Vec3; 
+    fn evaluate_color(&self, cam :&Camera, isect :&Intersection, scene :&Scene) -> Vec3;
 }
 
 pub fn vec3_to_argb1555(vec :&Vec3) -> u16 {
@@ -76,7 +76,7 @@ impl Material for ModifiedPhongModel {
                     let r_dot_v = r.dot(&v);
 
                     if r_dot_v > 0.0 {
-                        intensity.inplace_add(&self.k_specular).inplace_mult_vec(&light.emission).inplace_mult(powf(r_dot_v, self.phong_exponent));
+                        intensity.inplace_add(&self.k_specular).inplace_mult_vec(&light.emission).inplace_mult(r_dot_v);
                     }
                 }
             }

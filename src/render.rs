@@ -1,10 +1,10 @@
 use camera::Camera;
-use vector::{Vec3, Vec2};
+use vector::{Vec3,Vec2};
 use scene::Scene;
 use intersection::Intersection;
 use ray::Ray;
-use lcd::{Lcd,Color};
-use reflectionmodel::vec3_to_argb1555;
+use lcd::Lcd;
+use reflectionmodel::{Material,vec3_to_argb1555};
 
 pub struct RenderBuffer {
     pub width  :i32,
@@ -42,23 +42,54 @@ pub fn render(lcd :&mut Lcd, buff :&RenderBuffer, cam :&Camera, scene :&Scene) {
             let pixel_uv = make_uv(buff, cam, x as f32, y as f32);
             let primary_ray = gen_primary_ray(cam, &pixel_uv);
 
-            let mut isect :Option<Intersection> = None;
+            let color = raytrace(&primary_ray, cam, scene);
+            lcd.print_point_color_at(x as u16,y as u16,vec3_to_argb1555(&color));
+        }
+    }
+}
 
-            for intersectable in scene.objects.iter() {
-                let tentative_isect = intersectable.intersect(&primary_ray);
+fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene) -> Vec3 {
+    let mut color = Vec3::zero();
 
-                if let Some(curr_isect) = tentative_isect {
-                    if curr_isect.t > 0.0 && (isect.is_none() || curr_isect.t < isect.unwrap().t) {
-                        isect = tentative_isect;
-                    }
+    let mut isect :Option<Intersection> = None;
+
+    for intersectable in scene.objects.iter() {
+        let tentative_isect = intersectable.intersect(&ray);
+
+        if let Some(curr_isect) = tentative_isect {
+            if curr_isect.t > 0.0 && (isect.is_none() || curr_isect.t < isect.unwrap().t) {
+                isect = tentative_isect;
+            }
+        }
+    }
+
+    if let Some(actual_isect) = isect {
+        let material = actual_isect.material;
+        color = color.add(&material.evaluate_color(cam, &actual_isect, scene));
+
+        let new_origin = actual_isect.get_position();
+        if material.is_specular() {
+            let new_dir = ray.direction.reflect(&actual_isect.normal);
+            let new_ray = Ray::new(new_origin, new_dir);
+            color = actual_isect.material.k_specular.mult_vec(&color.add(&raytrace(&new_ray,cam,scene)));
+        }
+        if material.transmitting {
+            let refracted = ray.direction.refract(&actual_isect.normal, material.ior, false);
+            match refracted {
+                Some(new_dir) => {
+                    let new_ray = Ray::new(new_origin,new_dir);
+                    color = color.add(&actual_isect.material.k_t.mult_vec(&raytrace(&new_ray,cam,scene)))
+                },
+                None          => {
+                    let new_dir = ray.direction.reflect(&actual_isect.normal);
+                    let new_ray = Ray::new(new_origin,new_dir);
+                    color = color.add(&actual_isect.material.k_specular.mult_vec(&raytrace(&new_ray,cam,scene)))
                 }
             }
-
-            //match isect {
-                //// TODO(phil): whitted style ray trace
-                //Some(actual_isect) => lcd.print_point_color_at(x as u16, y as u16, vec3_to_argb1555(actual_isect.material)),
-                //None               => lcd.print_point_color_at(x as u16, y as u16, vec3_to_argb1555(&Vec3::new(0.0,0.0,1.0)))
-            //}
         }
+
+        color
+    } else {
+        Vec3::new(0.0,0.0,1.0)
     }
 }
