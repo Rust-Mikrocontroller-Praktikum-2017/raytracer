@@ -29,7 +29,8 @@ mod displays;
 use vector::Vec3;
 use render::render;
 use camera::Film;
-use cameras::perspective::PerspectiveCamera;
+// use cameras::perspective::PerspectiveCamera;
+use cameras::orthographic::OrthographicCamera;
 use scenes::spheres::SCENE_SPHERE;
 use displays::stm32f7::Lcd as LcdDisplay;
 
@@ -125,8 +126,16 @@ fn main(hw: board::Hardware) -> ! {
         color: Vec3::new(0.0,0.4,0.8)
     };
 
-    let cam = PerspectiveCamera::new(
-        Vec3::new(-4.0,0.0,0.5),
+    /*
+     * let cam = PerspectiveCamera::new(
+     *     Vec3::new(-4.0,0.0,0.5),
+     *     Vec3::zero(),
+     *     film
+     * );
+     */
+
+    let cam = OrthographicCamera::new(
+        Vec3::new(-154.0,0.0,0.5),
         Vec3::zero(),
         film
     );
