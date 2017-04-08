@@ -24,8 +24,8 @@ pub struct OrthographicCamera {
 
 impl Camera for OrthographicCamera {
     fn gen_primary_ray(&self, x :f32, y :f32) -> Ray {
-        let uv = make_uv(&self.film, (self.t,self.r,self.b,self.l), x, y);
-        let origin = self.u.mult(uv.u).add(&(self.v.mult(uv.v)));
+        let uv = make_uv(&self.film, (self.t,self.r,self.b,self.l), x+0.5, y+0.5);
+        let origin = self.pos.add(&self.u.mult(uv.u).add(&(self.v.mult(uv.v))));
         Ray::new(origin, self.w.mult(-1.0))
     }
 

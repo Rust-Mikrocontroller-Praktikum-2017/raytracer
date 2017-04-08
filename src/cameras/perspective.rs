@@ -62,6 +62,7 @@ impl PerspectiveCamera {
         cam.fov = fov;
         cam.focal_length = cam.t as f32 / tan(fov_rad/2.0);
 
+        cam.pos.inplace_add(&cam.w.mult(cam.focal_length));
         cam
     }
 }
@@ -69,7 +70,7 @@ impl PerspectiveCamera {
 impl Camera for PerspectiveCamera {
 
     fn gen_primary_ray(&self, x :f32, y :f32) -> Ray {
-        let uv = make_uv(&self.film, (self.t,self.r,self.b,self.l), x, y);
+        let uv = make_uv(&self.film, (self.t,self.r,self.b,self.l), x+0.5, y+0.5);
         let mut dir = (self.u.mult(uv.u))
                 .add(&(self.v.mult(uv.v)))
                 .sub(&(self.w.mult(self.focal_length)));
