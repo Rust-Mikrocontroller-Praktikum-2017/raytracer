@@ -2,10 +2,11 @@
 use std::intrinsics;
 #[cfg(not(test))]
 use core::intrinsics;
+use core::f32;
 
 pub const EPS: f32 = 1.0e-3;
-pub const NAN: f32 = 0.0_f32/0.0_f32;
-pub const PI: f32 = 3.14159265359;
+pub const NAN: f32 = f32::NAN;
+pub const PI: f32 = f32::consts::PI;
 pub const QTRPI: f32 = 0.25 * PI;
 pub const HALFPI: f32 = 0.5 * PI;
 pub const THREEHALFPI: f32 = 1.5 * PI;
@@ -70,10 +71,10 @@ pub fn cos(_x :f32) -> f32 {
     let quadrant = (x / HALFPI) as u32;
 
     match quadrant {
-        0 => return  cos_32s(x),
-        1 => return -cos_32s(PI-x),
-        2 => return -cos_32s(x-PI),
-        3 => return  cos_32s(TWOPI-x),
+        0 =>  cos_32s(x),
+        1 => -cos_32s(PI-x),
+        2 => -cos_32s(x-PI),
+        3 =>  cos_32s(TWOPI-x),
         _ => unreachable!()
     }
 }
@@ -92,14 +93,14 @@ pub fn tan(_x :f32) -> f32 {
     let octant = (x / QTRPI) as u32;
 
     match octant {
-        0 => return      tan_32s(x*FOUR_OVER_PI),
-        1 => return  1.0/tan_32s((HALFPI-x)*FOUR_OVER_PI),
-        2 => return -1.0/tan_32s((x-HALFPI)*FOUR_OVER_PI),
-        3 => return     -tan_32s((PI-x)*FOUR_OVER_PI),
-        4 => return      tan_32s((x-PI)*FOUR_OVER_PI),
-        5 => return  1.0/tan_32s((THREEHALFPI-x)*FOUR_OVER_PI),
-        6 => return -1.0/tan_32s((x-THREEHALFPI)*FOUR_OVER_PI),
-        7 => return     -tan_32s((TWOPI-x)*FOUR_OVER_PI),
+        0 =>      tan_32s(x*FOUR_OVER_PI),
+        1 =>  1.0/tan_32s((HALFPI-x)*FOUR_OVER_PI),
+        2 => -1.0/tan_32s((x-HALFPI)*FOUR_OVER_PI),
+        3 =>     -tan_32s((PI-x)*FOUR_OVER_PI),
+        4 =>      tan_32s((x-PI)*FOUR_OVER_PI),
+        5 =>  1.0/tan_32s((THREEHALFPI-x)*FOUR_OVER_PI),
+        6 => -1.0/tan_32s((x-THREEHALFPI)*FOUR_OVER_PI),
+        7 =>     -tan_32s((TWOPI-x)*FOUR_OVER_PI),
         _ => unreachable!()
     }
 }

@@ -15,6 +15,7 @@ mod vector;
 mod math;
 mod camera;
 mod scene;
+mod scenes;
 mod render;
 mod intersection;
 mod ray;
@@ -23,7 +24,7 @@ mod reflectionmodel;
 use vector::Vec3;
 use render::render;
 use camera::{Film, PerspectiveCamera};
-use scene::{SCENE_SPHERE};
+use scenes::spheres::SCENE_SPHERE;
 
 #[no_mangle]
 pub unsafe extern "C" fn reset() -> ! {
@@ -118,7 +119,7 @@ fn main(hw: board::Hardware) -> ! {
     };
 
     let cam = PerspectiveCamera::new(
-        Vec3::new(-10.0,0.0,0.5),
+        Vec3::new(-4.0,0.0,0.5),
         Vec3::zero(),
         film
     );

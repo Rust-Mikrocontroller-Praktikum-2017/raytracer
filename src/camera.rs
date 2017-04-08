@@ -99,10 +99,10 @@ impl OrthographicCamera {
         cam.w = coord.2;
 
         let image_plane = make_image_plane(&cam);
-        cam.l = image_plane.0;
+        cam.t = image_plane.0;
         cam.r = image_plane.1;
-        cam.t = image_plane.2;
-        cam.b = image_plane.3;
+        cam.b = image_plane.2;
+        cam.l = image_plane.3;
 
         cam
     }
@@ -123,7 +123,7 @@ fn make_image_plane(cam :&Camera) -> (i32, i32, i32, i32) {
         let b = -t;
         let r = (cam.get_film().x_resolution / 2) as i32;
         let l = -r;
-        (t, b, r, l)
+        (t, r, b, l)
 }
 
 pub fn make_uv(film :&Film, t:i32,r:i32,b:i32,l:i32, x: f32, y: f32) -> Vec2 {
@@ -156,15 +156,15 @@ impl PerspectiveCamera {
         cam.w = coord.2;
 
         let image_plane = make_image_plane(&cam);
-        cam.l = image_plane.0;
+        cam.t = image_plane.0;
         cam.r = image_plane.1;
-        cam.t = image_plane.2;
-        cam.b = image_plane.3;
+        cam.b = image_plane.2;
+        cam.l = image_plane.3;
 
         let fov_rad = (fov % 180) as f32 / 180.0 * PI;
         cam.fov = fov;
         cam.focal_length = cam.t as f32 / tan(fov_rad/2.0);
-        
+
         cam
     }
 }

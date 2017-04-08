@@ -24,7 +24,7 @@ fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene) -> Vec3 {
     let mut isect :Option<Intersection> = None;
 
     for intersectable in scene.objects.iter() {
-        let tentative_isect = intersectable.intersect(&ray);
+        let tentative_isect = intersectable.intersect(ray);
 
         if let Some(curr_isect) = tentative_isect {
             if curr_isect.t > 0.0 && (isect.is_none() || curr_isect.t < isect.unwrap().t) {
@@ -33,8 +33,8 @@ fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene) -> Vec3 {
         }
     }
 
-    let mut color = Vec3::zero();
     if let Some(actual_isect) = isect {
+        let mut color = Vec3::zero();
         let material = actual_isect.material;
         color = color.add(&material.evaluate_color(cam, &actual_isect, scene));
 
@@ -61,8 +61,11 @@ fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene) -> Vec3 {
                 }
             }
         }
+
+        color
+    } else {
+        cam.get_film().color
     }
-    color
 }
 
 pub fn vec3_to_argb1555(vec :&Vec3) -> u16 {

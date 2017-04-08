@@ -44,24 +44,24 @@ impl Vec3 {
     pub fn normalize(&mut self) -> &mut Self {
         let length = self.length();
 
-        self.x = self.x / length;
-        self.y = self.y / length;
-        self.z = self.z / length;
+        self.x /= length;
+        self.y /= length;
+        self.z /= length;
 
         self
     }
 
     pub fn inplace_add(&mut self, other :&Self) -> &mut Self {
-        self.x = self.x + other.x;
-        self.y = self.y + other.y;
-        self.z = self.z + other.z;
+        self.x += other.x;
+        self.y += other.y;
+        self.z += other.z;
         self
     }
 
     pub fn inplace_sub(&mut self, other :&Self) -> &mut Self {
-        self.x = self.x - other.x;
-        self.y = self.y - other.y;
-        self.z = self.z - other.z;
+        self.x -= other.x;
+        self.y -= other.y;
+        self.z -= other.z;
         self
     }
 
@@ -98,16 +98,16 @@ impl Vec3 {
     }
 
     pub fn inplace_mult_vec(&mut self, other :&Vec3) -> &mut Self {
-        self.x = self.x * other.x;
-        self.y = self.y * other.y;
-        self.z = self.z * other.z;
+        self.x *= other.x;
+        self.y *= other.y;
+        self.z *= other.z;
         self
     }
 
     pub fn inplace_mult(&mut self, other :f32) -> &mut Self {
-        self.x = self.x * other;
-        self.y = self.y * other;
-        self.z = self.z * other;
+        self.x *= other;
+        self.y *= other;
+        self.z *= other;
         self
     }
 
@@ -125,9 +125,7 @@ impl Vec3 {
 
     pub fn reflect(&self, n :&Self) -> Self {
         let cos = self.dot(n);
-        let reflected = n.mult(2.0*cos).sub(self);
-
-        reflected
+        n.mult(2.0*cos).sub(self)
     }
 
     pub fn refract(&self, n: &Self, ior: f32, inside: bool) -> Option<Vec3> {
@@ -211,21 +209,21 @@ impl Vec2 {
     pub fn normalize(&mut self) -> &mut Self {
         let length = self.length();
 
-        self.u = self.u / length;
-        self.v = self.v / length;
+        self.u /= length;
+        self.v /= length;
 
         self
     }
 
     pub fn inplace_add(&mut self, other :&Self) -> &mut Self {
-        self.u = self.u + other.u;
-        self.v = self.v + other.v;
+        self.u += other.u;
+        self.v += other.v;
         self
     }
 
     pub fn inplace_sub(&mut self, other :&Self) -> &mut Self {
-        self.u = self.u - other.u;
-        self.v = self.v - other.v;
+        self.u -= other.u;
+        self.v -= other.v;
         self
     }
 
@@ -258,8 +256,8 @@ impl Vec2 {
     }
 
     pub fn inplace_mult(&mut self, other :f32) -> &mut Self {
-        self.u = self.u * other;
-        self.v = self.v * other;
+        self.u *= other;
+        self.v *= other;
         self
     }
 }

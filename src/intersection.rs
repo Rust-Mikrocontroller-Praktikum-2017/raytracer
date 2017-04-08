@@ -72,7 +72,7 @@ impl Intersectable for Sphere {
             return Some(self.make_intersection(t2,ray));
         }
 
-        return Some(self.make_intersection(t1,ray));
+        Some(self.make_intersection(t1,ray))
     }
 
     fn get_material(&self) -> &ModifiedPhongModel {
