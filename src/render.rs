@@ -13,13 +13,16 @@ pub fn render(display :&mut Display, cam :&Camera, scene :&Scene) {
         for x in 0..(cam.get_film().x_resolution) {
             let primary_ray = cam.gen_primary_ray(x as f32 + 0.5, y as f32 + 0.5);
 
-            let color = raytrace(&primary_ray, cam, scene);
+            let color = raytrace(&primary_ray, cam, scene, 0);
             display.set_pixel(x as u16,y as u16, &color);
         }
     }
 }
 
-fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene) -> Vec3 {
+fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene, depth: u8) -> Vec3 {
+    if depth > 5 {
+        return cam.get_film().color;
+    }
     let mut isect :Option<Intersection> = None;
 
     for intersectable in scene.objects.iter() {
@@ -42,7 +45,7 @@ fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene) -> Vec3 {
             let mut new_dir = ray.direction.reflect(&actual_isect.normal);
             new_dir.normalize();
             let new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)), new_dir);
-            color.inplace_add(&actual_isect.material.k_specular.mult_vec(&raytrace(&new_ray,cam,scene)));
+            color.inplace_add(&actual_isect.material.k_specular.mult_vec(&raytrace(&new_ray,cam,scene,depth+1)));
         }
         if material.transmitting {
             let refracted = ray.direction.refract(&actual_isect.normal, material.ior, false);
@@ -50,13 +53,13 @@ fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene) -> Vec3 {
                 Some(mut new_dir) => {
                     let new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)),new_dir);
                     new_dir.normalize();
-                    color.inplace_add(&actual_isect.material.k_t.mult_vec(&raytrace(&new_ray,cam,scene)));
+                    color.inplace_add(&actual_isect.material.k_t.mult_vec(&raytrace(&new_ray,cam,scene,depth+1)));
                 },
                 None          => {
                     let mut new_dir = ray.direction.reflect(&actual_isect.normal);
                     new_dir.normalize();
                     let new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)),new_dir);
-                    color.inplace_add(&actual_isect.material.k_specular.mult_vec(&raytrace(&new_ray,cam,scene)));
+                    color.inplace_add(&actual_isect.material.k_specular.mult_vec(&raytrace(&new_ray,cam,scene,depth+1)));
                 }
             }
         }

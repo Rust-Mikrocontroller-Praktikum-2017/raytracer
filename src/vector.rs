@@ -45,6 +45,10 @@ impl Vec3 {
         sqrt(self.length_squared())
     }
 
+    pub fn max_norm(&self) -> f32 {
+        max(max(self.x, self.y), self.z)
+    }
+
     pub fn normalize(&mut self) -> &mut Self {
         let length = self.length();
 
@@ -93,6 +97,14 @@ impl Vec3 {
         }
     }
 
+    pub fn div(&self, other: f32) -> Self {
+        Vec3 {
+            x: self.x / other,
+            y: self.y / other,
+            z: self.z / other,
+        }
+    }
+
     pub fn mult_vec(&self, other :&Vec3) -> Self {
         Vec3 {
             x: self.x * other.x,
@@ -129,7 +141,7 @@ impl Vec3 {
 
     pub fn reflect(&self, n :&Self) -> Self {
         let cos = self.dot(n);
-        n.mult(2.0*cos).sub(self)
+        self.sub(&n.mult(2.0*cos))
     }
 
     pub fn refract(&self, n: &Self, ior: f32, inside: bool) -> Option<Vec3> {

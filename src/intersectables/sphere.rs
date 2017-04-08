@@ -13,7 +13,7 @@ pub struct Sphere {
 
 impl Sphere {
     fn make_intersection(&self, t :f32, ray :Ray) -> Intersection {
-        let mut normal = self.center.sub(&(ray.origin.add(&(ray.direction.mult(t)))));
+        let mut normal = ray.get(t).sub(&self.center);
         normal.normalize();
 
         Intersection {

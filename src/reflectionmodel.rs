@@ -1,5 +1,5 @@
 use vector::Vec3;
-//use math::powf;
+use math::powi;
 use camera::Camera;
 use intersection::Intersection;
 use scene::Scene;
@@ -43,7 +43,7 @@ impl Material for ModifiedPhongModel {
     }
 
     fn evaluate_color(&self, cam :&Camera, isect :&Intersection, scene :&Scene) -> Vec3 {
-        let mut intensity :Vec3 = self.emission;
+        let mut intensity = self.emission;
 
         for intersectable in scene.objects.iter() {
             let light = intersectable.get_material();
@@ -53,14 +53,16 @@ impl Material for ModifiedPhongModel {
                 let light_pos = intersectable.reduce_to_point();
                 // TODO: premultiply this and cache
                 //let light_emission = k_emission_color.mult(k_emission_color);
-                intensity.inplace_add(&self.k_ambient.mult_vec(&light.emission));
+                intensity.inplace_add(&self.k_ambient.mult_vec(&light.emission.div(light.emission.max_norm())));
                 let mut l = light_pos.sub(&isect_pos);
                 let dist = l.length();
                 l.normalize();
                 let n_dot_l = isect.normal.dot(&l);
 
                 if n_dot_l > 0.0 {
-                    intensity.inplace_add(self.k_diffus.mult_vec(&light.emission).inplace_mult(n_dot_l / (dist * dist)));
+                    let mut diff = self.k_diffus.mult_vec(&light.emission);
+                    diff.inplace_mult(n_dot_l / (dist * dist));
+                    intensity.inplace_add(&diff);
 
                     let mut r = isect.normal.mult(2.0 * n_dot_l);
                     r.inplace_sub(&l);
@@ -71,7 +73,7 @@ impl Material for ModifiedPhongModel {
                     let r_dot_v = r.dot(&v);
 
                     if r_dot_v > 0.0 {
-                        intensity.inplace_add(self.k_specular.mult_vec(&light.emission).inplace_mult(r_dot_v));
+                        intensity.inplace_add(self.k_specular.mult_vec(&light.emission).inplace_mult(powi(r_dot_v, self.phong_exponent as u32) / (dist*dist)));
                     }
                 }
             }
