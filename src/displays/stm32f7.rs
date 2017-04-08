@@ -1,6 +1,7 @@
 use lcd::{Lcd as internalLcd, Color};
 use display::Display;
 use vector::Vec3;
+use math::min;
 
 pub struct Lcd {
     lcd: internalLcd
@@ -27,9 +28,9 @@ impl Lcd {
     /// representation to argb1555 format.
     fn to_internal(vec :&Vec3) -> u16 {
         Color::rgb(
-            (vec.x*255.0 + 0.5) as u8,
-            (vec.y*255.0 + 0.5) as u8,
-            (vec.z*255.0 + 0.5) as u8,
+            (min(1.0, vec.x) *255.0 + 0.5) as u8,
+            (min(1.0, vec.y) *255.0 + 0.5) as u8,
+            (min(1.0, vec.z) *255.0 + 0.5) as u8,
         ).to_argb1555()
     }
 }
