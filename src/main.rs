@@ -14,6 +14,7 @@ use stm32f7::{system_clock, sdram, lcd, board, embedded};
 mod vector;
 mod math;
 mod camera;
+mod cameras;
 mod scene;
 mod scenes;
 mod render;
@@ -25,7 +26,8 @@ mod displays;
 
 use vector::Vec3;
 use render::render;
-use camera::{Film, PerspectiveCamera};
+use camera::Film;
+use cameras::perspective::PerspectiveCamera;
 use scenes::spheres::SCENE_SPHERE;
 use displays::stm32f7::Lcd as LcdDisplay;
 
