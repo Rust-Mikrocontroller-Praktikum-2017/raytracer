@@ -1,6 +1,8 @@
 #![allow(dead_code)]
 #![feature(core_intrinsics)]
 
+extern crate core;
+
 fn main() {
     println!("If you see this, tests were not run!");
 }

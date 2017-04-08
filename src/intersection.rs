@@ -34,7 +34,7 @@ pub struct Sphere {
 }
 
 impl Sphere {
-    fn make_intersection(&self, t :f32, ray :&Ray) -> Intersection {
+    fn make_intersection(&self, t :f32, ray :Ray) -> Intersection {
         let mut normal = self.center.sub(&(ray.origin.add(&(ray.direction.mult(t)))));
         normal.normalize();
 
@@ -42,7 +42,7 @@ impl Sphere {
             t: t,
             normal: normal,
             material: &self.material,
-            ray: ray.clone()
+            ray: ray
         }
     }
 }
@@ -63,16 +63,16 @@ impl Intersectable for Sphere {
         let t1 = (-b - sqrt(discriminant)) / (2.0*a);
 
         if discriminant == 0.0 {
-            return Some(self.make_intersection(t1,ray));
+            return Some(self.make_intersection(t1,*ray));
         }
 
         let t2 = (-b + sqrt(discriminant)) / (2.0*a);
 
         if t1 < 0.0 && t2 > 0.0 {
-            return Some(self.make_intersection(t2,ray));
+            return Some(self.make_intersection(t2,*ray));
         }
 
-        Some(self.make_intersection(t1,ray))
+        Some(self.make_intersection(t1,*ray))
     }
 
     fn get_material(&self) -> &ModifiedPhongModel {

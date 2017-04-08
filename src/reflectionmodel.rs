@@ -43,7 +43,7 @@ impl Material for ModifiedPhongModel {
     }
 
     fn evaluate_color(&self, cam :&Camera, isect :&Intersection, scene :&Scene) -> Vec3 {
-        let mut intensity :Vec3 = self.emission.clone();
+        let mut intensity :Vec3 = self.emission;
 
         for intersectable in scene.objects.iter() {
             let light = intersectable.get_material();

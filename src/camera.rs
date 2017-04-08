@@ -64,7 +64,7 @@ pub struct Film {
 
 impl Camera for OrthographicCamera {
     fn gen_primary_ray(&self, x :f32, y :f32) -> Ray {
-        let uv = make_uv(&self.film, self.t, self.r, self.b, self.l, x, y);
+        let uv = make_uv(&self.film, (self.t,self.r,self.b,self.l), x, y);
         let origin = self.u.mult(uv.u).add(&(self.v.mult(uv.v)));
         Ray::new(origin, self.w.mult(-1.0))
     }
@@ -126,10 +126,10 @@ fn make_image_plane(cam :&Camera) -> (i32, i32, i32, i32) {
         (t, r, b, l)
 }
 
-pub fn make_uv(film :&Film, t:i32,r:i32,b:i32,l:i32, x: f32, y: f32) -> Vec2 {
+pub fn make_uv(film :&Film, (top,right,bottom,left): (i32,i32,i32,i32), x: f32, y: f32) -> Vec2 {
     Vec2 {
-        u: l as f32 + ((r - l) as f32 * (x)) / (film.x_resolution as f32),
-        v: t as f32 + ((b - t) as f32 * (y)) / (film.y_resolution as f32),
+        u: left as f32 + ((right - left) as f32 * (x)) / (film.x_resolution as f32),
+        v: top as f32 + ((bottom - top) as f32 * (y)) / (film.y_resolution as f32),
     }
 }
 
@@ -172,7 +172,7 @@ impl PerspectiveCamera {
 impl Camera for PerspectiveCamera {
 
     fn gen_primary_ray(&self, x :f32, y :f32) -> Ray {
-        let uv = make_uv(&self.film, self.t, self.r, self.b, self.l, x, y);
+        let uv = make_uv(&self.film, (self.t,self.r,self.b,self.l), x, y);
         let mut dir = (self.u.mult(uv.u))
                 .add(&(self.v.mult(uv.v)))
                 .sub(&(self.w.mult(self.focal_length)));
