@@ -12,4 +12,5 @@ before_script:
 
 script:
 - xargo check
-- rustc --test ./src/test.rs && ./tests
+- rustc --test ./src/test.rs && ./test
+
