@@ -29,6 +29,14 @@ pub fn max(a :f32, b :f32) -> f32 {
     }
 }
 
+pub fn powi(x: f32, exp: u32) -> f32 {
+    if exp == 0 {
+        1.0
+    } else {
+        (0..exp).fold(1.0, |init,_| init*x)
+    }
+}
+
 //#[inline]
 //pub fn powf(x: f32, n: f32) -> f32 {
 //    unsafe { intrinsics::powf32(x, n) }
