@@ -13,4 +13,8 @@ impl Ray {
             direction: direction
         }
     }
+
+    pub fn get(&self, t :f32) -> Vec3 {
+        self.origin.add(&self.direction.mult(t))
+    }
 }
