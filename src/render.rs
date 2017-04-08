@@ -35,7 +35,7 @@ fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene) -> Vec3 {
     if let Some(actual_isect) = isect {
         let mut color = Vec3::zero();
         let material = actual_isect.material;
-        color = color.add(&material.evaluate_color(cam, &actual_isect, scene));
+        color.inplace_add(&material.evaluate_color(cam, &actual_isect, scene));
 
         let new_origin = actual_isect.get_position();
         if material.is_specular() {

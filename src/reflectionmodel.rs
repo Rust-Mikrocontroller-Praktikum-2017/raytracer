@@ -55,21 +55,23 @@ impl Material for ModifiedPhongModel {
                 //let light_emission = k_emission_color.mult(k_emission_color);
                 intensity.inplace_add(&self.k_ambient.mult_vec(&light.emission));
                 let mut l = light_pos.sub(&isect_pos);
+                let dist = l.length();
                 l.normalize();
                 let n_dot_l = isect.normal.dot(&l);
 
                 if n_dot_l > 0.0 {
-                    intensity.inplace_add(self.k_diffus.mult_vec(&light.emission).inplace_mult(n_dot_l));
+                    intensity.inplace_add(self.k_diffus.mult_vec(&light.emission).inplace_mult(n_dot_l / (dist * dist)));
 
                     let mut r = isect.normal.mult(2.0 * n_dot_l);
                     r.inplace_sub(&l);
+                    r.normalize();
                     let mut v = cam.get_position().sub(&isect_pos);
                     v.normalize();
 
                     let r_dot_v = r.dot(&v);
 
                     if r_dot_v > 0.0 {
-                        intensity.inplace_add(&self.k_specular).inplace_mult_vec(&light.emission).inplace_mult(r_dot_v);
+                        intensity.inplace_add(self.k_specular.mult_vec(&light.emission).inplace_mult(r_dot_v));
                     }
                 }
             }
