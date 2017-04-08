@@ -3,19 +3,18 @@ use vector::Vec3;
 use scene::Scene;
 use intersection::Intersection;
 use ray::Ray;
-use lcd::Lcd;
 use reflectionmodel::Material;
 use math::EPS;
-use lcd::Color;
+use display::Display;
 
-pub fn render(lcd :&mut Lcd, cam :&Camera, scene :&Scene) {
+pub fn render(display :&mut Display, cam :&Camera, scene :&Scene) {
 
     for y in 0..(cam.get_film().y_resolution) {
         for x in 0..(cam.get_film().x_resolution) {
             let primary_ray = cam.gen_primary_ray(x as f32 + 0.5, y as f32 + 0.5);
 
             let color = raytrace(&primary_ray, cam, scene);
-            lcd.print_point_color_at(x as u16,y as u16,vec3_to_argb1555(&color));
+            display.set_pixel(x as u16,y as u16, &color);
         }
     }
 }
@@ -66,12 +65,4 @@ fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene) -> Vec3 {
     } else {
         cam.get_film().color
     }
-}
-
-pub fn vec3_to_argb1555(vec :&Vec3) -> u16 {
-    Color::rgb(
-        (vec.x*255.0 + 0.5) as u8,
-        (vec.y*255.0 + 0.5) as u8,
-        (vec.z*255.0 + 0.5) as u8,
-    ).to_argb1555()
 }

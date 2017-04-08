@@ -20,11 +20,14 @@ mod render;
 mod intersection;
 mod ray;
 mod reflectionmodel;
+mod display;
+mod displays;
 
 use vector::Vec3;
 use render::render;
 use camera::{Film, PerspectiveCamera};
 use scenes::spheres::SCENE_SPHERE;
+use displays::stm32f7::Lcd as LcdDisplay;
 
 #[no_mangle]
 pub unsafe extern "C" fn reset() -> ! {
@@ -124,7 +127,9 @@ fn main(hw: board::Hardware) -> ! {
         film
     );
 
-    render(&mut lcd, &cam, &SCENE_SPHERE);
+    let mut display = LcdDisplay::init(lcd);
+
+    render(&mut display, &cam, &SCENE_SPHERE);
 
     loop {
     }
