@@ -64,6 +64,8 @@ impl Intersectable for Sphere {
 
 #[cfg(test)]
 fn create_sphere() -> Sphere {
+    use vector::{VEC3_ONE, VEC3_ZERO};
+
     Sphere {
         center: Vec3 {x: 0.0, y: 0.0, z: 0.0},
         radius: 1.0,
