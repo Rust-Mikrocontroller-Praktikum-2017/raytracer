@@ -20,5 +20,5 @@ To execute unit tests run the commands listed below. Executing `cargo test` or
 
 ```
 rustc --test src/test.rs
-./tests
+./test
 ```
