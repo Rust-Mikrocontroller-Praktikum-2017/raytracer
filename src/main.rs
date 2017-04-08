@@ -1,5 +1,5 @@
 #![allow(dead_code)]
-#![feature(core_intrinsics)]
+#![feature(collections, core_intrinsics)]
 
 #![no_std]
 #![no_main]
@@ -8,6 +8,7 @@ extern crate stm32f7_discovery as stm32f7;
 
 // initialization routines for .data and .bss
 extern crate r0;
+extern crate collections;
 
 use stm32f7::{system_clock, sdram, lcd, board, embedded};
 
@@ -19,6 +20,7 @@ mod scene;
 mod scenes;
 mod render;
 mod intersection;
+mod intersectables;
 mod ray;
 mod reflectionmodel;
 mod display;

@@ -1,5 +1,5 @@
 use scene::Scene;
-use intersection::Sphere;
+use intersectables::sphere::Sphere;
 use vector::{Vec3, VEC3_ZERO, VEC3_ONE};
 use reflectionmodel::ModifiedPhongModel;
 
