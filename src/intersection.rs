@@ -8,7 +8,11 @@ pub trait Intersectable {
     // TODO: use generics or something to make the material swappable
     fn get_material(&self) -> &ModifiedPhongModel;
     //fn add_to_aabb(&self);
+    /// Reduces light sources with a non-zero surface area to point lights
+    /// for shading models that do only support point lights.
     fn reduce_to_point(&self) -> &Vec3;
+    /// emission of the reduced point light source
+    fn reduce_emission(&self) -> Vec3;
 }
 
 

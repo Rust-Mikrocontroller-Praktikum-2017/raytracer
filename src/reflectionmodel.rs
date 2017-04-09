@@ -44,11 +44,11 @@ impl<'a> Material for ModifiedPhongModel<'a> {
 
     fn evaluate_color(&self, cam :&Camera, isect :&Intersection, scene :&Scene) -> Vec3 {
         let isect_pos = isect.get_position();
-        let emission = self.emission.map_texture(&isect_pos);
-        let mut intensity = emission;
+        let mut intensity = self.emission.map_texture(&isect_pos);
 
         for intersectable in scene.objects.iter() {
             let light = intersectable.get_material();
+            let emission = intersectable.reduce_emission();
 
             if light.is_emitting(&isect_pos) {
                 let light_pos = intersectable.reduce_to_point();

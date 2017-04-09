@@ -90,6 +90,10 @@ impl<'a> Intersectable for Triangle<'a> {
     fn reduce_to_point(&self) -> &Vec3 {
         &self.a
     }
+
+    fn reduce_emission(&self) -> Vec3 {
+        self.material.emission.map_texture(&self.a)
+    }
 }
 
 #[cfg(test)]

@@ -60,6 +60,12 @@ impl<'a> Intersectable for Sphere<'a> {
     fn reduce_to_point(&self) -> &Vec3 {
         &self.center
     }
+
+    fn reduce_emission(&self) -> Vec3 {
+        let mut surface_point = Vec3::new(0.0, 0.0, self.radius);
+        surface_point.inplace_add(&self.center);
+        self.material.emission.map_texture(&surface_point)
+    }
 }
 
 #[cfg(test)]
