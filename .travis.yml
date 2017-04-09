@@ -2,7 +2,7 @@ language: rust
 rust: nightly
 cache: cargo
 
-before_script:
+install:
 - rustup component add rust-src
 - cd ..
 - (test -x $HOME/.cargo/bin/cargo-install-update || cargo install cargo-update)
@@ -10,7 +10,10 @@ before_script:
 - cargo install-update -a
 - cd $TRAVIS_BUILD_DIR
 
-script:
+before_script:
 - xargo check
-- rustc --test ./src/test.rs && ./test
+- rustc --test ./src/test.rs
+
+script:
+- RUST_BACKTRACE=1 ./test
 
