@@ -20,3 +20,4 @@ mod ray;
 mod reflectionmodel;
 mod display;
 mod displays;
+mod random;

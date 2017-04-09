@@ -25,6 +25,7 @@ mod ray;
 mod reflectionmodel;
 mod display;
 mod displays;
+mod random;
 
 use vector::Vec3;
 use render::render;
