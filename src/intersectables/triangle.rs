@@ -20,8 +20,12 @@ impl Triangle {
 
         let vec_ab :Vec3 = Vec3::fromto(&a,&b);
         let vec_ac :Vec3 = Vec3::fromto(&a,&c);
-        let mut normal = a.cross(&b);
+        // TODO: normal in correct direction?
+        let mut normal = vec_ab.cross(&vec_ac);
         normal.normalize();
+
+        // fails for degenerate triangles
+        assert!(normal.length() - 1.0 < EPS && normal.length() - 1.0 > -EPS);
 
         Triangle {
             a: a, b: b, c: c,
