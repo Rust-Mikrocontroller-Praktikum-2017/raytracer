@@ -123,7 +123,8 @@ fn main(hw: board::Hardware) -> ! {
     let film :Film = Film {
         x_resolution: 480,
         y_resolution: 272,
-        color: Vec3::new(0.0,0.4,0.8)
+        color: Vec3::new(0.0,0.4,0.8),
+        iso: 100,
     };
 
     /*

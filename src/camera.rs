@@ -14,4 +14,11 @@ pub struct Film {
     pub x_resolution: u32,
     pub y_resolution: u32,
     pub color: Vec3,
+    pub iso: u32
+}
+
+impl Film {
+    pub fn develop(&self, color :Vec3, _x: f32, _y: f32) -> Vec3 {
+        color.mult(self.iso as f32 / 100.0)
+    }
 }

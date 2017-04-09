@@ -9,12 +9,17 @@ use display::Display;
 
 pub fn render(display :&mut Display, cam :&Camera, scene :&Scene) {
 
-    for y in 0..(cam.get_film().y_resolution) {
-        for x in 0..(cam.get_film().x_resolution) {
-            let primary_ray = cam.gen_primary_ray(x as f32 + 0.5, y as f32 + 0.5);
+    let film = cam.get_film();
+
+    for y in 0..(film.y_resolution) {
+        for x in 0..(film.x_resolution) {
+            let x_center = x as f32 + 0.5;
+            let y_center = y as f32 + 0.5;
+            let primary_ray = cam.gen_primary_ray(x_center, y_center);
 
             let color = raytrace(&primary_ray, cam, scene, 0);
-            display.set_pixel(x as u16,y as u16, &color);
+            let developed_color = film.develop(color, x_center, y_center);
+            display.set_pixel(x as u16,y as u16, &developed_color);
         }
     }
 }
