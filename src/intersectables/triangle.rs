@@ -4,17 +4,17 @@ use intersection::{Intersectable, Intersection};
 use reflectionmodel::ModifiedPhongModel;
 use math::EPS;
 
-pub struct Triangle {
+pub struct Triangle<'a> {
     pub a: Vec3,
     pub b: Vec3,
     pub c: Vec3,
     pub vec_ab: Vec3,
     pub vec_ac: Vec3,
     pub normal: Vec3,
-    pub material: ModifiedPhongModel,
+    pub material: ModifiedPhongModel<'a>,
 }
 
-impl Triangle {
+impl<'a> Triangle<'a> {
 
     fn new(a :Vec3, b :Vec3, c :Vec3, material :ModifiedPhongModel) -> Triangle {
 
@@ -40,7 +40,7 @@ impl Triangle {
 
 }
 
-impl Intersectable for Triangle {
+impl<'a> Intersectable for Triangle<'a> {
 
     fn intersect(&self, ray :&Ray) -> Option<Intersection> {
         let p = ray.direction.cross(&self.vec_ac);

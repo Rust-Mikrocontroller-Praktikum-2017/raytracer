@@ -12,11 +12,11 @@ pub trait Intersectable {
 }
 
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Clone, Copy)]
 pub struct Intersection<'a> {
     pub t :f32,
     pub normal :Vec3,
-    pub material : &'a ModifiedPhongModel,
+    pub material : &'a ModifiedPhongModel<'a>,
     pub ray : Ray
 }
 

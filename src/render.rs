@@ -74,27 +74,34 @@ fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene, depth: u8) -> Vec3 {
         color.inplace_add(&material.evaluate_color(cam, &actual_isect, scene));
 
         let new_origin = actual_isect.get_position();
-        if material.is_specular() {
+
+        // TODO: refactor to perform the texture lookup only once
+        if material.is_specular(&new_origin) {
             let mut new_dir = ray.direction.reflect(&actual_isect.normal);
             new_dir.normalize();
             let new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)), new_dir);
-            color.inplace_add(&actual_isect.material.k_specular.mult_vec(&raytrace(&new_ray,cam,scene,depth+1)));
+            let spec_val = &material.k_specular.map_texture(&new_origin);
+            color.inplace_add(&spec_val.mult_vec(&raytrace(&new_ray,cam,scene,depth+1)));
         }
-        if material.transmitting {
+        if material.is_transmitting(&new_origin) {
             let refracted = ray.direction.refract(&actual_isect.normal, material.ior, false);
+            let t_val = material.k_t.map_texture(&new_origin);
+
+            let new_ray : Ray;
+
             match refracted {
                 Some(mut new_dir) => {
-                    let new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)),new_dir);
                     new_dir.normalize();
-                    color.inplace_add(&actual_isect.material.k_t.mult_vec(&raytrace(&new_ray,cam,scene,depth+1)));
+                    new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)),new_dir);
                 },
                 None          => {
                     let mut new_dir = ray.direction.reflect(&actual_isect.normal);
                     new_dir.normalize();
-                    let new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)),new_dir);
-                    color.inplace_add(&actual_isect.material.k_specular.mult_vec(&raytrace(&new_ray,cam,scene,depth+1)));
+                    new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)),new_dir);
                 }
             }
+
+            color.inplace_add(&t_val.mult_vec(&raytrace(&new_ray,cam,scene,depth+1)));
         }
 
         color

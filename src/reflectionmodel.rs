@@ -3,64 +3,65 @@ use math::powi;
 use camera::Camera;
 use intersection::Intersection;
 use scene::Scene;
+use texture::TextureMapping;
 //use lcd::Color;
 
 pub trait Material {
     /// True if this material is emitting light
-    fn is_emitting(&self) -> bool;
-    fn is_specular(&self) -> bool;
-    fn is_transparent(&self) -> bool;
+    fn is_emitting(&self, surface_pos :&Vec3) -> bool;
+    fn is_specular(&self, surface_pos :&Vec3) -> bool;
+    fn is_transmitting(&self, surface_pos :&Vec3) -> bool;
     fn evaluate_color(&self, cam :&Camera, isect :&Intersection, scene :&Scene) -> Vec3;
 }
 
 
-#[derive(Debug, Clone, Copy)]
-pub struct ModifiedPhongModel {
-    pub emission: Vec3,
-    //k_emission_intensity: f32,
-    //k_emission_color: &'a Vec3,
-    //k_diffuse_specular: &'a Vec3,
-    pub k_specular: Vec3,
-    pub k_diffus: Vec3,
-    pub k_ambient: Vec3,
+pub struct ModifiedPhongModel<'a> {
+    pub emission: &'a TextureMapping,
+    pub k_specular: &'a TextureMapping,
+    pub k_diffus: &'a TextureMapping,
+    pub k_ambient: &'a TextureMapping,
+    pub k_t: &'a TextureMapping,
+
     pub phong_exponent: f32,
     pub ior: f32,
-    pub k_t: Vec3,
-    pub transmitting: bool
 }
 
-impl Material for ModifiedPhongModel {
-    fn is_emitting(&self) -> bool {
-        self.emission.x > 0.0 || self.emission.y > 0.0 || self.emission.z > 0.0
+impl<'a> Material for ModifiedPhongModel<'a> {
+    fn is_emitting(&self, surface_pos :&Vec3) -> bool {
+        let val = self.emission.map_texture(surface_pos);
+        val.x > 0.0 || val.y > 0.0 || val.z > 0.0
     }
 
-    fn is_specular(&self) -> bool {
-        self.k_specular.x > 0.0 || self.k_specular.y > 0.0 || self.k_specular.z > 0.0
+    fn is_specular(&self, surface_pos : &Vec3) -> bool {
+        let val = self.k_specular.map_texture(surface_pos);
+        val.x > 0.0 || val.y > 0.0 || val.z > 0.0
     }
 
-    fn is_transparent(&self) -> bool {
-        self.transmitting
+    fn is_transmitting(&self, surface_pos : &Vec3) -> bool {
+        let val = self.k_t.map_texture(surface_pos);
+        val.x > 0.0 || val.y > 0.0 || val.z > 0.0
     }
 
     fn evaluate_color(&self, cam :&Camera, isect :&Intersection, scene :&Scene) -> Vec3 {
-        let mut intensity = self.emission;
+        let isect_pos = isect.get_position();
+        let emission = self.emission.map_texture(&isect_pos);
+        let mut intensity = emission;
 
         for intersectable in scene.objects.iter() {
             let light = intersectable.get_material();
 
-            if light.is_emitting() {
-                let isect_pos = isect.get_position();
+            if light.is_emitting(&isect_pos) {
                 let light_pos = intersectable.reduce_to_point();
-                // TODO: premultiply this and cache
-                //let light_emission = k_emission_color.mult(k_emission_color);
-                intensity.inplace_add(&self.k_ambient.mult_vec(&light.emission.div(light.emission.max_norm())));
+                let val_ambient = self.k_ambient.map_texture(&isect_pos);
+                intensity.inplace_add(&val_ambient.mult_vec(&emission.div(emission.max_norm())));
                 let mut l = light_pos.sub(&isect_pos);
                 let dist = l.length();
                 l.normalize();
                 let n_dot_l = isect.normal.dot(&l);
 
                 if n_dot_l > 0.0 {
-                    let mut diff = self.k_diffus.mult_vec(&light.emission);
+                    let val_diffus = self.k_diffus.map_texture(&isect_pos);
+                    let mut diff = val_diffus.mult_vec(&emission);
                     diff.inplace_mult(n_dot_l / (dist * dist));
                     intensity.inplace_add(&diff);
 
@@ -73,7 +74,8 @@ impl Material for ModifiedPhongModel {
                     let r_dot_v = r.dot(&v);
 
                     if r_dot_v > 0.0 {
-                        intensity.inplace_add(self.k_specular.mult_vec(&light.emission).inplace_mult(powi(r_dot_v, self.phong_exponent as u32) / (dist*dist)));
+                        let val_specular = self.k_specular.map_texture(&isect_pos);
+                        intensity.inplace_add(val_specular.mult_vec(&emission).inplace_mult(powi(r_dot_v, self.phong_exponent as u32) / (dist*dist)));
                     }
                 }
             }

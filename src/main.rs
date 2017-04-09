@@ -26,6 +26,8 @@ mod reflectionmodel;
 mod display;
 mod displays;
 mod random;
+mod texture;
+mod textures;
 
 use vector::Vec3;
 use render::render;

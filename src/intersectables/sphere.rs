@@ -5,13 +5,13 @@ use reflectionmodel::ModifiedPhongModel;
 use math::sqrt;
 
 
-pub struct Sphere {
+pub struct Sphere<'a> {
     pub center: Vec3,
     pub radius: f32,
-    pub material: ModifiedPhongModel,
+    pub material: ModifiedPhongModel<'a>,
 }
 
-impl Sphere {
+impl<'a> Sphere<'a> {
     fn make_intersection(&self, t :f32, ray :Ray) -> Intersection {
         let mut normal = ray.get(t).sub(&self.center);
         normal.normalize();
@@ -25,7 +25,7 @@ impl Sphere {
     }
 }
 
-impl Intersectable for Sphere {
+impl<'a> Intersectable for Sphere<'a> {
 
     fn intersect(&self, ray :&Ray) -> Option<Intersection> {
         let dist = ray.origin.sub(&self.center);
