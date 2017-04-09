@@ -39,7 +39,7 @@ pub fn render(display :&mut Display, cam :&Camera, scene :&Scene) {
 
                     let primary_ray = cam.gen_primary_ray(x_sample, y_sample);
 
-                    let sample_color = raytrace(&primary_ray, cam, scene, 0);
+                    let sample_color = raytrace(&primary_ray, cam, scene, false, 0);
                     pixel_color.inplace_add(&sample_color);
                 }
             }
@@ -52,7 +52,7 @@ pub fn render(display :&mut Display, cam :&Camera, scene :&Scene) {
     }
 }
 
-fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene, depth: u8) -> Vec3 {
+fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene, inside: bool, depth: u8) -> Vec3 {
     if depth > 5 {
         return cam.get_film().color;
     }
@@ -81,27 +81,30 @@ fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene, depth: u8) -> Vec3 {
             new_dir.normalize();
             let new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)), new_dir);
             let spec_val = &material.k_specular.map_texture(&new_origin);
-            color.inplace_add(&spec_val.mult_vec(&raytrace(&new_ray,cam,scene,depth+1)));
+            color.inplace_add(&spec_val.mult_vec(&raytrace(&new_ray,cam,scene,inside,depth+1)));
         }
         if material.is_transmitting(&new_origin) {
-            let refracted = ray.direction.refract(&actual_isect.normal, material.ior, false);
+            let refracted = ray.direction.refract(&actual_isect.normal, material.ior, inside);
             let t_val = material.k_t.map_texture(&new_origin);
 
             let new_ray : Ray;
+            let new_inside : bool;
 
             match refracted {
                 Some(mut new_dir) => {
                     new_dir.normalize();
+                    new_inside = !inside;
                     new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)),new_dir);
                 },
                 None          => {
                     let mut new_dir = ray.direction.reflect(&actual_isect.normal);
                     new_dir.normalize();
+                    new_inside = inside;
                     new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)),new_dir);
                 }
             }
 
-            color.inplace_add(&t_val.mult_vec(&raytrace(&new_ray,cam,scene,depth+1)));
+            color.inplace_add(&t_val.mult_vec(&raytrace(&new_ray,cam,scene,new_inside,depth+1)));
         }
 
         color
