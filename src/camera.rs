@@ -1,5 +1,8 @@
 use vector::Vec3;
 use ray::Ray;
+use scene::Scene;
+use display::Display;
+use render::render;
 
 pub const UP: Vec3 = Vec3 {x: 0.0, y: 0.0, z: 1.0};
 
@@ -8,6 +11,9 @@ pub trait Camera {
     fn get_position(&self) -> Vec3;
     fn get_target(&self) -> Vec3;
     fn get_film(&self) -> &Film;
+    fn take_picture(&self, scene :&Scene, display :&mut Display) {
+        render(display, self, scene);
+    }
 }
 
 pub struct Film {
