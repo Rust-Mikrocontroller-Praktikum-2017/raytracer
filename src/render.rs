@@ -11,14 +11,42 @@ pub fn render(display :&mut Display, cam :&Camera, scene :&Scene) {
 
     let film = cam.get_film();
 
+    // note: we are supersampling a grid positioned at the top
+    // left corner of the pixel, e.g. for the 2x2 supersampling:
+    //
+    // 0----X----X
+    // |         |
+    // 0    X    X
+    // |         |
+    // o----o----o
+    //
+    // where `X` are samples computed for the current pixel, and
+    // `o` are samples computed by adjacent pixels.
+    
+    let supersampling = film.supersampling;
+    let sample_dist = 1.0 / (supersampling as f32);
+
     for y in 0..(film.y_resolution) {
         for x in 0..(film.x_resolution) {
-            let x_center = x as f32 + 0.5;
-            let y_center = y as f32 + 0.5;
-            let primary_ray = cam.gen_primary_ray(x_center, y_center);
+            let mut x_sample = x as f32;
+            let mut y_sample = y as f32;
+            let mut pixel_color = Vec3::zero();
 
-            let color = raytrace(&primary_ray, cam, scene, 0);
-            let developed_color = film.develop(color, x_center, y_center);
+            for _y_supixel in 0..supersampling {
+                for _x_supixel in 0..supersampling {
+                    x_sample += sample_dist;
+                    y_sample += sample_dist;
+
+                    let primary_ray = cam.gen_primary_ray(x_sample, y_sample);
+
+                    let sample_color = raytrace(&primary_ray, cam, scene, 0);
+                    pixel_color.inplace_add(&sample_color);
+                }
+            }
+
+            pixel_color.inplace_div((supersampling * supersampling) as f32);
+
+            let developed_color = film.develop(pixel_color, x as f32, y as f32);
             display.set_pixel(x as u16,y as u16, &developed_color);
         }
     }

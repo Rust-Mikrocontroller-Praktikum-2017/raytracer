@@ -105,6 +105,13 @@ impl Vec3 {
         }
     }
 
+    pub fn inplace_div(&mut self, other :f32) -> &mut Self {
+        self.x /= other;
+        self.y /= other;
+        self.z /= other;
+        self
+    }
+
     pub fn mult_vec(&self, other :&Vec3) -> Self {
         Vec3 {
             x: self.x * other.x,
