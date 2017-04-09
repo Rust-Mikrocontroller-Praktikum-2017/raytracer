@@ -22,7 +22,7 @@ pub fn render(display :&mut Display, cam :&Camera, scene :&Scene) {
     //
     // where `X` are samples computed for the current pixel, and
     // `o` are samples computed by adjacent pixels.
-    
+
     let supersampling = film.supersampling;
     let sample_dist = 1.0 / (supersampling as f32);
 
@@ -39,7 +39,7 @@ pub fn render(display :&mut Display, cam :&Camera, scene :&Scene) {
 
                     let primary_ray = cam.gen_primary_ray(x_sample, y_sample);
 
-                    let sample_color = raytrace(&primary_ray, cam, scene, 0);
+                    let sample_color = raytrace(&primary_ray, cam, scene, false, 0);
                     pixel_color.inplace_add(&sample_color);
                 }
             }
@@ -52,7 +52,7 @@ pub fn render(display :&mut Display, cam :&Camera, scene :&Scene) {
     }
 }
 
-fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene, depth: u8) -> Vec3 {
+fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene, inside: bool, depth: u8) -> Vec3 {
     if depth > 5 {
         return cam.get_film().color;
     }
@@ -78,21 +78,21 @@ fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene, depth: u8) -> Vec3 {
             let mut new_dir = ray.direction.reflect(&actual_isect.normal);
             new_dir.normalize();
             let new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)), new_dir);
-            color.inplace_add(&actual_isect.material.k_specular.mult_vec(&raytrace(&new_ray,cam,scene,depth+1)));
+            color.inplace_add(&actual_isect.material.k_specular.mult_vec(&raytrace(&new_ray,cam,scene,inside,depth+1)));
         }
         if material.transmitting {
-            let refracted = ray.direction.refract(&actual_isect.normal, material.ior, false);
+            let refracted = ray.direction.refract(&actual_isect.normal, material.ior, inside);
             match refracted {
                 Some(mut new_dir) => {
-                    let new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)),new_dir);
                     new_dir.normalize();
-                    color.inplace_add(&actual_isect.material.k_t.mult_vec(&raytrace(&new_ray,cam,scene,depth+1)));
+                    let new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)),new_dir);
+                    color.inplace_add(&actual_isect.material.k_t.mult_vec(&raytrace(&new_ray,cam,scene,!inside,depth+1)));
                 },
                 None          => {
                     let mut new_dir = ray.direction.reflect(&actual_isect.normal);
                     new_dir.normalize();
                     let new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)),new_dir);
-                    color.inplace_add(&actual_isect.material.k_specular.mult_vec(&raytrace(&new_ray,cam,scene,depth+1)));
+                    color.inplace_add(&actual_isect.material.k_specular.mult_vec(&raytrace(&new_ray,cam,scene,inside,depth+1)));
                 }
             }
         }

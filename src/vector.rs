@@ -166,7 +166,7 @@ impl Vec3 {
         if discriminant < 0.0 {
             None
         } else {
-            Some(self.mult(-ratio).add(&nn.mult(self_dot_n*ratio-sqrt(discriminant))))
+            Some(self.mult(ratio).add(&nn.mult(self_dot_n*ratio-sqrt(discriminant))))
         }
     }
 
