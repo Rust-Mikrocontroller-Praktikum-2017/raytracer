@@ -46,7 +46,7 @@ impl Intersectable for Triangle {
         let p = ray.direction.cross(&self.vec_ac);
         let det = self.vec_ab.dot(&p);
 
-        if det < EPS && det > EPS { 
+        if det < EPS && det > EPS {
             return None;
         }
         let inv_det = 1.0 / det;
@@ -63,7 +63,7 @@ impl Intersectable for Triangle {
 
         let v = ray.direction.dot(&q) * inv_det;
 
-        if v < 0.0 || v > 1.0 {
+        if v < 0.0 || u + v > 1.0 {
             return None;
         }
 
@@ -119,7 +119,7 @@ fn triangle_intersection() {
 
     let ray = Ray::new(
         Vec3::new(0.25, 0.25, 1.0),
-        Vec3::new(0.0, 0.0, 1.0),
+        Vec3::new(0.0, 0.0, -1.0),
     );
 
     assert!(triangle.intersect(&ray).unwrap().t - 1.0 < EPS);
