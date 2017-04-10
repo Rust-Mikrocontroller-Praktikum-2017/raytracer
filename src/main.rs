@@ -143,7 +143,7 @@ fn main(hw: board::Hardware) -> ! {
      */
 
     let cam = OrthographicCamera::new(
-        Vec3::new(-154.0,0.0,0.5),
+        Vec3::new(-154.0,0.0,80.0),
         Vec3::zero(),
         film
     );
