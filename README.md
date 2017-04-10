@@ -18,11 +18,16 @@ __A simple ray tracer for embeded systems.__ Written in a week to learn rust.
 
 ### Building and Running on your OS
 
+Running the commands below, will build and run the ray tracer. The result will
+be written to a file called `render.png` in your current working directory.
+
 ```
 cd desktop && cargo run
 ```
 
 ### Building for the Stm32f7 Microcontroller
+
+Run the commands below and [upload the program as described here](https://github.com/embed-rs/stm32f7-discovery/blob/master/README.md).
 
 ```
 cd stm32f7 && xargo build
@@ -30,7 +35,7 @@ cd stm32f7 && xargo build
 
 ### Executing Unit Tests
 
-To execute unit tests run the commands listed below:
+To execute unit tests run the following commands:
 
 ```
 cd lib && cargo test
