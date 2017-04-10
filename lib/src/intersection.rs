@@ -5,14 +5,22 @@ use reflectionmodel::ModifiedPhongModel;
 pub trait Intersectable {
     //fn intersects_enveloping_body(&self, &Ray) -> bool;
     fn intersect(&self, &Ray) -> Option<Intersection>;
-    // TODO: use generics or something to make the material swappable
     fn get_material(&self) -> &ModifiedPhongModel;
     //fn add_to_aabb(&self);
-    /// Reduces light sources with a non-zero surface area to point lights
-    /// for shading models that do only support point lights.
+    /// Reduces light sources with a non-zero surface area to point lights for shading models that
+    /// do only support point lights.
     fn reduce_to_point(&self) -> &Vec3;
-    /// emission of the reduced point light source
+    /// emission of the reduced point light source. Area lights with a non zero emission at any
+    /// surface point MUST return a non-zero emission value for point lights.
     fn reduce_emission(&self) -> Vec3;
+    ///// true if the light source is has no surface area
+    //fn is_point_light(&self) -> bool;
+    ///// returns a random point on the visible area of
+    ///// the object
+    //fn sample_area_light(&self) -> Vec3;
+    fn is_light(&self) -> bool {
+        self.reduce_emission().max_norm() > 0.0
+    }
 }
 
 

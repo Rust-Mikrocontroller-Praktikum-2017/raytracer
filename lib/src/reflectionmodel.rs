@@ -1,5 +1,5 @@
 use vector::Vec3;
-use math::{powi, EPS};
+use math::{powi, HUGE_EPS};
 use camera::Camera;
 use intersection::Intersection;
 use scene::Scene;
@@ -14,7 +14,6 @@ pub trait Material {
     fn is_transmitting(&self, surface_pos :&Vec3) -> bool;
     fn evaluate_color(&self, cam :&Camera, isect :&Intersection, scene :&Scene) -> Vec3;
 }
-
 
 pub struct ModifiedPhongModel<'a> {
     pub emission: &'a TextureMapping,
@@ -64,11 +63,20 @@ impl<'a> Material for ModifiedPhongModel<'a> {
                 l.normalize();
                 let n_dot_l = isect.normal.dot(&l);
                 let mut shadow = false;
-                let shadow_ray = Ray::new(isect_pos.add(&isect.normal), l);
+                let shadow_ray = Ray::new(isect_pos.add(&isect.normal.mult(HUGE_EPS)), l);
                 for shadow_isectable in scene.objects.iter() {
+
+                    // TODO: should be replaced with a shadow_isectable == intersectable
+                    // currently avoids any shadows by light sources, but we only want
+                    // to disallow selfintersection of the light src
+                    if shadow_isectable.is_light()  {
+                        continue;
+                    }
+
                     let shadow_isect = shadow_isectable.intersect(&shadow_ray);
                     if let Some(si) = shadow_isect {
-                        if si.t > EPS && si.t < dist {
+                        // the ray starts 
+                        if si.t > 0.0 {
                             shadow = true;
                         }
                     }
