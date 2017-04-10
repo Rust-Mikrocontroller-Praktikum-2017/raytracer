@@ -4,3 +4,4 @@ test.exe
 lib/Cargo.lock
 .cargo
 *~
+render.png
