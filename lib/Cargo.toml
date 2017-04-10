@@ -1,0 +1,8 @@
+[package]
+authors = ["Philipp Krones", "Reiner Dolp"]
+name = "rtlib"
+version = "0.0.0"
+
+[profile.release]
+lto = true
+debug = true

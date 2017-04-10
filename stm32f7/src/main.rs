@@ -1,45 +1,24 @@
 #![allow(dead_code)]
-#![feature(collections, alloc, core_intrinsics)]
 
 #![no_std]
 #![no_main]
 
 extern crate stm32f7_discovery as stm32f7;
 
-// initialization routines for .data and .bss
 extern crate r0;
-extern crate collections;
-extern crate alloc;
+extern crate rtlib;
 
 use stm32f7::{system_clock, sdram, lcd, board, embedded};
 
-mod vector;
-mod math;
-mod camera;
-mod cameras;
-mod scene;
-mod scenes;
-mod render;
-mod intersection;
-mod intersectables;
-mod ray;
-mod reflectionmodel;
 mod display;
-mod displays;
-mod random;
-mod texture;
-mod textures;
-mod colors;
-mod colormapping;
-mod texturemapping;
 
-use vector::Vec3;
-use render::render;
-use camera::Film;
+use rtlib::vector::Vec3;
+use rtlib::render::render;
+use rtlib::camera::Film;
 // use cameras::perspective::PerspectiveCamera;
-use cameras::orthographic::OrthographicCamera;
-use scenes::spheres::SCENE_SPHERE;
-use displays::stm32f7::Lcd as LcdDisplay;
+use rtlib::cameras::orthographic::OrthographicCamera;
+use rtlib::scenes::spheres::SCENE_SPHERE;
+use display::LcdDisplay;
 
 #[no_mangle]
 pub unsafe extern "C" fn reset() -> ! {

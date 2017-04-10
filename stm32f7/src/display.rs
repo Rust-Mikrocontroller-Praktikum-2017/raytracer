@@ -1,15 +1,15 @@
-use lcd::{Lcd as internalLcd, Color};
-use display::Display;
-use vector::Vec3;
-use math::min;
+use stm32f7::lcd::{Lcd as internalLcd, Color};
+use rtlib::display::Display;
+use rtlib::vector::Vec3;
+use rtlib::math::min;
 
-pub struct Lcd {
+pub struct LcdDisplay {
     lcd: internalLcd
 }
 
-impl Display for Lcd {
+impl Display for LcdDisplay {
     fn set_pixel(&mut self, x :u16, y :u16, color: &Vec3) {
-            self.lcd.print_point_color_at(x as u16,y as u16, Lcd::to_internal(color));
+            self.lcd.print_point_color_at(x as u16,y as u16, LcdDisplay::to_internal(color));
     }
 
     fn reset(&mut self) {
@@ -17,9 +17,9 @@ impl Display for Lcd {
     }
 }
 
-impl Lcd {
-    pub fn init(lcd : internalLcd) -> Lcd {
-        return Lcd {
+impl LcdDisplay {
+    pub fn init(lcd : internalLcd) -> LcdDisplay {
+        return LcdDisplay {
             lcd: lcd
         }
     }
