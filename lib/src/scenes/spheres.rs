@@ -69,5 +69,19 @@ pub const SCENE_SPHERE: Scene = Scene {
                 ior: 0.0,
             }
         },
+        &Sphere {
+            center: Vec3 {x: 0.0, y: 150.0, z: 80.0},
+            radius: 0.0,
+            material: ModifiedPhongModel {
+                emission:       &NoTexture { color: Vec3 { x: 1.0e4, y: 1.0e4, z: 1.0e4 } },
+                k_specular:     &NoTexture { color: VEC3_ZERO },
+                k_diffus:       &NoTexture { color: VEC3_ZERO },
+                k_ambient:      &NoTexture { color: VEC3_ZERO },
+                k_t:            &NoTexture { color: VEC3_ZERO },
+
+                phong_exponent: 1.0,
+                ior: 0.0,
+            }
+        },
     ]
 };

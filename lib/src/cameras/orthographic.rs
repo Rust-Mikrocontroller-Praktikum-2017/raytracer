@@ -33,12 +33,29 @@ impl Camera for OrthographicCamera {
         self.pos
     }
 
+    fn set_position(&mut self, pos: Vec3) {
+        self.pos = pos;
+    }
+
     fn get_target(&self) -> Vec3 {
         self.target
     }
 
     fn get_film(&self) -> &Film {
         &self.film
+    }
+
+    fn set_image_plane(&mut self, image_plane: (i32,i32,i32,i32)) {
+        self.t = image_plane.0;
+        self.r = image_plane.1;
+        self.b = image_plane.2;
+        self.l = image_plane.3;
+    }
+
+    fn set_camera_coord(&mut self, coord: (Vec3,Vec3,Vec3)) {
+        self.u = coord.0;
+        self.v = coord.1;
+        self.w = coord.2;
     }
 }
 

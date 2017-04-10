@@ -1,4 +1,4 @@
-use math::{min, max, sqrt, EPS};
+use math::{min, max, sqrt, EPS, abs};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vec3 {
@@ -54,7 +54,7 @@ impl Vec3 {
     }
 
     pub fn max_norm(&self) -> f32 {
-        max(max(self.x, self.y), self.z)
+        max(max(abs(self.x), abs(self.y)), abs(self.z))
     }
 
     pub fn normalize(&mut self) -> &mut Self {
@@ -222,6 +222,10 @@ fn can_reflect_vector() {
 }
 
 impl Vec2 {
+    pub fn zero() -> Vec2 {
+        Self::new(0.0,0.0)
+    }
+
     pub fn new(u :f32, v :f32) -> Vec2 {
         Vec2 {
             u: u,
@@ -235,6 +239,10 @@ impl Vec2 {
 
     pub fn length(&self) -> f32 {
         sqrt(self.length_squared())
+    }
+
+    pub fn max_norm(&self) -> f32 {
+        max(abs(self.u),abs(self.v))
     }
 
     pub fn normalize(&mut self) -> &mut Self {
