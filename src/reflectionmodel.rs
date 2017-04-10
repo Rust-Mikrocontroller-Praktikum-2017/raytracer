@@ -46,6 +46,7 @@ impl<'a> Material for ModifiedPhongModel<'a> {
     fn evaluate_color(&self, cam :&Camera, isect :&Intersection, scene :&Scene) -> Vec3 {
         let isect_pos = isect.get_position();
         let mut intensity = self.emission.map_texture(&isect_pos);
+        let mut first_light = true;
 
         for intersectable in scene.objects.iter() {
             let light = intersectable.get_material();
@@ -53,23 +54,27 @@ impl<'a> Material for ModifiedPhongModel<'a> {
 
             if light.is_emitting(&isect_pos) {
                 let light_pos = intersectable.reduce_to_point();
-                let val_ambient = self.k_ambient.map_texture(&isect_pos);
-                intensity.inplace_add(&val_ambient.mult_vec(&emission.div(emission.max_norm())));
+                if first_light {
+                    let val_ambient = self.k_ambient.map_texture(&isect_pos);
+                    intensity.inplace_add(&val_ambient.mult_vec(&emission.div(emission.max_norm())));
+                    first_light = false;
+                }
                 let mut l = light_pos.sub(&isect_pos);
                 let dist = l.length();
                 l.normalize();
                 let n_dot_l = isect.normal.dot(&l);
+                let mut shadow = false;
                 let shadow_ray = Ray::new(isect_pos.add(&isect.normal), l);
                 for shadow_isectable in scene.objects.iter() {
                     let shadow_isect = shadow_isectable.intersect(&shadow_ray);
                     if let Some(si) = shadow_isect {
                         if si.t > EPS && si.t < dist {
-                            return intensity;
+                            shadow = true;
                         }
                     }
                 }
 
-                if n_dot_l > 0.0 {
+                if n_dot_l > 0.0 && !shadow {
                     let val_diffus = self.k_diffus.map_texture(&isect_pos);
                     let mut diff = val_diffus.mult_vec(&emission);
                     diff.inplace_mult(n_dot_l / (dist * dist));
