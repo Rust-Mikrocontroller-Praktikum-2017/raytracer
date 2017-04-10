@@ -1,9 +1,10 @@
 use vector::Vec3;
-use math::powi;
+use math::{powi, EPS};
 use camera::Camera;
 use intersection::Intersection;
 use scene::Scene;
 use texture::TextureMapping;
+use ray::Ray;
 //use lcd::Color;
 
 pub trait Material {
@@ -58,6 +59,15 @@ impl<'a> Material for ModifiedPhongModel<'a> {
                 let dist = l.length();
                 l.normalize();
                 let n_dot_l = isect.normal.dot(&l);
+                let shadow_ray = Ray::new(isect_pos.add(&isect.normal), l);
+                for shadow_isectable in scene.objects.iter() {
+                    let shadow_isect = shadow_isectable.intersect(&shadow_ray);
+                    if let Some(si) = shadow_isect {
+                        if si.t > EPS && si.t < dist {
+                            return intensity;
+                        }
+                    }
+                }
 
                 if n_dot_l > 0.0 {
                     let val_diffus = self.k_diffus.map_texture(&isect_pos);
