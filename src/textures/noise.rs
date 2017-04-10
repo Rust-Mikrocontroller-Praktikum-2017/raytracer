@@ -1,8 +1,9 @@
 use texture::Texture;
 use vector::Vec3;
 use math::rem;
+use colormapping::{ColorMapping, EarthTones};
 
-trait LatticeNoiseTexture : Texture + Sized {
+trait LatticeNoiseTexture : Texture {
     fn get_width(&self) -> u16;
     fn get_height(&self) -> u16;
     fn sample(&self, u :u16, v :u16) -> f32;
@@ -40,7 +41,7 @@ trait LatticeNoiseTexture : Texture + Sized {
 }
 
 const RANDOM :[f32;97]= [
-    1.3502347887,0.7707289142,0.8074737110,0.9560200738,0.8099103970,
+    0.3502347887,0.7707289142,0.8074737110,0.9560200738,0.8099103970,
     0.0465470354,0.7011022358,0.4005982395,0.9841398935,0.7324767543,
     0.8915973725,0.5589943791,0.5366404377,0.6833854732,0.5452557817,
     0.9633457016,0.3012300929,0.8753218745,0.1917415483,0.3045765056,
@@ -93,7 +94,7 @@ impl LatticeNoiseTexture for LaticeNoise {
     }
 }
 
-struct Turbulence3 {
+pub struct Turbulence3<'a> {
     width: u16,
     height: u16,
     
@@ -101,15 +102,17 @@ struct Turbulence3 {
     octave_2 : LaticeNoise,
     octave_1_weight :f32,
     octave_2_weight :f32,
+
+    color_mapping: &'a ColorMapping
 }
 
-impl Texture for Turbulence3 {
+impl<'a> Texture for Turbulence3<'a> {
     fn get_texel(&self, u :f32, v: f32) -> Vec3 {
         self.color_map(self.get_texel_channel(u,v))
     }
 }
 
-impl LatticeNoiseTexture for Turbulence3 {
+impl<'a> LatticeNoiseTexture for Turbulence3<'a> {
 
     fn get_width(&self) -> u16 {
         self.width
@@ -131,7 +134,7 @@ impl LatticeNoiseTexture for Turbulence3 {
         let val = val_octave_0 + val_octave_1*self.octave_1_weight +
             val_octave_2*self.octave_2_weight;
 
-        self.color_map(val)
+        self.color_mapping.color_map(val)
     }
 }
 
@@ -143,12 +146,25 @@ fn lerp(a :f32, b :f32, p :f32) -> f32 {
     a * (1.0 - p) + b * p
 }
 
-struct Turbulence {
-}
+//pub const MARMOR :Turbulence3 = Turbulence3 {
 
-struct Marmor {
-}
+//};
 
-// Turbulence with colors mapped to blue and green
-struct Earth {
-}
+pub const EARTH_TEXTURE :Turbulence3 = Turbulence3 {
+        width:  100,
+        height: 100,
+        
+        octave_1_weight: 0.50,
+        octave_1 : LaticeNoise {
+            width: 200,
+            height: 200,
+        },
+
+        octave_2_weight: 0.25,
+        octave_2 : LaticeNoise {
+            width: 400,
+            height: 400,
+        },
+
+        color_mapping: &EarthTones {}
+};

@@ -1,5 +1,5 @@
 #![allow(dead_code)]
-#![feature(collections, core_intrinsics)]
+#![feature(collections, alloc, core_intrinsics)]
 
 #![no_std]
 #![no_main]
@@ -9,6 +9,7 @@ extern crate stm32f7_discovery as stm32f7;
 // initialization routines for .data and .bss
 extern crate r0;
 extern crate collections;
+extern crate alloc;
 
 use stm32f7::{system_clock, sdram, lcd, board, embedded};
 
@@ -28,6 +29,8 @@ mod displays;
 mod random;
 mod texture;
 mod textures;
+mod colors;
+mod colormapping;
 
 use vector::Vec3;
 use render::render;

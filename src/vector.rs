@@ -37,6 +37,14 @@ impl Vec3 {
         }
     }
 
+    pub fn lerp(a :&Vec3, b :&Vec3, p :f32) -> Vec3 {
+        Vec3 {
+            x: (1.0-p) * a.x + p*b.x,
+            y: (1.0-p) * a.y + p*b.y,
+            z: (1.0-p) * a.z + p*b.z,
+        }
+    }
+
     pub fn length_squared(&self) -> f32 {
         self.x * self.x + self.y * self.y + self.z * self.z
     }
