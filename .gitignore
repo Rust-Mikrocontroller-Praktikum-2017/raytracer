@@ -2,3 +2,5 @@ target
 test
 test.exe
 lib/Cargo.lock
+.cargo
+*~
