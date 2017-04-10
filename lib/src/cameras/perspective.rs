@@ -25,22 +25,14 @@ pub struct PerspectiveCamera {
     // distance between camera and image plane
     // (focal length)
     pub focal_length   :f32,
-
-    // field of view in degree
-    pub fov :u8
 }
 
 impl PerspectiveCamera {
     pub fn new(pos :Vec3, target :Vec3, film :Film) -> PerspectiveCamera {
-        PerspectiveCamera::new_fov(pos, target, film, 90)
-    }
-
-    pub fn new_fov(pos :Vec3, target :Vec3, film :Film, fov: u8) -> PerspectiveCamera {
         let mut cam = PerspectiveCamera {
             pos: pos,
             target: target,
             film: film,
-            fov: fov,
 
             focal_length: 0.0,
             l: 0, r: 0, t: 0, b: 0,
@@ -58,12 +50,24 @@ impl PerspectiveCamera {
         cam.b = image_plane.2;
         cam.l = image_plane.3;
 
-        let fov_rad = (fov % 180) as f32 / 180.0 * PI;
-        cam.fov = fov;
-        cam.focal_length = cam.t as f32 / tan(fov_rad/2.0);
+        cam.set_field_of_view(90);
 
-        cam.pos.inplace_add(&cam.w.mult(cam.focal_length));
         cam
+    }
+
+    pub fn set_field_of_view(&mut self, fov :u8) -> &mut Self {
+        let fov_rad = (fov % 180) as f32 / 180.0 * PI;
+        let focal_length = self.t as f32 / tan(fov_rad/2.0);
+        self.set_focal_length(focal_length);
+        self
+    }
+
+    pub fn set_focal_length(&mut self, new_fl :f32) -> &mut Self {
+        self.pos.inplace_add(&self.w.mult(-self.focal_length));
+        self.focal_length = new_fl;
+        self.pos.inplace_add(&self.w.mult(new_fl));
+
+        self
     }
 }
 
