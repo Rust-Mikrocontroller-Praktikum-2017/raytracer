@@ -4,7 +4,7 @@ use scene::Scene;
 use intersection::Intersection;
 use ray::Ray;
 use reflectionmodel::Material;
-use math::EPS;
+use math::HUGE_EPS;
 use display::Display;
 
 pub fn render(display :&mut Display, cam :&Camera, scene :&Scene) {
@@ -53,6 +53,7 @@ pub fn render(display :&mut Display, cam :&Camera, scene :&Scene) {
 }
 
 fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene, inside: bool, depth: u8) -> Vec3 {
+    // TODO: get rid of "inside" bool and implement refraction by comparing iors
     if depth > 5 {
         return cam.get_film().color;
     }
@@ -79,7 +80,7 @@ fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene, inside: bool, depth: u8) -> 
         if material.is_specular(&new_origin) {
             let mut new_dir = ray.direction.reflect(&actual_isect.normal);
             new_dir.normalize();
-            let new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)), new_dir);
+            let new_ray = Ray::new(new_origin.add(&new_dir.mult(HUGE_EPS)), new_dir);
             let spec_val = &material.k_specular.map_texture(&new_origin);
             color.inplace_add(&spec_val.mult_vec(&raytrace(&new_ray,cam,scene,inside,depth+1)));
         }
@@ -94,13 +95,13 @@ fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene, inside: bool, depth: u8) -> 
                 Some(mut new_dir) => {
                     new_dir.normalize();
                     new_inside = !inside;
-                    new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)),new_dir);
+                    new_ray = Ray::new(new_origin.add(&new_dir.mult(HUGE_EPS)),new_dir);
                 },
                 None          => {
                     let mut new_dir = ray.direction.reflect(&actual_isect.normal);
                     new_dir.normalize();
                     new_inside = inside;
-                    new_ray = Ray::new(new_origin.add(&new_dir.mult(EPS)),new_dir);
+                    new_ray = Ray::new(new_origin.add(&new_dir.mult(HUGE_EPS)),new_dir);
                 }
             }
 
