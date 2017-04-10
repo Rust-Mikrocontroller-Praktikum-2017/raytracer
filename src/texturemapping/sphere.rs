@@ -2,14 +2,14 @@ use texture::{Texture, TextureMapping};
 use math::{arccos, arctan, TWOPI};
 use vector::Vec3;
 
-struct Spherical {
-    texture: Texture
+pub struct Spherical<'a> {
+    pub texture: &'a Texture
 }
 
-impl TextureMapping for Spherical {
+impl<'a> TextureMapping for Spherical<'a> {
     fn map_texture(&self, surface_pos :&Vec3) -> Vec3 {
         let spherical = cartesian_to_spherical(surface_pos);
-        
+
         self.texture.get_texel(spherical.0 / TWOPI, spherical.1)
     }
 }
