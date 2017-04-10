@@ -8,7 +8,7 @@ pub const EPS: f32 = 1.0e-3;
 // our implementations of sin, cos, tan and other trigonometric funtions using polynomals of a low
 // degree may have a huge error for edge cases, e.g.  values close to 0.0 or 1.0. HUGE_EPS may be
 // applicable in some cases, use EPS otherwise.
-pub const HUGE_EPS : f32 = 1.0;
+pub const HUGE_EPS : f32 = 0.1;
 pub const NAN: f32 = f32::NAN;
 pub const PI: f32 = f32::consts::PI;
 pub const QTRPI: f32 = 0.25 * PI;

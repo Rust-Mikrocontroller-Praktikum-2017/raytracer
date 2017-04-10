@@ -25,12 +25,12 @@ fn main() {
 
     
     let mut cam = PerspectiveCamera::new(
-        Vec3::new(-200.0,0.0,0.5),
+        Vec3::new(-200.0,-10.0,5.0),
         Vec3::zero(),
         film
     );
 
-    cam.set_focal_length(300.0);
+    cam.set_field_of_view(45);
     
     //let cam = OrthographicCamera::new(
         //Vec3::new(-154.0,0.0,80.0),
