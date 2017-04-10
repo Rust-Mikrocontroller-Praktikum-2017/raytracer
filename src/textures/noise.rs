@@ -3,7 +3,7 @@ use vector::Vec3;
 use math::rem;
 use colormapping::{ColorMapping, EarthTones};
 
-trait LatticeNoiseTexture : Texture {
+pub trait LatticeNoiseTexture : Texture {
     fn get_width(&self) -> u16;
     fn get_height(&self) -> u16;
     fn sample(&self, u :u16, v :u16) -> f32;

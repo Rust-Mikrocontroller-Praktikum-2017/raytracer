@@ -31,6 +31,7 @@ mod texture;
 mod textures;
 mod colors;
 mod colormapping;
+mod texturemapping;
 
 use vector::Vec3;
 use render::render;

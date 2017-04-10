@@ -63,9 +63,33 @@ pub fn modulo(x :f32, d :f32) -> f32 {
     rem(rem(x,d) + d, d)
 }
 
+#[inline]
 pub fn sin(x :f32) -> f32 {
     cos(HALFPI - x)
 }
+
+#[inline]
+pub fn arcsin(x :f32) -> f32 {
+    arctan(x / sqrt(1.0-2.0*x))
+}
+
+#[inline]
+pub fn arccos(x :f32) -> f32 {
+    HALFPI - arcsin(x) 
+}
+
+pub fn arctan(x :f32) -> f32 {
+    arcsin(x / sqrt(x*x + 1.0))
+}
+
+//const ATAN_1 :f32 = 1.6867629106;
+//const ATAN_2 :f32 = 0.4378497304;
+//const ATAN_3 :f32 = 1.6867633134;
+
+//pub fn atan_66(x: f32) -> f32 {
+    //let x2 = x*x;
+    //(x*(ATAN_1+x2*ATAN_2)/ATAN_3+x2)
+//}
 
 // sin, cos and tan approximations adapted from
 // http://www.ganssle.com/approx.htm
