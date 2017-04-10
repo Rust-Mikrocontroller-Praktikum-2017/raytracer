@@ -1,0 +1,15 @@
+[package]
+authors = ["Philipp Krones", "Reiner Dolp"]
+name = "rtdesktop"
+version = "0.0.0"
+
+[dependencies]
+image = "0.12.3"
+
+[dependencies.rtlib]
+path = "./../lib"
+version = "0.0.0"
+
+[profile.release]
+lto = true
+debug = true
