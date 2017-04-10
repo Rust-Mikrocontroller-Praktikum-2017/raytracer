@@ -75,11 +75,30 @@ pub fn arcsin(x :f32) -> f32 {
 
 #[inline]
 pub fn arccos(x :f32) -> f32 {
-    HALFPI - arcsin(x) 
+    HALFPI - arcsin(x)
 }
 
 pub fn arctan(x :f32) -> f32 {
-    arcsin(x / sqrt(x*x + 1.0))
+    let mut _x = x;
+    if x < -1.0 && x > 1.0 {
+        _x = 1.0/x;
+    }
+
+    let mut sum = 0.0;
+    for i in (0..10).filter(|i| i % 2 == 1) {
+        let val = powi(_x, i) / (i as f32);
+        if i % 4 == 1 {
+            sum += val;
+        } else {
+            sum -= val;
+        }
+    }
+
+    if x > -1.0 && x < 1.0 {
+        sum
+    } else {
+        HALFPI - sum
+    }
 }
 
 //const ATAN_1 :f32 = 1.6867629106;
