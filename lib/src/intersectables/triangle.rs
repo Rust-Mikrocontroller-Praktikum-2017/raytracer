@@ -4,6 +4,11 @@ use intersection::{Intersectable, Intersection};
 use reflectionmodel::ModifiedPhongModel;
 use math::EPS;
 
+#[cfg(test)]
+use vector::VEC3_ZERO;
+#[cfg(test)]
+use textures::color::NoTexture;
+
 pub struct Triangle<'a> {
     pub a: Vec3,
     pub b: Vec3,
@@ -97,20 +102,16 @@ impl<'a> Intersectable for Triangle<'a> {
 }
 
 #[cfg(test)]
-fn any_material() -> ModifiedPhongModel {
-    use vector::VEC3_ZERO;
+const TEST_MATERIAL :ModifiedPhongModel = ModifiedPhongModel {
+    emission:     &NoTexture { color: VEC3_ZERO },
+    k_specular:   &NoTexture { color: VEC3_ZERO },
+    k_diffus:     &NoTexture { color: VEC3_ZERO },
+    k_ambient:    &NoTexture { color: VEC3_ZERO },
+    k_t:          &NoTexture { color: VEC3_ZERO },
 
-    ModifiedPhongModel {
-        emission: VEC3_ZERO,
-        k_specular: VEC3_ZERO,
-        k_diffus: VEC3_ZERO,
-        k_ambient: VEC3_ZERO,
-        phong_exponent: 1.0,
-        k_t: VEC3_ZERO,
-        ior: 0.0,
-        transmitting: false
-    }
-}
+    phong_exponent: 1.0,
+    ior: 0.0,
+};
 
 #[test]
 fn triangle_intersection() {
@@ -118,7 +119,7 @@ fn triangle_intersection() {
         Vec3::new(1.0,1.0,0.0),
         Vec3::new(0.0,0.0,0.0),
         Vec3::new(0.0,1.0,0.0),
-        any_material()
+        TEST_MATERIAL
     );
 
     let ray = Ray::new(
@@ -135,7 +136,7 @@ fn triangle_no_intersection() {
         Vec3::new(1.0,1.0,0.0),
         Vec3::new(0.0,0.0,0.0),
         Vec3::new(0.0,1.0,0.0),
-        any_material()
+        TEST_MATERIAL
     );
 
     let ray = Ray::new(

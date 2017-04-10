@@ -1,6 +1,6 @@
-#[cfg(test)]
-use std::intrinsics;
-#[cfg(not(test))]
+//#[cfg(test)]
+//use std::intrinsics;
+//#[cfg(not(test))]
 use core::intrinsics;
 use core::f32;
 
