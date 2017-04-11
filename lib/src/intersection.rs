@@ -9,7 +9,7 @@ pub trait Intersectable {
     //fn add_to_aabb(&self);
     /// Reduces light sources with a non-zero surface area to point lights for shading models that
     /// do only support point lights.
-    fn reduce_to_point(&self) -> &Vec3;
+    fn reduce_to_point(&self) -> Vec3;
     /// emission of the reduced point light source. Area lights with a non zero emission at any
     /// surface point MUST return a non-zero emission value for point lights.
     fn reduce_emission(&self) -> Vec3;

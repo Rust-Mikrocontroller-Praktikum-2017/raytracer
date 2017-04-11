@@ -64,8 +64,8 @@ impl<'a> Intersectable for Sphere<'a> {
         &self.material
     }
 
-    fn reduce_to_point(&self) -> &Vec3 {
-        &self.center
+    fn reduce_to_point(&self) -> Vec3 {
+        self.center
     }
 
     fn reduce_emission(&self) -> Vec3 {

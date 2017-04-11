@@ -92,8 +92,15 @@ impl<'a> Intersectable for Triangle<'a> {
         &self.material
     }
 
-    fn reduce_to_point(&self) -> &Vec3 {
-        &self.a
+    fn reduce_to_point(&self) -> Vec3 {
+        let a_len = self.c.sub(&self.b).length();
+        let b_len = self.vec_ac.length();
+        let c_len = self.vec_ab.length();
+        let circum = a_len+b_len+c_len;
+        let center = self.a.mult(a_len / circum)
+            .add(&self.b.mult(b_len / circum))
+            .add(&self.c.mult(c_len / circum));
+        center
     }
 
     fn reduce_emission(&self) -> Vec3 {
