@@ -1,7 +1,6 @@
 __A simple ray tracer for embeded systems.__ Written in a week as an introduction to the rust programming language.
 
-
-[![Build Status](https://travis-ci.com/reiner-dolp/rust.svg?token=pT89NzCyQvDUzex3heXM&branch=master)](https://travis-ci.com/reiner-dolp/rust)
+[![Build Status](https://travis-ci.org/Rust-Mikrocontroller-Praktikum-2017/raytracer.svg?branch=master)](https://travis-ci.org/Rust-Mikrocontroller-Praktikum-2017/raytracer)
 
 ![increasing reflectivity](./showcase/increasing_reflectivity.png)
 
