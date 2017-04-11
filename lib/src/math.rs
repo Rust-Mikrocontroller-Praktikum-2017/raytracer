@@ -89,7 +89,7 @@ pub fn arccos(x :f32) -> f32 {
 
 pub fn arctan(x :f32) -> f32 {
     let mut _x = x;
-    if x < -1.0 && x > 1.0 {
+    if x < -1.0 || x > 1.0 {
         _x = 1.0/x;
     }
 
@@ -103,7 +103,7 @@ pub fn arctan(x :f32) -> f32 {
         }
     }
 
-    if x < -1.0 && x > 1.0 {
+    if x < -1.0 || x > 1.0 {
         HALFPI - sum
     } else {
         sum
