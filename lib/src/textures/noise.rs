@@ -72,12 +72,12 @@ const RANDOM :[f32;97]= [
 fn reproducable_randomness(u :u16,v :u16) -> f32 {
     // mod using prime numbers to reduce visible
     // repetiton
-    RANDOM[rem(rem(u as f32, 277.0) + v as f32, 97.0) as usize]
+    RANDOM[rem((u as f32) + 277.0 * (v as f32), 97.0) as usize]
 }
 
-struct LaticeNoise {
-    width  :u16,
-    height :u16,
+pub struct LaticeNoise {
+    pub width  :u16,
+    pub height :u16,
 }
 
 impl Texture for LaticeNoise {

@@ -1,5 +1,5 @@
 use texture::{Texture, TextureMapping};
-use math::{arccos, arctan, arcsin, TWOPI, PI};
+use math::{arccos, atan2, arctan, arcsin, TWOPI, PI};
 use vector::Vec3;
 use intersection::Intersectable;
 
@@ -28,18 +28,14 @@ pub struct Cylindrical<'a> {
 
 impl<'a> TextureMapping for Cylindrical<'a> {
     fn map_texture(&self, surface_pos :&Vec3, isectable: &Intersectable) -> Vec3 {
-        let cylindrical = cartesian_to_cylindrical(surface_pos, isectable);
-        let size = 2.0 * surface_pos.length(); //???
+        let center = &isectable.reduce_to_point();
+        let offset = Vec3::fromto(center, surface_pos);
+        let maxheight = 2.0 * isectable.maximum_expansion(center);
 
-        self.texture.get_texel(cylindrical.0 / TWOPI, cylindrical.1 / size)
+        let phi = atan2(offset.y, offset.x);
+
+        self.texture.get_texel(phi / TWOPI, offset.z / maxheight)
     }
-}
-
-fn cartesian_to_cylindrical(v :&Vec3, isectable: &Intersectable) -> (f32,f32) {
-    let center = &isectable.reduce_to_point();
-    let v_to_center = Vec3::fromto(center, v);
-    let len = isectable.maximum_expansion(center);
-    (arcsin(v_to_center.y / len), v_to_center.z)
 }
 
 pub struct MapXY<'a> {
@@ -47,9 +43,15 @@ pub struct MapXY<'a> {
 }
 
 impl<'a> TextureMapping for MapXY<'a> {
-    fn map_texture(&self, surface_pos :&Vec3, _isectable: &Intersectable) -> Vec3 {
-        let objsize = 2.0 * surface_pos.length();
-        self.texture.get_texel(surface_pos.x / objsize, surface_pos.y / objsize)
+    fn map_texture(&self, surface_pos :&Vec3, isectable: &Intersectable) -> Vec3 {
+        let center = isectable.reduce_to_point();
+        let objsize = isectable.maximum_expansion(&center) * 2.0;
+        let offset = Vec3::fromto(&center, surface_pos);
+        let mut s = offset.x / objsize;
+        let s = (1.0 + s) * 0.5;
+        let mut t = offset.y / objsize;
+        let t = (1.0 + t) * 0.5;
+        self.texture.get_texel(s, t)
     }
 }
 
@@ -58,9 +60,15 @@ pub struct MapXZ<'a> {
 }
 
 impl<'a> TextureMapping for MapXZ<'a> {
-    fn map_texture(&self, surface_pos :&Vec3, _isectable: &Intersectable) -> Vec3 {
-        let objsize = surface_pos.length();
-        self.texture.get_texel(surface_pos.x / objsize, surface_pos.z / objsize)
+    fn map_texture(&self, surface_pos :&Vec3, isectable: &Intersectable) -> Vec3 {
+        let center = isectable.reduce_to_point();
+        let objsize = isectable.maximum_expansion(&center) * 2.0;
+        let offset = Vec3::fromto(&center, surface_pos);
+        let mut s = offset.x / objsize;
+        let s = (1.0 + s) * 0.5;
+        let mut t = offset.z / objsize;
+        let t = (1.0 + t) * 0.5;
+        self.texture.get_texel(s, t)
     }
 }
 
@@ -69,8 +77,14 @@ pub struct MapYZ<'a> {
 }
 
 impl<'a> TextureMapping for MapYZ<'a> {
-    fn map_texture(&self, surface_pos :&Vec3, _isectable: &Intersectable) -> Vec3 {
-        let objsize = surface_pos.length();
-        self.texture.get_texel(surface_pos.y / objsize, surface_pos.z / objsize)
+    fn map_texture(&self, surface_pos :&Vec3, isectable: &Intersectable) -> Vec3 {
+        let center = isectable.reduce_to_point();
+        let objsize = isectable.maximum_expansion(&center) * 2.0;
+        let offset = Vec3::fromto(&center, surface_pos);
+        let mut s = offset.y / objsize;
+        let s = (1.0 + s) * 0.5;
+        let mut t = offset.z / objsize;
+        let t = (1.0 + t) * 0.5;
+        self.texture.get_texel(s, t)
     }
 }
