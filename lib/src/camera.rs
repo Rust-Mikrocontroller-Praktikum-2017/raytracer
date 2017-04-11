@@ -76,7 +76,7 @@ impl<T : Camera> CameraOperations for T {
 
 #[test]
 fn rotate_y_works() {
-    use math::{EPS};
+    use math::{EPS,HALFPI};
     use cameras::perspective::PerspectiveCamera;
     let film :Film = Film {
         x_resolution: 480,
@@ -91,7 +91,7 @@ fn rotate_y_works() {
         film
     );
 
-    cam.rotate(Axis::Y, 217.6);
+    cam.rotate(Axis::Y, HALFPI);
     assert!(cam.pos.y < EPS && cam.pos.y > -EPS, "cam.pos.y={}", cam.pos.y);
     assert!(cam.pos.x < 100.0*EPS && cam.pos.x > -100.0*EPS, "cam.pos.x={}", cam.pos.x);
     assert!(cam.pos.z + 10.0 < 100.0*EPS && cam.pos.z + 10.0 > -100.0*EPS, "cam.pos.z={}", cam.pos.z);
@@ -100,7 +100,7 @@ fn rotate_y_works() {
 
 #[test]
 fn rotate_z_works() {
-    use math::{EPS};
+    use math::{EPS,HALFPI};
     use cameras::perspective::PerspectiveCamera;
     let film :Film = Film {
         x_resolution: 480,
@@ -115,7 +115,7 @@ fn rotate_z_works() {
         film
     );
 
-    cam.rotate(Axis::Z, 384.0);
+    cam.rotate(Axis::Z, HALFPI);
     assert!(cam.pos.z < EPS && cam.pos.z > -EPS, "cam.pos.z={}", cam.pos.z);
     assert!(cam.pos.x < 100.0*EPS && cam.pos.x > -100.0*EPS, "cam.pos.x={}", cam.pos.x);
     assert!(cam.pos.y - 10.0 < 100.0*EPS && cam.pos.y - 10.0 > -100.0*EPS, "cam.pos.y={}", cam.pos.y);
