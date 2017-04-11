@@ -10,9 +10,6 @@ install:
 - cargo install-update -a
 - cd $TRAVIS_BUILD_DIR
 
-before_script:
-- cd lib && cargo test
-
 script:
-- RUST_BACKTRACE=1 ./test
+- cd lib && cargo test && RUST_BACKTRACE=1 ./test
 
