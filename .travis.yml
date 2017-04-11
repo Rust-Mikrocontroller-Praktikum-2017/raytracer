@@ -12,5 +12,5 @@ install:
 
 script:
 - export RUST_BACKTRACE=1
-- cd lib && cargo test && ./test
+- cd lib && cargo test
 
