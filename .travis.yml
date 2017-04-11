@@ -11,5 +11,6 @@ install:
 - cd $TRAVIS_BUILD_DIR
 
 script:
-- cd lib && cargo test && RUST_BACKTRACE=1 ./test
+- export RUST_BACKTRACE=1
+- cd lib && cargo test && ./test
 
