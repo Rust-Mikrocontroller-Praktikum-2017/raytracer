@@ -64,7 +64,7 @@ pub fn sqrt(x : f32) -> f32 {
 /// Directly using % produces a linker error on the used hardware.
 #[inline]
 pub fn rem(c :f32, m :f32) -> f32 {
-    c-(((c/m)+0.5) as u32 as f32 * m)
+    c-((c/m) as u32 as f32 * m)
 }
 
 #[inline]
@@ -171,6 +171,11 @@ const TAN_2 :f32 = -4.6133253;
 fn tan_32s(x: f32) -> f32 {
     let x2 = x*x;
     x*TAN_1/(TAN_2 + x2)
+}
+
+#[test]
+fn rem_works() {
+    assert_eq!(1.0, rem(3.0, 2.0));
 }
 
 //#[inline]
