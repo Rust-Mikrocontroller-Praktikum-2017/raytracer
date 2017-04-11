@@ -11,8 +11,7 @@ install:
 - cd $TRAVIS_BUILD_DIR
 
 before_script:
-- xargo check
-- rustc --test ./src/test.rs
+- cd lib && cargo test
 
 script:
 - RUST_BACKTRACE=1 ./test
