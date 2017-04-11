@@ -7,3 +7,4 @@ pub const BROWN_ORANGE : Vec3 = Vec3 { x: 0.6980392, y: 0.65882352, z: 0.0627450
 pub const GREEN        : Vec3 = Vec3 { x: 0.3764705, y: 0.55686274, z: 0.0 };
 pub const WHITE        : Vec3 = Vec3 { x: 1.0, y: 1.0, z: 1.0 };
 pub const GRASS_GREEN  : Vec3 = Vec3 { x: 0.2509803, y: 1.0, z: 1.0 };
+pub const RED          : Vec3 = Vec3 { x: 1.0, y: 0.0, z: 0.0 };

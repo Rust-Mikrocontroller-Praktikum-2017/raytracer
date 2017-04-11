@@ -1,6 +1,6 @@
 use texture::Texture;
 use vector::Vec3;
-use math::rem;
+use math::{max, min, modulo, rem};
 use colormapping::{ColorMapping, EarthTones};
 
 pub trait LatticeNoiseTexture : Texture {
@@ -9,7 +9,13 @@ pub trait LatticeNoiseTexture : Texture {
     fn sample(&self, u :u16, v :u16) -> f32;
 
     fn get_texel(&self, u :f32, v: f32) -> Vec3 {
-        self.color_map(self.get_texel_channel(u,v))
+        // repeat texture
+        let ub = modulo(u, 1.0);
+        let vb = modulo(v, 1.0);
+        // clamp texture
+        //let ub = max(0.0, min(u, 1.0));
+        //let vb = max(0.0, min(v, 1.0));
+        self.color_map(self.get_texel_channel(ub,vb))
     }
 
     fn get_texel_channel(&self, _u :f32, _v: f32) -> f32 {
@@ -76,7 +82,11 @@ struct LaticeNoise {
 
 impl Texture for LaticeNoise {
     fn get_texel(&self, u :f32, v: f32) -> Vec3 {
-        self.color_map(self.get_texel_channel(u,v))
+        //let ub = max(0.0, min(u, 1.0));
+        //let vb = max(0.0, min(v, 1.0));
+        let ub = modulo(u, 1.0);
+        let vb = modulo(v, 1.0);
+        self.color_map(self.get_texel_channel(ub,vb))
     }
 }
 
@@ -108,7 +118,11 @@ pub struct Turbulence3<'a> {
 
 impl<'a> Texture for Turbulence3<'a> {
     fn get_texel(&self, u :f32, v: f32) -> Vec3 {
-        self.color_map(self.get_texel_channel(u,v))
+        //let ub = max(0.0, min(u, 1.0));
+        //let vb = max(0.0, min(v, 1.0));
+        let ub = modulo(u, 1.0);
+        let vb = modulo(v, 1.0);
+        self.color_mapping.color_map(self.get_texel_channel(ub,vb))
     }
 }
 
@@ -127,9 +141,12 @@ impl<'a> LatticeNoiseTexture for Turbulence3<'a> {
     }
 
     fn get_texel(&self, u :f32, v: f32) -> Vec3 {
-        let val_octave_0 = self.get_texel_channel(u,v);
-        let val_octave_1 = self.octave_1.get_texel_channel(u,v);
-        let val_octave_2 = self.octave_2.get_texel_channel(u,v);
+        let ub = max(0.0, min(u, 1.0));
+        let vb = max(0.0, min(v, 1.0));
+
+        let val_octave_0 = self.get_texel_channel(ub,vb);
+        let val_octave_1 = self.octave_1.get_texel_channel(ub,vb);
+        let val_octave_2 = self.octave_2.get_texel_channel(ub,vb);
 
         let val = val_octave_0 + val_octave_1*self.octave_1_weight +
             val_octave_2*self.octave_2_weight;

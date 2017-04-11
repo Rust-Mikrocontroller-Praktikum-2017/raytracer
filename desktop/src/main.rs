@@ -15,8 +15,8 @@ fn main() {
     let film :Film = Film {
         x_resolution: 480,
         y_resolution: 272,
-        supersampling: 1,
-        color: Vec3::new(0.0,0.4,0.8),
+        supersampling: 4,
+        color: Vec3::new(0.0,0.1,0.2),
         iso: 100,
     };
 
@@ -25,7 +25,7 @@ fn main() {
 
     
     let mut cam = PerspectiveCamera::new(
-        Vec3::new(-200.0,-10.0,5.0),
+        Vec3::new(-400.0,-10.0,500.0),
         Vec3::zero(),
         film
     );
