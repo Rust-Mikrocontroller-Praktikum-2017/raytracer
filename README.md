@@ -20,6 +20,9 @@ runtime.
 
 ### Features and Showcase
 
+Swipe left or right to rotate the camera around the scene. Swipe up or down to
+zoom in or out.
+
 ![increasing reflectivity](./showcase/increasing_reflectivity.png)
 
 _Shown above are spheres with increasing reflection coefficient._
@@ -42,7 +45,7 @@ cd desktop && cargo run
 Run the commands below and [upload the program as described here](https://github.com/embed-rs/stm32f7-discovery/blob/master/README.md).
 
 ```
-cd stm32f7 && xargo build
+cd stm32f7 && xargo build --release
 ```
 
 ### Executing Unit Tests
@@ -54,3 +57,11 @@ cd lib && cargo test
 ```
 
 ### Benchmarking
+
+You can benchmark the application using the commands shown below. A simple
+scene should take less than 10 milliseconds on a desktop system. Rendering
+on the microcontroller should take about 10 seconds.
+
+```
+cd lib && cargo test
+```
