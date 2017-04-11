@@ -3,7 +3,7 @@ __A simple ray tracer for embeded systems.__ Written in a week as an introductio
 
 [![Build Status](https://travis-ci.com/reiner-dolp/rust.svg?token=pT89NzCyQvDUzex3heXM&branch=master)](https://travis-ci.com/reiner-dolp/rust)
 
-|![increasing reflectivity](./showcase/increasing_reflectivity.png)
+![increasing reflectivity](./showcase/increasing_reflectivity.png)
 
 _Shown above are spheres with increasing reflection coefficient._
 
