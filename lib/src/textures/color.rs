@@ -1,6 +1,7 @@
 use vector::Vec3;
 use texture::{Texture, TextureMapping};
 use colors::{RED, WHITE};
+use intersection::Intersectable;
 
 pub struct NoTexture {
     pub color: Vec3
@@ -13,7 +14,7 @@ impl Texture for NoTexture {
 }
 
 impl TextureMapping for NoTexture {
-    fn map_texture(&self, _surface_pos :&Vec3) -> Vec3 {
+    fn map_texture(&self, _surface_pos :&Vec3, _isectable: &Intersectable) -> Vec3 {
         self.color
     }
 }

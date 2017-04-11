@@ -2,7 +2,7 @@ use vector::Vec3;
 use ray::Ray;
 use intersection::{Intersectable, Intersection};
 use reflectionmodel::ModifiedPhongModel;
-use math::EPS;
+use math::{max, EPS};
 
 #[cfg(test)]
 use vector::VEC3_ZERO;
@@ -97,7 +97,14 @@ impl<'a> Intersectable for Triangle<'a> {
     }
 
     fn reduce_emission(&self) -> Vec3 {
-        self.material.emission.map_texture(&self.a)
+        self.material.emission.map_texture(&self.a, self)
+    }
+
+    fn maximum_expansion(&self, center: &Vec3) -> f32 {
+        let dist_a = self.a.sub(center).length();
+        let dist_b = self.b.sub(center).length();
+        let dist_c = self.c.sub(center).length();
+        max(max(dist_a, dist_b), dist_c)
     }
 }
 

@@ -1,7 +1,7 @@
 use camera::Camera;
 use vector::Vec3;
 use scene::Scene;
-use intersection::Intersection;
+use intersection::{Intersection, Intersectable};
 use ray::Ray;
 use reflectionmodel::Material;
 use math::HUGE_EPS;
@@ -56,6 +56,7 @@ fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene, inside: bool, depth: u8) -> 
         return cam.get_film().color;
     }
     let mut isect :Option<Intersection> = None;
+    let mut isectable: Option<&Intersectable> = None;
 
     for intersectable in scene.objects.iter() {
         let tentative_isect = intersectable.intersect(ray);
@@ -63,6 +64,7 @@ fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene, inside: bool, depth: u8) -> 
         if let Some(curr_isect) = tentative_isect {
             if curr_isect.t > 0.0 && (isect.is_none() || curr_isect.t < isect.unwrap().t) {
                 isect = tentative_isect;
+                isectable = Some(*intersectable);
             }
         }
     }
@@ -70,21 +72,21 @@ fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene, inside: bool, depth: u8) -> 
     if let Some(actual_isect) = isect {
         let mut color = Vec3::zero();
         let material = actual_isect.material;
-        color.inplace_add(&material.evaluate_color(cam, &actual_isect, scene));
+        color.inplace_add(&material.evaluate_color(cam, &actual_isect, isectable.unwrap(), scene));
 
         let new_origin = actual_isect.get_position();
 
         // TODO: refactor to perform the texture lookup only once
-        if material.is_specular(&new_origin) {
+        if material.is_specular(&new_origin, isectable.unwrap()) {
             let mut new_dir = ray.direction.reflect(&actual_isect.normal);
             new_dir.normalize();
             let new_ray = Ray::new(new_origin.add(&new_dir.mult(HUGE_EPS)), new_dir);
-            let spec_val = &material.k_specular.map_texture(&new_origin);
+            let spec_val = &material.k_specular.map_texture(&new_origin, isectable.unwrap());
             color.inplace_add(&spec_val.mult_vec(&raytrace(&new_ray,cam,scene,inside,depth+1)));
         }
-        if material.is_transmitting(&new_origin) {
+        if material.is_transmitting(&new_origin, isectable.unwrap()) {
             let refracted = ray.direction.refract(&actual_isect.normal, material.ior, inside);
-            let t_val = material.k_t.map_texture(&new_origin);
+            let t_val = material.k_t.map_texture(&new_origin, isectable.unwrap());
 
             let new_ray : Ray;
             let new_inside : bool;

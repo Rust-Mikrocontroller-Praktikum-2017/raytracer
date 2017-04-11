@@ -13,6 +13,7 @@ pub trait Intersectable {
     /// emission of the reduced point light source. Area lights with a non zero emission at any
     /// surface point MUST return a non-zero emission value for point lights.
     fn reduce_emission(&self) -> Vec3;
+    fn maximum_expansion(&self, center: &Vec3) -> f32;
     ///// true if the light source is has no surface area
     //fn is_point_light(&self) -> bool;
     ///// returns a random point on the visible area of
