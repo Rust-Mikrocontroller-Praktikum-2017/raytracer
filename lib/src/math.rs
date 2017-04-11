@@ -79,7 +79,7 @@ pub fn sin(x :f32) -> f32 {
 
 #[inline]
 pub fn arcsin(x :f32) -> f32 {
-    arctan(x / sqrt(1.0-2.0*x))
+    2.0 * arctan(x / (1.0 + sqrt(1.0-x*x)))
 }
 
 #[inline]
@@ -103,7 +103,7 @@ pub fn arctan(x :f32) -> f32 {
         }
     }
 
-    if x > -1.0 && x < 1.0 {
+    if x >= -1.0 && x <= 1.0 {
         sum
     } else {
         HALFPI - sum
