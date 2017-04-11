@@ -103,7 +103,9 @@ pub fn arctan(x :f32) -> f32 {
         }
     }
 
-    if x < -1.0 || x > 1.0 {
+    if x < -1.0 {
+        -HALFPI - sum
+    } else if x > 1.0 {
         HALFPI - sum
     } else {
         sum
