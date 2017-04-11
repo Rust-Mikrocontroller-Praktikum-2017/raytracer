@@ -15,10 +15,6 @@ impl Display for LcdDisplay {
     fn reset(&mut self) {
         self.lcd.set_background_color(Color::rgb(0,0,0));
     }
-
-    fn clear_screen(&mut self) {
-        self.lcd.clear_screen();
-    }
 }
 
 impl LcdDisplay {

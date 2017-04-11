@@ -173,7 +173,7 @@ fn main(hw: board::Hardware) -> ! {
                     let rad = -swipe.v*1.25/y_res*HALFPI;
                     cam.rotate(Axis::Y, rad);
                 }
-                display.clear_screen();
+                display.reset();
                 render(&mut display, &cam, &SCENE_SPHERE);
             }
             swipe = Vec2::zero();
