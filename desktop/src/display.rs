@@ -19,8 +19,7 @@ impl PngBuffer {
     }
 
     pub fn write(&self) {
-        //let ref mut out = File::create().unwrap();
-        let _ = self.buff.save(&Path::new("render.png")).unwrap();
+        self.buff.save(&Path::new("render.png")).unwrap();
     }
 }
 
