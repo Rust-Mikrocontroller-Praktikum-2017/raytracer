@@ -79,11 +79,13 @@ impl<T : Camera> CameraOperations for T {
 fn rotate_y_works() {
     use math::{EPS,HALFPI};
     use cameras::perspective::PerspectiveCamera;
+    use textures::color::NoTexture;
+
     let film :Film = Film {
         x_resolution: 480,
         y_resolution: 272,
         supersampling: 1,
-        color: Vec3::new(0.0,0.4,0.8),
+        texture: &NoTexture { color: Vec3::new(0.0,0.4,0.8) },
         iso: 100,
     };
     let mut cam = PerspectiveCamera::new(
@@ -103,11 +105,13 @@ fn rotate_y_works() {
 fn rotate_z_works() {
     use math::{EPS,HALFPI};
     use cameras::perspective::PerspectiveCamera;
+    use textures::color::NoTexture;
+
     let film :Film = Film {
         x_resolution: 480,
         y_resolution: 272,
         supersampling: 1,
-        color: Vec3::new(0.0,0.4,0.8),
+        texture: &NoTexture { color: Vec3::new(0.0,0.4,0.8) },
         iso: 100,
     };
     let mut cam = PerspectiveCamera::new(
