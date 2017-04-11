@@ -1,10 +1,11 @@
-__A simple ray tracer for embeded systems.__ Written in a week to learn rust.
+__A simple ray tracer for embeded systems.__ Written in a week as an introduction to the rust programming language.
+
 
 [![Build Status](https://travis-ci.com/reiner-dolp/rust.svg?token=pT89NzCyQvDUzex3heXM&branch=master)](https://travis-ci.com/reiner-dolp/rust)
 
-![increasing reflectivity](./showcase/increasing_reflectivity.png)
+|![increasing reflectivity](./showcase/increasing_reflectivity.png)
 
-__Shown above are spheres with increasing reflection coefficient.__
+_Shown above are spheres with increasing reflection coefficient._
 
 
 ---
