@@ -4,12 +4,21 @@ use rtlib::vector::Vec3;
 use rtlib::math::min;
 
 pub struct LcdDisplay {
-    lcd: internalLcd
+    lcd: internalLcd,
+    buff: [u16; 480]
 }
 
 impl Display for LcdDisplay {
     fn set_pixel(&mut self, x :u16, y :u16, color: &Vec3) {
-            self.lcd.print_point_color_at(x as u16,y as u16, LcdDisplay::color_to_internal(color));
+        assert!(x < 480);
+        if x == 479 {
+            self.buff[x as usize] = LcdDisplay::color_to_internal(color);
+            for i in 0..self.buff.len() {
+                self.lcd.print_point_color_at(i as u16,y as u16, self.buff[i]);
+            }
+        } else {
+            self.buff[x as usize] = LcdDisplay::color_to_internal(color);
+        }
     }
 
     fn reset(&mut self) {
@@ -20,7 +29,8 @@ impl Display for LcdDisplay {
 impl LcdDisplay {
     pub fn init(lcd : internalLcd) -> LcdDisplay {
         LcdDisplay {
-            lcd: lcd
+            lcd: lcd,
+            buff: [0; 480]
         }
     }
 
