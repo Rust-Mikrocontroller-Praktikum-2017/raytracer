@@ -103,10 +103,10 @@ pub fn arctan(x :f32) -> f32 {
         }
     }
 
-    if x >= -1.0 && x <= 1.0 {
-        sum
-    } else {
+    if x < -1.0 && x > 1.0 {
         HALFPI - sum
+    } else {
+        sum
     }
 }
 
@@ -126,7 +126,7 @@ pub fn arctan(x :f32) -> f32 {
 pub fn cos(_x :f32) -> f32 {
 
     let mut x = rem(_x, TWOPI);
-    if x < 0.0 { x -= x; }
+    if x < 0.0 { x = -x; }
 
     let quadrant = (x / HALFPI) as u32;
 

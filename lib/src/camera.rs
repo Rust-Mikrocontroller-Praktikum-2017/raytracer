@@ -51,7 +51,6 @@ impl<T : Camera> CameraOperations for T {
         let mut new_pos = pos;
         match axis {
             Axis::X => {
-                //unused
                 new_pos.y = cos(rad) * pos.y - sin(rad) * pos.z;
                 new_pos.z = sin(rad) * pos.y + cos(rad) * pos.z;
             },

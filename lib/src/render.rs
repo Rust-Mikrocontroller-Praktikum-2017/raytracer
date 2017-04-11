@@ -22,7 +22,7 @@ pub fn render(display :&mut Display, cam :&Camera, scene :&Scene) {
     //
     // where `X` are samples computed for the current pixel, and
     // `o` are samples computed by adjacent pixels.
-    
+
     let supersampling = film.supersampling;
     let sample_dist = 1.0 / (supersampling as f32);
 

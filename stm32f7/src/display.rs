@@ -9,11 +9,11 @@ pub struct LcdDisplay {
 
 impl Display for LcdDisplay {
     fn set_pixel(&mut self, x :u16, y :u16, color: &Vec3) {
-            self.lcd.print_point_color_at(x as u16,y as u16, LcdDisplay::color_to_internal(color));
+        self.lcd.print_point_color_at(x as u16,y as u16, LcdDisplay::color_to_internal(color));
     }
 
     fn reset(&mut self) {
-        self.lcd.set_background_color(Color::rgb(0,0,0));
+        self.lcd.clear_screen();
     }
 }
 
