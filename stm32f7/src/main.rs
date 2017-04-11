@@ -16,10 +16,13 @@ use rtlib::vector::{Vec3, Vec2};
 use rtlib::render::render;
 use rtlib::camera::Film;
 use rtlib::cameras::orthographic::OrthographicCamera;
+// use rtlib::cameras::perspective::PerspectiveCamera;
 use rtlib::scenes::spheres::SCENE_SPHERE;
 use rtlib::camera::Axis;
 use rtlib::camera::CameraOperations;
+use rtlib::math::{abs, HALFPI};
 use display::LcdDisplay;
+use rtlib::display::Display;
 
 #[no_mangle]
 pub unsafe extern "C" fn reset() -> ! {
@@ -49,6 +52,7 @@ pub unsafe extern "C" fn reset() -> ! {
     main(board::hw());
 }
 
+#[inline(never)]
 fn main(hw: board::Hardware) -> ! {
     let board::Hardware { rcc,
                           pwr,
@@ -122,8 +126,8 @@ fn main(hw: board::Hardware) -> ! {
     };
 
     /*
-     * let cam = PerspectiveCamera::new(
-     *     Vec3::new(-49.0,0.0,0.5),
+     * let mut cam = PerspectiveCamera::new(
+     *     Vec3::new(-200.0,-10.0,5.0),
      *     Vec3::zero(),
      *     film
      * );
@@ -158,15 +162,22 @@ fn main(hw: board::Hardware) -> ! {
                 last_touch = touch;
             }
         }
-        if swipe.max_norm() > 10.0 && system_clock::ticks() - last_touch_time > 500 {
-            if swipe.u > swipe.v {
-                cam.rotate(Axis::Z, swipe.u);
-                swipe = Vec2::zero();
-            } else {
-                cam.rotate(Axis::Y, swipe.v);
-                swipe = Vec2::zero();
+        if system_clock::ticks() - last_touch_time > 500 {
+            if swipe.max_norm() > 10.0 {
+                if abs(swipe.u) > abs(swipe.v) {
+                    let x_res = cam.film.x_resolution as f32;
+                    let rad = swipe.u*1.25/x_res*HALFPI;
+                    cam.rotate(Axis::Z, rad);
+                } else {
+                    let y_res = cam.film.y_resolution as f32;
+                    let rad = -swipe.v*1.25/y_res*HALFPI;
+                    cam.rotate(Axis::Y, rad);
+                }
+                display.clear_screen();
+                render(&mut display, &cam, &SCENE_SPHERE);
             }
-            render(&mut display, &cam, &SCENE_SPHERE);
+            swipe = Vec2::zero();
+            last_touch = Vec2::zero();
             last_touch_time = system_clock::ticks();
         }
     }

@@ -63,9 +63,7 @@ impl PerspectiveCamera {
     }
 
     pub fn set_focal_length(&mut self, new_fl :f32) -> &mut Self {
-        self.pos.inplace_add(&self.w.mult(-self.focal_length));
         self.focal_length = new_fl;
-        self.pos.inplace_add(&self.w.mult(new_fl));
 
         self
     }

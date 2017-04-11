@@ -1,6 +1,6 @@
 use vector::Vec3;
 use ray::Ray;
-use math::{sin, cos, HALFPI, min};
+use math::{sin, cos};
 use cameras::projective::{make_camera_coord, make_image_plane};
 //use scene::Scene;
 //use display::Display;
@@ -46,25 +46,22 @@ pub trait CameraOperations {
 }
 
 impl<T : Camera> CameraOperations for T {
-    fn rotate(&mut self, axis: Axis, dist: f32) {
+    fn rotate(&mut self, axis: Axis, rad: f32) {
         let pos = self.get_position();
         let mut new_pos = pos;
         match axis {
             Axis::X => {
                 //unused
-                let alpha = HALFPI;
-                new_pos.y = cos(alpha) * pos.y - sin(alpha) * pos.z;
-                new_pos.z = sin(alpha) * pos.y + cos(alpha) * pos.z;
+                new_pos.y = cos(rad) * pos.y - sin(rad) * pos.z;
+                new_pos.z = sin(rad) * pos.y + cos(rad) * pos.z;
             },
             Axis::Y => {
-                let alpha = min(HALFPI, dist*1.25/272.0 * HALFPI);
-                new_pos.x = cos(alpha) * pos.x + sin(alpha) * pos.z;
-                new_pos.z = -sin(alpha) * pos.x + cos(alpha) * pos.z;
+                new_pos.x = cos(rad) * pos.x + sin(rad) * pos.z;
+                new_pos.z = -sin(rad) * pos.x + cos(rad) * pos.z;
             },
             Axis::Z => {
-                let alpha = min(HALFPI, dist*1.25/480.0 * HALFPI);
-                new_pos.x = cos(alpha) * pos.x - sin(alpha) * pos.y;
-                new_pos.y = sin(alpha) * pos.x + cos(alpha) * pos.y;
+                new_pos.x = cos(rad) * pos.x - sin(rad) * pos.y;
+                new_pos.y = sin(rad) * pos.x + cos(rad) * pos.y;
             },
         }
 
@@ -76,4 +73,51 @@ impl<T : Camera> CameraOperations for T {
         let image_plane = make_image_plane(self);
         self.set_image_plane(image_plane);
     }
+}
+
+#[test]
+fn rotate_y_works() {
+    use math::{EPS};
+    use cameras::perspective::PerspectiveCamera;
+    let film :Film = Film {
+        x_resolution: 480,
+        y_resolution: 272,
+        supersampling: 1,
+        color: Vec3::new(0.0,0.4,0.8),
+        iso: 100,
+    };
+    let mut cam = PerspectiveCamera::new(
+        Vec3::new(10.0,0.0,0.0),
+        Vec3::zero(),
+        film
+    );
+
+    cam.rotate(Axis::Y, 217.6);
+    assert!(cam.pos.y < EPS && cam.pos.y > -EPS, "cam.pos.y={}", cam.pos.y);
+    assert!(cam.pos.x < 100.0*EPS && cam.pos.x > -100.0*EPS, "cam.pos.x={}", cam.pos.x);
+    assert!(cam.pos.z + 10.0 < 100.0*EPS && cam.pos.z + 10.0 > -100.0*EPS, "cam.pos.z={}", cam.pos.z);
+}
+
+
+#[test]
+fn rotate_z_works() {
+    use math::{EPS};
+    use cameras::perspective::PerspectiveCamera;
+    let film :Film = Film {
+        x_resolution: 480,
+        y_resolution: 272,
+        supersampling: 1,
+        color: Vec3::new(0.0,0.4,0.8),
+        iso: 100,
+    };
+    let mut cam = PerspectiveCamera::new(
+        Vec3::new(10.0,0.0,0.0),
+        Vec3::zero(),
+        film
+    );
+
+    cam.rotate(Axis::Z, 384.0);
+    assert!(cam.pos.z < EPS && cam.pos.z > -EPS, "cam.pos.z={}", cam.pos.z);
+    assert!(cam.pos.x < 100.0*EPS && cam.pos.x > -100.0*EPS, "cam.pos.x={}", cam.pos.x);
+    assert!(cam.pos.y - 10.0 < 100.0*EPS && cam.pos.y - 10.0 > -100.0*EPS, "cam.pos.y={}", cam.pos.y);
 }
