@@ -1,14 +1,10 @@
-__A simple ray tracer for embeded systems.__ Written in a week as an introduction to the rust programming language.
+__A simple ray tracer for embeded systems.__ Written in a week as an
+introduction to the rust programming language. The ray tracer uses Turner
+Whitted's formulation for recursion. Surfaces are represented using a modified
+version of the phong reflection model. Textures are procedurally generated on
+runtime.
 
 [![Build Status](https://travis-ci.org/Rust-Mikrocontroller-Praktikum-2017/raytracer.svg?branch=master)](https://travis-ci.org/Rust-Mikrocontroller-Praktikum-2017/raytracer)
-
-![increasing reflectivity](./showcase/increasing_reflectivity.png)
-
-_Shown above are spheres with increasing reflection coefficient._
-
-![different texture mappings](./showcase/texture_mappings.png)
-
-_Different methods to apply a tiled 2D texture to an object._
 
 
 ---
@@ -23,6 +19,14 @@ _Different methods to apply a tiled 2D texture to an object._
 ---
 
 ### Features and Showcase
+
+![increasing reflectivity](./showcase/increasing_reflectivity.png)
+
+_Shown above are spheres with increasing reflection coefficient._
+
+![different texture mappings](./showcase/texture_mappings.png)
+
+_Different methods to apply a tiled 2D texture to an object._
 
 ### Building and Running on your OS
 
