@@ -28,14 +28,12 @@ pub fn render(display :&mut Display, cam :&Camera, scene :&Scene) {
 
     for y in 0..(film.y_resolution) {
         for x in 0..(film.x_resolution) {
-            let mut x_sample = x as f32;
-            let mut y_sample = y as f32;
             let mut pixel_color = Vec3::zero();
 
             for _y_supixel in 0..supersampling {
                 for _x_supixel in 0..supersampling {
-                    x_sample += sample_dist;
-                    y_sample += sample_dist;
+                    let y_sample = (y as f32) + sample_dist * (_y_supixel as f32);
+                    let x_sample = (x as f32) + sample_dist * (_x_supixel as f32);
 
                     let primary_ray = cam.gen_primary_ray(x_sample, y_sample);
 
