@@ -2,6 +2,7 @@ use vector::Vec3;
 use ray::Ray;
 use math::{sin, cos};
 use cameras::projective::{make_camera_coord, make_image_plane};
+use texture::Texture;
 //use scene::Scene;
 //use display::Display;
 //use render::render;
@@ -27,15 +28,15 @@ pub trait Camera {
     //}
 }
 
-pub struct Film {
+pub struct Film<'a> {
     pub x_resolution: u32,
     pub y_resolution: u32,
     pub supersampling: u32,
-    pub color: Vec3,
+    pub texture: &'a Texture,
     pub iso: u32
 }
 
-impl Film {
+impl<'a> Film<'a> {
     pub fn develop(&self, color :Vec3, _x: f32, _y: f32) -> Vec3 {
         color.mult(self.iso as f32 / 100.0)
     }

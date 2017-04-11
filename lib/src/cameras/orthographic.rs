@@ -3,11 +3,11 @@ use ray::Ray;
 use vector::{Vec3, VEC3_ZERO};
 use cameras::projective::{make_camera_coord, make_image_plane, make_uv};
 
-pub struct OrthographicCamera {
+pub struct OrthographicCamera<'a> {
     // camera position in world coordinates
     pub pos: Vec3,
     pub target: Vec3,
-    pub film: Film,
+    pub film: Film<'a>,
 
     // basis vectors of camera coordinate system
     // in world coordinates
@@ -22,7 +22,7 @@ pub struct OrthographicCamera {
     pub r :i32,
 }
 
-impl Camera for OrthographicCamera {
+impl<'a> Camera for OrthographicCamera<'a> {
     fn gen_primary_ray(&self, x :f32, y :f32) -> Ray {
         let uv = make_uv(&self.film, (self.t,self.r,self.b,self.l), x+0.5, y+0.5);
         let origin = self.pos.add(&self.u.mult(uv.u).add(&(self.v.mult(uv.v))));
@@ -59,8 +59,8 @@ impl Camera for OrthographicCamera {
     }
 }
 
-impl OrthographicCamera {
-    pub fn new(pos :Vec3, target :Vec3, film :Film) -> OrthographicCamera {
+impl<'a> OrthographicCamera<'a> {
+    pub fn new(pos :Vec3, target :Vec3, film :Film<'a>) -> OrthographicCamera<'a> {
         let mut cam = OrthographicCamera {
             pos: pos,
             target: target,

@@ -4,11 +4,11 @@ use vector::{Vec3, VEC3_ZERO};
 use math::{PI,tan};
 use cameras::projective::{make_camera_coord, make_image_plane, make_uv};
 
-pub struct PerspectiveCamera {
+pub struct PerspectiveCamera<'a> {
     // camera position in world coordinates
     pub pos: Vec3,
     pub target: Vec3,
-    pub film: Film,
+    pub film: Film<'a>,
 
     // basis vectors of camera coordinate system
     // in world coordinates
@@ -27,8 +27,8 @@ pub struct PerspectiveCamera {
     pub focal_length   :f32,
 }
 
-impl PerspectiveCamera {
-    pub fn new(pos :Vec3, target :Vec3, film :Film) -> PerspectiveCamera {
+impl<'a> PerspectiveCamera<'a> {
+    pub fn new(pos :Vec3, target :Vec3, film :Film<'a>) -> PerspectiveCamera<'a> {
         let mut cam = PerspectiveCamera {
             pos: pos,
             target: target,
@@ -69,7 +69,7 @@ impl PerspectiveCamera {
     }
 }
 
-impl Camera for PerspectiveCamera {
+impl<'a> Camera for PerspectiveCamera<'a> {
 
     fn gen_primary_ray(&self, x :f32, y :f32) -> Ray {
         let uv = make_uv(&self.film, (self.t,self.r,self.b,self.l), x+0.5, y+0.5);

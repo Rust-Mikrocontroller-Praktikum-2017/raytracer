@@ -4,8 +4,9 @@ use scene::Scene;
 use intersection::{Intersection, Intersectable};
 use ray::Ray;
 use reflectionmodel::Material;
-use math::HUGE_EPS;
+use math::{atan2, arccos, HUGE_EPS, PI, TWOPI};
 use display::Display;
+use texture::Texture;
 
 pub fn render(display :&mut Display, cam :&Camera, scene :&Scene) {
 
@@ -50,11 +51,18 @@ pub fn render(display :&mut Display, cam :&Camera, scene :&Scene) {
     }
 }
 
+fn read_latlong_map(map :&Texture, ray: &Ray) -> Vec3 {
+    let tetha = arccos(ray.direction.z);
+    let phi = atan2(ray.direction.y, ray.direction.x);
+    map.get_texel(tetha/PI, phi/TWOPI)
+}
+
 fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene, inside: bool, depth: u8) -> Vec3 {
     // TODO: get rid of "inside" bool and implement refraction by comparing iors
     if depth > 5 {
-        return cam.get_film().color;
+        return read_latlong_map(cam.get_film().texture, ray)
     }
+
     let mut isect :Option<Intersection> = None;
     let mut isectable: Option<&Intersectable> = None;
 
@@ -110,6 +118,6 @@ fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene, inside: bool, depth: u8) -> 
 
         color
     } else {
-        cam.get_film().color
+        read_latlong_map(cam.get_film().texture, ray)
     }
 }

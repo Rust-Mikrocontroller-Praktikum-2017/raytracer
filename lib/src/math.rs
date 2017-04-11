@@ -82,6 +82,26 @@ pub fn arcsin(x :f32) -> f32 {
     2.0 * arctan(x / (1.0 + sqrt(1.0-x*x)))
 }
 
+pub fn atan2(y :f32,x :f32) -> f32 {
+    if x > 0.0 {
+        arctan(y/x)
+    } else if x < 0.0 {
+        if x >= 0.0 {
+            arctan(y/x)+PI
+        } else {
+            arctan(y/x)-PI
+        }
+    } else {
+        if y > 0.0 {
+            HALFPI
+        } else if y < 0.0 {
+            -HALFPI
+        } else {
+            NAN
+        }
+    }
+}
+
 #[inline]
 pub fn arccos(x :f32) -> f32 {
     HALFPI - arcsin(x)
