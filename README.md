@@ -7,6 +7,10 @@ __A simple ray tracer for embeded systems.__ Written in a week as an introductio
 
 _Shown above are spheres with increasing reflection coefficient._
 
+![different texture mappings](./showcase/texture_mappings.png)
+
+_Different methods to apply a tiled 2D texture to an object._
+
 
 ---
 <p align=center><strong>Table of Contents</strong></p>
