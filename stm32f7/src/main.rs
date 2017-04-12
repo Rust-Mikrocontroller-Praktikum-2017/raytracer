@@ -157,16 +157,26 @@ fn main(hw: board::Hardware) -> ! {
 
     cam_1.set_field_of_view(45);
 
-    /*
-     * let mut cam = OrthographicCamera::new(
-     *     Vec3::new(-154.0,0.0,80.0),
-     *     Vec3::zero(),
-     *     film
-     * );
-     */
+    let film_2 :Film = Film {
+        x_resolution: 480,
+        y_resolution: 272,
+        supersampling: 1,
+        texture: &FileTexture{
+            width: 403,
+            height: 161,
+            rgbdata: include_bytes!("../../textures/latlong_palace_small.rgb")
+        },
+        iso: 100,
+    };
+
+    let cam_2 = PerspectiveCamera::new(
+        Vec3::new(-200.0,0.0,0.0),
+        Vec3::new(0.0,0.0,0.0),
+        film_2
+    );
 
     let mut display = LcdDisplay::init(lcd);
-    let mut cams = [cam_1,cam_0.clone(),cam_0];
+    let mut cams = [cam_1,cam_2,cam_0];
     let scenes = [pyramid::SCENE_PYRAMID, spheres::SCENE_SPHERE, space::SCENE_SPACE];
     let mut current_scene = 0;
 

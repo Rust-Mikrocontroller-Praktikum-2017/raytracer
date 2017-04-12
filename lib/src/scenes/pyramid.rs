@@ -4,7 +4,7 @@ use intersectables::triangle::Triangle;
 use vector::{Vec3, VEC3_ZERO};
 use reflectionmodel::ModifiedPhongModel;
 use textures::color::{NoTexture};
-use textures::noise::SAND_TEXTURE;
+use textures::file::FileTexture;
 use texture::MultTexture;
 use texturemapping::sphere::{MapXY};
 
@@ -92,8 +92,8 @@ pub const SCENE_PYRAMID: Scene = Scene {
             material: ModifiedPhongModel {
                 emission:       &NoTexture { color: VEC3_ZERO },
                 k_specular:     &NoTexture { color: VEC3_ZERO },
-                k_diffus:       &MapXY { texture: &MultTexture { factor: 0.7, texture: &SAND_TEXTURE }},
-                k_ambient:      &MapXY { texture: &MultTexture { factor: 0.2, texture: &SAND_TEXTURE }},
+                k_diffus:       &MapXY { texture: &MultTexture { factor: 0.7, texture: &FileTexture { width: 150, height: 150, rgbdata: include_bytes!("../../../textures/sand.rgb")}}},
+                k_ambient:      &MapXY { texture: &MultTexture { factor: 0.2, texture: &FileTexture { width: 150, height: 150, rgbdata: include_bytes!("../../../textures/sand.rgb")}}},
                 k_t:            &NoTexture { color: VEC3_ZERO },
 
                 phong_exponent: 1.0,
@@ -110,8 +110,8 @@ pub const SCENE_PYRAMID: Scene = Scene {
             material: ModifiedPhongModel {
                 emission:       &NoTexture { color: VEC3_ZERO },
                 k_specular:     &NoTexture { color: VEC3_ZERO },
-                k_diffus:       &MapXY { texture: &MultTexture { factor: 0.7, texture: &SAND_TEXTURE }},
-                k_ambient:      &MapXY { texture: &MultTexture { factor: 0.2, texture: &SAND_TEXTURE }},
+                k_diffus:       &MapXY { texture: &MultTexture { factor: 0.7, texture: &FileTexture { width: 150, height: 150, rgbdata: include_bytes!("../../../textures/sand.rgb")}}},
+                k_ambient:      &MapXY { texture: &MultTexture { factor: 0.2, texture: &FileTexture { width: 150, height: 150, rgbdata: include_bytes!("../../../textures/sand.rgb")}}},
                 k_t:            &NoTexture { color: VEC3_ZERO },
 
                 phong_exponent: 1.0,
