@@ -11,3 +11,5 @@ pub const RED          : Vec3 = Vec3 { x: 1.0, y: 0.0, z: 0.0 };
 pub const DARK_BLUE    : Vec3 = Vec3 { x: 0.0, y: 0.0, z: 0.10 };
 pub const BLACK        : Vec3 = Vec3 { x: 0.0, y: 0.0, z: 0.05 };
 pub const OFF_WHITE    : Vec3 = Vec3 { x: 0.7, y: 0.7, z: 0.7 };
+pub const DARK_SAND    : Vec3 = Vec3 { x: 0.61, y: 0.51, z: 0.39 };
+pub const LIGHT_SAND   : Vec3 = Vec3 { x: 0.93, y: 0.90, z: 0.87 };
