@@ -3,9 +3,9 @@ use ray::Ray;
 use math::{sin, cos};
 use cameras::projective::{make_camera_coord, make_image_plane};
 use texture::Texture;
-//use scene::Scene;
-//use display::Display;
-//use render::render;
+use scene::Scene;
+use display::Display;
+use render::render;
 
 pub const UP: Vec3 = Vec3 {x: 0.0, y: 0.0, z: 1.0};
 
@@ -23,9 +23,6 @@ pub trait Camera {
     fn get_film(&self) -> &Film;
     fn set_camera_coord(&mut self, coord: (Vec3,Vec3,Vec3));
     fn set_image_plane(&mut self, image_plane: (i32,i32,i32,i32));
-    //fn take_picture(&self, scene :&Scene, display :&mut Display) {
-        //render(display, self, scene);
-    //}
 }
 
 #[derive(Clone)]
@@ -44,7 +41,7 @@ impl<'a> Film<'a> {
 }
 pub trait CameraOperations {
     fn rotate(&mut self, axis: Axis, dist: f32);
-
+    fn take_picture(&self, scene :&Scene, display :&mut Display);
 }
 
 impl<T : Camera> CameraOperations for T {
@@ -73,6 +70,10 @@ impl<T : Camera> CameraOperations for T {
 
         let image_plane = make_image_plane(self);
         self.set_image_plane(image_plane);
+    }
+
+    fn take_picture(&self, scene :&Scene, display :&mut Display) {
+        render(display, self, scene);
     }
 }
 

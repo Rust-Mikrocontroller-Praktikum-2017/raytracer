@@ -13,7 +13,6 @@ use stm32f7::{system_clock, sdram, lcd, i2c, touch, board, embedded};
 mod display;
 
 use rtlib::vector::{Vec3, Vec2};
-use rtlib::render::render;
 use rtlib::camera::Film;
 // use rtlib::cameras::orthographic::OrthographicCamera;
 use rtlib::cameras::perspective::PerspectiveCamera;
@@ -187,7 +186,7 @@ fn main(hw: board::Hardware) -> ! {
     ];
     let mut current_scene = 0;
 
-    render(&mut display, &cams[current_scene], &scenes[current_scene]);
+    cams[current_scene].take_picture(&scenes[current_scene], &mut display);
 
     let mut swipe = Vec2::zero();
     let mut last_touch_time = system_clock::ticks();
@@ -221,7 +220,7 @@ fn main(hw: board::Hardware) -> ! {
                     cams[current_scene].rotate(Axis::Y, rad);
                 }
                 display.reset();
-                render(&mut display, &cams[current_scene], &scenes[current_scene]);
+                cams[current_scene].take_picture(&scenes[current_scene], &mut display);
             }
             swipe = Vec2::zero();
             last_touch = Vec2::zero();
@@ -233,7 +232,7 @@ fn main(hw: board::Hardware) -> ! {
             current_scene += 1;
             current_scene %= scenes.len();
             display.reset();
-            render(&mut display, &cams[current_scene], &scenes[current_scene]);
+            cams[current_scene].take_picture(&scenes[current_scene], &mut display);
         }
 
         button_pressed_old = button_pressed;
