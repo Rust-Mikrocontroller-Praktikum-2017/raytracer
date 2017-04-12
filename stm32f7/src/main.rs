@@ -17,7 +17,7 @@ use rtlib::render::render;
 use rtlib::camera::Film;
 // use rtlib::cameras::orthographic::OrthographicCamera;
 use rtlib::cameras::perspective::PerspectiveCamera;
-use rtlib::scenes::{space,spheres,pyramid};
+use rtlib::scenes::{space,spheres,pyramid,environmentmappingdemo};
 use rtlib::camera::Axis;
 use rtlib::camera::CameraOperations;
 use rtlib::math::{abs, HALFPI};
@@ -176,8 +176,15 @@ fn main(hw: board::Hardware) -> ! {
     );
 
     let mut display = LcdDisplay::init(lcd);
-    let mut cams = [cam_1,cam_2,cam_0];
-    let scenes = [pyramid::SCENE_PYRAMID, spheres::SCENE_SPHERE, space::SCENE_SPACE];
+    let mut cams = [cam_0.clone(),
+                    cam_2,
+                    cam_1,
+                    cam_0];
+    let scenes = [spheres::SCENE_SPHERE,
+                    environmentmappingdemo::SCENE_ENVMAP_DEMO,
+                    pyramid::SCENE_PYRAMID,
+                    space::SCENE_SPACE
+    ];
     let mut current_scene = 0;
 
     render(&mut display, &cams[current_scene], &scenes[current_scene]);
