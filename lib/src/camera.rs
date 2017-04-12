@@ -28,6 +28,7 @@ pub trait Camera {
     //}
 }
 
+#[derive(Clone)]
 pub struct Film<'a> {
     pub x_resolution: u32,
     pub y_resolution: u32,

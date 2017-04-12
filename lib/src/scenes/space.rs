@@ -9,7 +9,7 @@ use texturemapping::sphere::{MapXY, MapXZ, MapYZ, Cylindrical, Spherical};
 use texture::MultTexture;
 // use textures::noise::EARTH_TEXTURE;
 
-pub const SCENE_SPHERE: Scene = Scene {
+pub const SCENE_SPACE: Scene = Scene {
     objects: &[
         //&Sphere {
             //center: Vec3 {x: 00.0, y: 150.0, z: 50.0},

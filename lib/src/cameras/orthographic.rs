@@ -3,6 +3,7 @@ use ray::Ray;
 use vector::{Vec3, VEC3_ZERO};
 use cameras::projective::{make_camera_coord, make_image_plane, make_uv};
 
+#[derive(Clone)]
 pub struct OrthographicCamera<'a> {
     // camera position in world coordinates
     pub pos: Vec3,
