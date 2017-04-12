@@ -4,7 +4,7 @@ Whitted's formulation. Surfaces are represented using a modified version of the
 phong reflection model. Textures can be embeded or -- as the microcontroller
 has limited memory -- procedurally generated on runtime. Remixing of existing
 textures is supported through textures modifiers and combiners. Environment
-mapping is supported.
+mapping and supersampling is also supported.
 
 [![Build Status](https://travis-ci.org/Rust-Mikrocontroller-Praktikum-2017/raytracer.svg?branch=master)](https://travis-ci.org/Rust-Mikrocontroller-Praktikum-2017/raytracer)
 
@@ -29,13 +29,13 @@ on the backside of the board to cycle through the available scenes.
 ![environment mapping](./showcase/envmap.png)
 _Shown above is a specular sphere suspended mid-air in a palace._
 
-![increasing reflectivity](./showcase/increasing_reflectivity.png)
-
-_Shown above are spheres with increasing reflection coefficient._
+![abstract scene](./showcase/abstract.png)
+_Abstract scene with a red specular sphere, a completely deffuse sphere and a
+deffuse triangle._
 
 ![different texture mappings](./showcase/texture_mappings.png)
 
-_Different methods to apply a tiled 2D texture to an object._
+_Different methods to apply a synthesized tiled 2D texture to an object._
 
 ### Building and Running on your OS
 
