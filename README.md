@@ -1,8 +1,10 @@
 __A simple ray tracer for embeded systems.__ Written in a week as an
 introduction to the rust programming language. The ray tracer uses Turner
-Whitted's formulation for recursion. Surfaces are represented using a modified
-version of the phong reflection model. Textures are procedurally generated on
-runtime.
+Whitted's formulation. Surfaces are represented using a modified version of the
+phong reflection model. Textures can be embeded or -- as the microcontroller
+has limited memory -- procedurally generated on runtime. Remixing of existing
+textures is supported through textures modifiers and combiners. Environment
+mapping is supported.
 
 [![Build Status](https://travis-ci.org/Rust-Mikrocontroller-Praktikum-2017/raytracer.svg?branch=master)](https://travis-ci.org/Rust-Mikrocontroller-Praktikum-2017/raytracer)
 
@@ -10,7 +12,7 @@ runtime.
 ---
 <p align=center><strong>Table of Contents</strong></p>
 
-1. [Features and Showcase](#showcase)
+1. [Showcase](#showcase)
 2. [Building and Running on your OS](#building-and-running-on-your-os)
 3. [Building for the Stm32f7 Microcontroller](#building-for-the-stm32f7-microcontroller)
 4. [Executing Unit Tests](#executing-unit-tests)
@@ -19,13 +21,13 @@ runtime.
 
 ---
 
-### Features and Showcase
+### Showcase
 
 Swipe left, right, up or down to rotate the camera around the scene. Use the button
 on the backside of the board to cycle through the available scenes.
 
 ![environment mapping](./showcase/envmap.png)
-_Shown above is a sphere suspended in a palace.__
+_Shown above is a specular sphere suspended mid-air in a palace._
 
 ![increasing reflectivity](./showcase/increasing_reflectivity.png)
 
@@ -41,7 +43,7 @@ Running the commands below, will build and run the ray tracer. The result will
 be written to a file called `render.png` in your current working directory.
 
 ```
-cd desktop && cargo run
+cd desktop && cargo run --release
 ```
 
 ### Building for the Stm32f7 Microcontroller
@@ -57,7 +59,9 @@ cd stm32f7 && xargo build --release
 
 ### Executing Unit Tests
 
-To execute unit tests run the following commands:
+To execute unit tests run the following commands. Unit test results can also
+be viewed on Travis CI by clicking the build badge shown at the beginning of
+this document.
 
 ```
 cd lib && cargo test
@@ -85,3 +89,8 @@ FileTexture {
     rgbdata: include_bytes!("../../textures/texture.rgb")
 },
 ```
+
+Some browsers like Chrome may require you to invoke the script through a webserver.
+You can boot a local http server using `phyton -m SimpleHTTPServer 8080` for python
+2 or `python -m http.server 8080` for python 3. Visit `localhost:8080/texconv.html`
+to run the script.
