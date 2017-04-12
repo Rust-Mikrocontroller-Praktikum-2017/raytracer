@@ -3,6 +3,18 @@ use vector::Vec3;
 use math::{max, min, modulo, rem};
 use colormapping::{ColorMapping, EarthTones, SpaceAndStars};
 
+pub struct Noise {}
+
+impl Texture for Noise {
+    fn get_texel(&self, u :f32, v: f32) -> Vec3 {
+        // texture repeats every 800*800 pixel
+        let noise = reproducable_randomness((u * 800.0) as u16, (v * 800.0) as u16, 1);
+        Vec3 {
+            x: noise, y: noise, z: noise
+        }
+    }
+}
+
 pub trait LatticeNoiseTexture : Texture {
     fn get_width(&self) -> u16;
     fn get_height(&self) -> u16;
