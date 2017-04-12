@@ -1,5 +1,5 @@
 use vector::Vec3;
-use colors::{OFF_WHITE, DEEP_BLUE, BLUE, CYAN, BROWN_ORANGE, GRASS_GREEN, WHITE, DARK_BLUE, BLACK};
+use colors::{DEEP_BLUE, BLUE, CYAN, BROWN_ORANGE, GRASS_GREEN, WHITE, DARK_BLUE, BLACK};
 
 pub trait ColorMapping {
     fn color_map(&self, val :f32) -> Vec3;

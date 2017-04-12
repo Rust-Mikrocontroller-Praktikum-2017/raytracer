@@ -24,6 +24,7 @@ use rtlib::math::{abs, HALFPI};
 use display::LcdDisplay;
 use rtlib::display::Display;
 use rtlib::textures::file::FileTexture;
+use rtlib::textures::color::NoTexture;
 
 #[no_mangle]
 pub unsafe extern "C" fn reset() -> ! {
@@ -122,7 +123,21 @@ fn main(hw: board::Hardware) -> ! {
     let button = gpio.to_input(button_pin, gpio::Resistor::NoPull)
         .expect("button pin already in use");
 
-    let film :Film = Film {
+    let film_0 :Film = Film {
+        x_resolution: 480,
+        y_resolution: 272,
+        supersampling: 1,
+        texture: &NoTexture { color: Vec3 { x: 0.0, y: 0.1, z: 0.2 } },
+        iso: 100,
+    };
+
+    let cam_0 = PerspectiveCamera::new(
+        Vec3::new(-200.0,0.0,10.0),
+        Vec3::new(0.0,0.0,0.0),
+        film_0
+    );
+
+    let film_1 :Film = Film {
         x_resolution: 480,
         y_resolution: 272,
         supersampling: 1,
@@ -134,15 +149,13 @@ fn main(hw: board::Hardware) -> ! {
         iso: 100,
     };
 
-    let mut cam = PerspectiveCamera::new(
+    let mut cam_1 = PerspectiveCamera::new(
         Vec3::new(-200.0,100.0,150.0),
         Vec3::new(0.0,0.0,20.0),
-        film
+        film_1
     );
 
-    cam.set_field_of_view(45);
-
-    let mut mut_cam = cam.clone();
+    cam_1.set_field_of_view(45);
 
     /*
      * let mut cam = OrthographicCamera::new(
@@ -153,10 +166,11 @@ fn main(hw: board::Hardware) -> ! {
      */
 
     let mut display = LcdDisplay::init(lcd);
+    let mut cams = [cam_1,cam_0.clone(),cam_0];
     let scenes = [pyramid::SCENE_PYRAMID, spheres::SCENE_SPHERE, space::SCENE_SPACE];
     let mut current_scene = 0;
 
-    render(&mut display, &cam, &scenes[current_scene]);
+    render(&mut display, &cams[current_scene], &scenes[current_scene]);
 
     let mut swipe = Vec2::zero();
     let mut last_touch_time = system_clock::ticks();
@@ -181,16 +195,16 @@ fn main(hw: board::Hardware) -> ! {
         if system_clock::ticks() - last_touch_time > 500 {
             if swipe.max_norm() > 10.0 {
                 if abs(swipe.u) > abs(swipe.v) {
-                    let x_res = mut_cam.film.x_resolution as f32;
+                    let x_res = cams[current_scene].film.x_resolution as f32;
                     let rad = swipe.u*1.25/x_res*HALFPI;
-                    mut_cam.rotate(Axis::Z, rad);
+                    cams[current_scene].rotate(Axis::Z, rad);
                 } else {
-                    let y_res = mut_cam.film.y_resolution as f32;
+                    let y_res = cams[current_scene].film.y_resolution as f32;
                     let rad = -swipe.v*1.25/y_res*HALFPI;
-                    mut_cam.rotate(Axis::Y, rad);
+                    cams[current_scene].rotate(Axis::Y, rad);
                 }
                 display.reset();
-                render(&mut display, &mut_cam, &scenes[current_scene]);
+                render(&mut display, &cams[current_scene], &scenes[current_scene]);
             }
             swipe = Vec2::zero();
             last_touch = Vec2::zero();
@@ -200,10 +214,9 @@ fn main(hw: board::Hardware) -> ! {
         let button_pressed = button.get();
         if button_pressed && !button_pressed_old {
             current_scene += 1;
-            current_scene = current_scene % scenes.len();
+            current_scene %= scenes.len();
             display.reset();
-            mut_cam = cam.clone();
-            render(&mut display, &mut_cam, &scenes[current_scene]);
+            render(&mut display, &cams[current_scene], &scenes[current_scene]);
         }
 
         button_pressed_old = button_pressed;
