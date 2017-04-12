@@ -1,7 +1,7 @@
 __A simple ray tracer for embeded systems.__ Written in a week as an
 introduction to the rust programming language. The ray tracer uses Turner
 Whitted's formulation. Surfaces are represented using a modified version of the
-phong reflection model. Textures can be embeded or -- as the microcontroller
+phong reflection model. Textures can be embedded or -- as the microcontroller
 has limited memory -- procedurally generated on runtime. Remixing of existing
 textures is supported through textures modifiers and combiners. Environment
 mapping and supersampling is also supported.
