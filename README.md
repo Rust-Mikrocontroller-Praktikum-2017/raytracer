@@ -24,7 +24,8 @@ runtime.
 Swipe left, right, up or down to rotate the camera around the scene. Use the button
 on the backside of the board to cycle through the available scenes.
 
-![increasing reflectivity](./showcase/envmap.png)
+![environment mapping](./showcase/envmap.png)
+_Shown above is a sphere suspended in a palace.__
 
 ![increasing reflectivity](./showcase/increasing_reflectivity.png)
 
