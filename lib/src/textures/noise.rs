@@ -79,7 +79,6 @@ pub struct LaticeNoise {
     pub width  :u16,
     pub height :u16,
     pub seed   :u16,
-    pub color  :Vec3
 }
 
 impl Texture for LaticeNoise {
@@ -88,7 +87,7 @@ impl Texture for LaticeNoise {
         //let vb = max(0.0, min(v, 1.0));
         let ub = modulo(u, 1.0);
         let vb = modulo(v, 1.0);
-        self.color_map(self.get_texel_channel(ub,vb)).mult_vec(&self.color)
+        self.color_map(self.get_texel_channel(ub,vb))
     }
 }
 
@@ -180,7 +179,6 @@ pub const EARTH_TEXTURE :Turbulence3 = Turbulence3 {
         width: 40,
         height: 40,
         seed: 422,
-        color: Vec3 { x: 1.0, y: 1.0, z: 1.0 }
     },
 
     octave_2_weight: 0.25,
@@ -188,7 +186,6 @@ pub const EARTH_TEXTURE :Turbulence3 = Turbulence3 {
         width: 80,
         height: 80,
         seed: 1290,
-        color: Vec3 { x: 1.0, y: 1.0, z: 1.0 }
     },
 
     color_mapping: &EarthTones {}
@@ -204,7 +201,6 @@ pub const NIGHT_SKY_TEXTURE :Turbulence3 = Turbulence3 {
         width: 200,
         height: 200,
         seed: 999,
-        color: Vec3 { x: 1.0, y: 1.0, z: 1.0 }
     },
 
     octave_2_weight: 1.0,
@@ -212,7 +208,6 @@ pub const NIGHT_SKY_TEXTURE :Turbulence3 = Turbulence3 {
         width: 400,
         height: 400,
         seed: 9999,
-        color: Vec3 { x: 1.0, y: 1.0, z: 1.0 }
     },
 
     color_mapping: &SpaceAndStars {}
@@ -222,5 +217,4 @@ pub const SAND_TEXTURE :LaticeNoise = LaticeNoise {
     width:  500,
     height: 500,
     seed: 100,
-    color: Vec3 { x: 1.0, y: 1.0, z: 0.0 }
 };
