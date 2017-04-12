@@ -77,6 +77,30 @@ impl<'a> Intersectable for Sphere<'a> {
     fn maximum_expansion(&self, _center: &Vec3) -> f32 {
         self.radius
     }
+
+    //fn has_surface_area(&self) -> bool {
+        //self.radius > 0.0
+    //}
+
+    // TODO: this should only sample the potentially visible hemisphere
+    // currently the whole sphere is sampled
+    //fn sample_area_light(&self) -> Vec3 {
+        //let random_1 = u32_to_f32(RANDOM.as_mut_ref().next_u32());
+        //let random_2 = u32_to_f32(RANDOM.as_mut_ref().next_u32());
+
+        //let theta = arccos(1-random_1);
+        //let phi = TWOPI * random_2;
+
+        //let postive_hemisphere = Vec3 {
+            //x: r * sin(theta) * cos(phi),
+            //y: r * sin(theta) * sin(phi),
+            //z: r * cos(theta)
+        //};
+    //}
+}
+
+fn u32_to_f32(a :u32) -> f32 {
+    (a as f32) / (u32::max_value() as f32)
 }
 
 #[cfg(test)]

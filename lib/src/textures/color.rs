@@ -21,7 +21,9 @@ impl TextureMapping for NoTexture {
 
 pub struct Tiles {
     pub num_tiles_u: u32,
-    pub num_tiles_v: u32
+    pub num_tiles_v: u32,
+    pub color_1: Vec3,
+    pub color_2: Vec3,
 }
 
 impl Texture for Tiles {
@@ -34,15 +36,15 @@ impl Texture for Tiles {
 
         if even_u  {
             if even_v {
-                RED
+                self.color_1
             } else {
-                WHITE
+                self.color_2
             }
         } else {
             if even_v {
-                WHITE
+                self.color_2
             } else {
-                RED
+                self.color_1
             }
         }
     }

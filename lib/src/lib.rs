@@ -1,6 +1,8 @@
 #![allow(dead_code)]
 #![feature(collections, alloc, core_intrinsics)]
 
+#![cfg_attr(test, feature(test))]
+
 #![no_std]
 
 extern crate collections;
