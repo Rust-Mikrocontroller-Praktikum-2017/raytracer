@@ -17,13 +17,13 @@ use rtlib::render::render;
 use rtlib::camera::Film;
 // use rtlib::cameras::orthographic::OrthographicCamera;
 use rtlib::cameras::perspective::PerspectiveCamera;
-use rtlib::scenes::{space,spheres};
+use rtlib::scenes::{space,spheres,pyramid};
 use rtlib::camera::Axis;
 use rtlib::camera::CameraOperations;
 use rtlib::math::{abs, HALFPI};
 use display::LcdDisplay;
 use rtlib::display::Display;
-use rtlib::textures::color::NoTexture;
+use rtlib::textures::file::FileTexture;
 
 #[no_mangle]
 pub unsafe extern "C" fn reset() -> ! {
@@ -126,15 +126,21 @@ fn main(hw: board::Hardware) -> ! {
         x_resolution: 480,
         y_resolution: 272,
         supersampling: 1,
-        texture: &NoTexture { color: Vec3::new(0.0,0.1,0.2) },
+        texture: &FileTexture{
+            width: 403,
+            height: 161,
+            rgbdata: include_bytes!("../../textures/sky.rgb")
+        },
         iso: 100,
     };
 
-    let cam = PerspectiveCamera::new(
-        Vec3::new(-200.0,-10.0,5.0),
-        Vec3::zero(),
+    let mut cam = PerspectiveCamera::new(
+        Vec3::new(-200.0,100.0,150.0),
+        Vec3::new(0.0,0.0,20.0),
         film
     );
+
+    cam.set_field_of_view(45);
 
     let mut mut_cam = cam.clone();
 
@@ -147,7 +153,7 @@ fn main(hw: board::Hardware) -> ! {
      */
 
     let mut display = LcdDisplay::init(lcd);
-    let scenes = [spheres::SCENE_SPHERE, space::SCENE_SPACE];
+    let scenes = [pyramid::SCENE_PYRAMID, spheres::SCENE_SPHERE, space::SCENE_SPACE];
     let mut current_scene = 0;
 
     render(&mut display, &cam, &scenes[current_scene]);

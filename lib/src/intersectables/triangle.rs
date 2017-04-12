@@ -21,7 +21,7 @@ pub struct Triangle<'a> {
 
 impl<'a> Triangle<'a> {
 
-    fn new(a :Vec3, b :Vec3, c :Vec3, material :ModifiedPhongModel) -> Triangle {
+    pub fn new(a :Vec3, b :Vec3, c :Vec3, material :ModifiedPhongModel) -> Triangle {
 
         let vec_ab :Vec3 = Vec3::fromto(&a,&b);
         let vec_ac :Vec3 = Vec3::fromto(&a,&c);

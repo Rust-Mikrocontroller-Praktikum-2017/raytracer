@@ -1,5 +1,5 @@
 #![allow(dead_code)]
-#![feature(test, collections, alloc, core_intrinsics)]
+#![feature(collections, alloc, core_intrinsics)]
 
 #![no_std]
 
@@ -70,7 +70,7 @@ fn supersample_bench(b: &mut Bencher, multisample: u32) {
 
         let mut display = NoDisplay {};
 
-        
+
         let mut cam = PerspectiveCamera::new(
             Vec3::new(-400.0,-10.0,500.0),
             Vec3::zero(),

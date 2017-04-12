@@ -67,7 +67,7 @@ const RANDOM :[f32;97]= [
     0.3344491680,0.8642747331,0.5247502835,0.9334799768,0.0000867655,
     0.2837620431,0.0422592508,0.3555656634,0.6729973376,0.5639365988,
     0.1498330680,0.3631261755,//0.3331190519,0.1122175372,0.7005139154,
-];
+    ];
 
 fn reproducable_randomness(u :u16,v :u16, seed :u16) -> f32 {
     // mod using prime numbers to reduce visible
@@ -78,7 +78,8 @@ fn reproducable_randomness(u :u16,v :u16, seed :u16) -> f32 {
 pub struct LaticeNoise {
     pub width  :u16,
     pub height :u16,
-    pub seed   :u16
+    pub seed   :u16,
+    pub color  :Vec3
 }
 
 impl Texture for LaticeNoise {
@@ -87,7 +88,7 @@ impl Texture for LaticeNoise {
         //let vb = max(0.0, min(v, 1.0));
         let ub = modulo(u, 1.0);
         let vb = modulo(v, 1.0);
-        self.color_map(self.get_texel_channel(ub,vb))
+        self.color_map(self.get_texel_channel(ub,vb)).mult_vec(&self.color)
     }
 }
 
@@ -109,7 +110,7 @@ pub struct Turbulence3<'a> {
     width: u16,
     height: u16,
     seed: u16,
-    
+
     octave_1 : LaticeNoise,
     octave_2 : LaticeNoise,
     octave_1_weight :f32,
@@ -158,7 +159,7 @@ impl<'a> LatticeNoiseTexture for Turbulence3<'a> {
 }
 
 //fn u32_to_f32(a :u32) -> f32 {
-    //(a as f32) / (u32::max_value() as f32)
+//(a as f32) / (u32::max_value() as f32)
 //}
 
 fn lerp(a :f32, b :f32, p :f32) -> f32 {
@@ -170,45 +171,56 @@ fn lerp(a :f32, b :f32, p :f32) -> f32 {
 //};
 
 pub const EARTH_TEXTURE :Turbulence3 = Turbulence3 {
-        width:  20,
-        height: 20,
-        seed: 1,
-        
-        octave_1_weight: 0.50,
-        octave_1 : LaticeNoise {
-            width: 40,
-            height: 40,
-            seed: 422,
-        },
+    width:  20,
+    height: 20,
+    seed: 1,
 
-        octave_2_weight: 0.25,
-        octave_2 : LaticeNoise {
-            width: 80,
-            height: 80,
-            seed: 1290,
-        },
+    octave_1_weight: 0.50,
+    octave_1 : LaticeNoise {
+        width: 40,
+        height: 40,
+        seed: 422,
+        color: Vec3 { x: 1.0, y: 1.0, z: 1.0 }
+    },
 
-        color_mapping: &EarthTones {}
+    octave_2_weight: 0.25,
+    octave_2 : LaticeNoise {
+        width: 80,
+        height: 80,
+        seed: 1290,
+        color: Vec3 { x: 1.0, y: 1.0, z: 1.0 }
+    },
+
+    color_mapping: &EarthTones {}
 };
 
 pub const NIGHT_SKY_TEXTURE :Turbulence3 = Turbulence3 {
-        width:  100,
-        height: 100,
-        seed: 1,
-        
-        octave_1_weight: 1.0,
-        octave_1 : LaticeNoise {
-            width: 200,
-            height: 200,
-            seed: 999,
-        },
+    width:  100,
+    height: 100,
+    seed: 1,
 
-        octave_2_weight: 1.0,
-        octave_2 : LaticeNoise {
-            width: 400,
-            height: 400,
-            seed: 9999,
-        },
+    octave_1_weight: 1.0,
+    octave_1 : LaticeNoise {
+        width: 200,
+        height: 200,
+        seed: 999,
+        color: Vec3 { x: 1.0, y: 1.0, z: 1.0 }
+    },
 
-        color_mapping: &SpaceAndStars {}
+    octave_2_weight: 1.0,
+    octave_2 : LaticeNoise {
+        width: 400,
+        height: 400,
+        seed: 9999,
+        color: Vec3 { x: 1.0, y: 1.0, z: 1.0 }
+    },
+
+    color_mapping: &SpaceAndStars {}
+};
+
+pub const SAND_TEXTURE :LaticeNoise = LaticeNoise {
+    width:  500,
+    height: 500,
+    seed: 100,
+    color: Vec3 { x: 1.0, y: 1.0, z: 0.0 }
 };

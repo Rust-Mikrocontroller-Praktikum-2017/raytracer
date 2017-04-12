@@ -1,5 +1,5 @@
 use texture::{Texture, TextureMapping};
-use math::{arccos, atan2, arctan, arcsin, TWOPI, PI};
+use math::{arccos, atan2, arctan, TWOPI, PI};
 use vector::Vec3;
 use intersection::Intersectable;
 
@@ -48,9 +48,9 @@ impl<'a> TextureMapping for MapXY<'a> {
         let objsize = isectable.maximum_expansion(&center) * 2.0;
         let offset = Vec3::fromto(&center, surface_pos);
         let mut s = offset.x / objsize;
-        let s = (1.0 + s) * 0.5;
+        s = (1.0 + s) * 0.5;
         let mut t = offset.y / objsize;
-        let t = (1.0 + t) * 0.5;
+        t = (1.0 + t) * 0.5;
         self.texture.get_texel(s, t)
     }
 }
@@ -65,9 +65,9 @@ impl<'a> TextureMapping for MapXZ<'a> {
         let objsize = isectable.maximum_expansion(&center) * 2.0;
         let offset = Vec3::fromto(&center, surface_pos);
         let mut s = offset.x / objsize;
-        let s = (1.0 + s) * 0.5;
+        s = (1.0 + s) * 0.5;
         let mut t = offset.z / objsize;
-        let t = (1.0 + t) * 0.5;
+        t = (1.0 + t) * 0.5;
         self.texture.get_texel(s, t)
     }
 }
@@ -82,9 +82,9 @@ impl<'a> TextureMapping for MapYZ<'a> {
         let objsize = isectable.maximum_expansion(&center) * 2.0;
         let offset = Vec3::fromto(&center, surface_pos);
         let mut s = offset.y / objsize;
-        let s = (1.0 + s) * 0.5;
+        s = (1.0 + s) * 0.5;
         let mut t = offset.z / objsize;
-        let t = (1.0 + t) * 0.5;
+        t = (1.0 + t) * 0.5;
         self.texture.get_texel(s, t)
     }
 }

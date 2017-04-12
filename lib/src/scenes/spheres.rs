@@ -1,13 +1,8 @@
 use scene::Scene;
 use intersectables::sphere::Sphere;
-use intersectables::triangle::Triangle;
 use vector::{Vec3, VEC3_ZERO};
 use reflectionmodel::ModifiedPhongModel;
-use textures::color::{Tiles, NoTexture};
-use textures::noise::{LaticeNoise, EARTH_TEXTURE};
-use texturemapping::sphere::{MapXY, MapXZ, MapYZ, Cylindrical, Spherical};
-use texture::MultTexture;
-// use textures::noise::EARTH_TEXTURE;
+use textures::color::{NoTexture};
 
 pub const SCENE_SPHERE: Scene = Scene {
     objects: &[
