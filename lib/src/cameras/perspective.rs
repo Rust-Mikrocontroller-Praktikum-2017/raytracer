@@ -4,6 +4,7 @@ use vector::{Vec3, VEC3_ZERO};
 use math::{PI,tan};
 use cameras::projective::{make_camera_coord, make_image_plane, make_uv};
 
+#[derive(Clone)]
 pub struct PerspectiveCamera<'a> {
     // camera position in world coordinates
     pub pos: Vec3,

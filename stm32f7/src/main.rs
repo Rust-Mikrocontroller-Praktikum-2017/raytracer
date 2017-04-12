@@ -15,14 +15,15 @@ mod display;
 use rtlib::vector::{Vec3, Vec2};
 use rtlib::render::render;
 use rtlib::camera::Film;
-use rtlib::cameras::orthographic::OrthographicCamera;
-// use rtlib::cameras::perspective::PerspectiveCamera;
-use rtlib::scenes::spheres::SCENE_SPHERE;
+// use rtlib::cameras::orthographic::OrthographicCamera;
+use rtlib::cameras::perspective::PerspectiveCamera;
+use rtlib::scenes::{space,spheres};
 use rtlib::camera::Axis;
 use rtlib::camera::CameraOperations;
 use rtlib::math::{abs, HALFPI};
 use display::LcdDisplay;
 use rtlib::display::Display;
+use rtlib::textures::color::NoTexture;
 
 #[no_mangle]
 pub unsafe extern "C" fn reset() -> ! {
@@ -73,7 +74,7 @@ fn main(hw: board::Hardware) -> ! {
                           i2c_3,
                           .. } = hw;
 
-    use embedded::interfaces::gpio::{Gpio};
+    use embedded::interfaces::gpio::{self, Gpio};
 
     let mut gpio = Gpio::new(gpio_a,
                              gpio_b,
@@ -117,35 +118,44 @@ fn main(hw: board::Hardware) -> ! {
 
     touch::check_family_id(&mut i2c_3).unwrap();
 
+    let button_pin = (gpio::Port::PortI, gpio::Pin::Pin11);
+    let button = gpio.to_input(button_pin, gpio::Resistor::NoPull)
+        .expect("button pin already in use");
+
     let film :Film = Film {
         x_resolution: 480,
         y_resolution: 272,
         supersampling: 1,
-        color: Vec3::new(0.0,0.4,0.8),
+        texture: &NoTexture { color: Vec3::new(0.0,0.1,0.2) },
         iso: 100,
     };
 
+    let cam = PerspectiveCamera::new(
+        Vec3::new(-200.0,-10.0,5.0),
+        Vec3::zero(),
+        film
+    );
+
+    let mut mut_cam = cam.clone();
+
     /*
-     * let mut cam = PerspectiveCamera::new(
-     *     Vec3::new(-200.0,-10.0,5.0),
+     * let mut cam = OrthographicCamera::new(
+     *     Vec3::new(-154.0,0.0,80.0),
      *     Vec3::zero(),
      *     film
      * );
      */
 
-    let mut cam = OrthographicCamera::new(
-        Vec3::new(-154.0,0.0,80.0),
-        Vec3::zero(),
-        film
-    );
-
     let mut display = LcdDisplay::init(lcd);
+    let scenes = [spheres::SCENE_SPHERE, space::SCENE_SPACE];
+    let mut current_scene = 0;
 
-    render(&mut display, &cam, &SCENE_SPHERE);
+    render(&mut display, &cam, &scenes[current_scene]);
 
     let mut swipe = Vec2::zero();
     let mut last_touch_time = system_clock::ticks();
     let mut last_touch = Vec2::zero();
+    let mut button_pressed_old = false;
     loop {
         if let Ok(mut touches) = touch::touches(&mut i2c_3) {
             if !touches.is_empty() {
@@ -165,21 +175,32 @@ fn main(hw: board::Hardware) -> ! {
         if system_clock::ticks() - last_touch_time > 500 {
             if swipe.max_norm() > 10.0 {
                 if abs(swipe.u) > abs(swipe.v) {
-                    let x_res = cam.film.x_resolution as f32;
+                    let x_res = mut_cam.film.x_resolution as f32;
                     let rad = swipe.u*1.25/x_res*HALFPI;
-                    cam.rotate(Axis::Z, rad);
+                    mut_cam.rotate(Axis::Z, rad);
                 } else {
-                    let y_res = cam.film.y_resolution as f32;
+                    let y_res = mut_cam.film.y_resolution as f32;
                     let rad = -swipe.v*1.25/y_res*HALFPI;
-                    cam.rotate(Axis::Y, rad);
+                    mut_cam.rotate(Axis::Y, rad);
                 }
                 display.reset();
-                render(&mut display, &cam, &SCENE_SPHERE);
+                render(&mut display, &mut_cam, &scenes[current_scene]);
             }
             swipe = Vec2::zero();
             last_touch = Vec2::zero();
             last_touch_time = system_clock::ticks();
         }
+
+        let button_pressed = button.get();
+        if button_pressed && !button_pressed_old {
+            current_scene += 1;
+            current_scene = current_scene % scenes.len();
+            display.reset();
+            mut_cam = cam.clone();
+            render(&mut display, &mut_cam, &scenes[current_scene]);
+        }
+
+        button_pressed_old = button_pressed;
     }
 }
 
