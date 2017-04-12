@@ -1,7 +1,7 @@
 use texture::Texture;
 use vector::Vec3;
 use math::{max, min, modulo, rem};
-use colormapping::{ColorMapping, EarthTones};
+use colormapping::{ColorMapping, EarthTones, SpaceAndStars};
 
 pub trait LatticeNoiseTexture : Texture {
     fn get_width(&self) -> u16;
@@ -69,15 +69,16 @@ const RANDOM :[f32;97]= [
     0.1498330680,0.3631261755,//0.3331190519,0.1122175372,0.7005139154,
 ];
 
-fn reproducable_randomness(u :u16,v :u16) -> f32 {
+fn reproducable_randomness(u :u16,v :u16, seed :u16) -> f32 {
     // mod using prime numbers to reduce visible
     // repetiton
-    RANDOM[rem((u as f32) + 277.0 * (v as f32), 97.0) as usize]
+    RANDOM[rem(seed as f32 * ((u as f32) + 277.0 * (v as f32)) + (seed as f32), 97.0) as usize]
 }
 
 pub struct LaticeNoise {
     pub width  :u16,
     pub height :u16,
+    pub seed   :u16
 }
 
 impl Texture for LaticeNoise {
@@ -100,13 +101,14 @@ impl LatticeNoiseTexture for LaticeNoise {
     }
 
     fn sample(&self, u :u16,v :u16) -> f32 {
-        reproducable_randomness(u,v)
+        reproducable_randomness(u,v, self.seed)
     }
 }
 
 pub struct Turbulence3<'a> {
     width: u16,
     height: u16,
+    seed: u16,
     
     octave_1 : LaticeNoise,
     octave_2 : LaticeNoise,
@@ -137,7 +139,7 @@ impl<'a> LatticeNoiseTexture for Turbulence3<'a> {
     }
 
     fn sample(&self, u :u16,v :u16) -> f32 {
-        reproducable_randomness(u,v)
+        reproducable_randomness(u,v, self.seed)
     }
 
     fn get_texel(&self, u :f32, v: f32) -> Vec3 {
@@ -168,20 +170,45 @@ fn lerp(a :f32, b :f32, p :f32) -> f32 {
 //};
 
 pub const EARTH_TEXTURE :Turbulence3 = Turbulence3 {
-        width:  100,
-        height: 100,
+        width:  20,
+        height: 20,
+        seed: 1,
         
         octave_1_weight: 0.50,
         octave_1 : LaticeNoise {
-            width: 200,
-            height: 200,
+            width: 40,
+            height: 40,
+            seed: 422,
         },
 
         octave_2_weight: 0.25,
         octave_2 : LaticeNoise {
-            width: 400,
-            height: 400,
+            width: 80,
+            height: 80,
+            seed: 1290,
         },
 
         color_mapping: &EarthTones {}
+};
+
+pub const NIGHT_SKY_TEXTURE :Turbulence3 = Turbulence3 {
+        width:  100,
+        height: 100,
+        seed: 1,
+        
+        octave_1_weight: 1.0,
+        octave_1 : LaticeNoise {
+            width: 200,
+            height: 200,
+            seed: 999,
+        },
+
+        octave_2_weight: 1.0,
+        octave_2 : LaticeNoise {
+            width: 400,
+            height: 400,
+            seed: 9999,
+        },
+
+        color_mapping: &SpaceAndStars {}
 };

@@ -15,6 +15,7 @@ runtime.
 3. [Building for the Stm32f7 Microcontroller](#building-for-the-stm32f7-microcontroller)
 4. [Executing Unit Tests](#executing-unit-tests)
 5. [Benchmarking](#benchmarking)
+6. [Converting and Uploading Textures](#converting-and-uploading-textures)
 
 ---
 
@@ -22,6 +23,8 @@ runtime.
 
 Swipe left, right, up or down to rotate the camera around the scene. Use the button
 on the backside of the board to cycle through the available scenes.
+
+![increasing reflectivity](./showcase/envmap.png)
 
 ![increasing reflectivity](./showcase/increasing_reflectivity.png)
 
@@ -67,4 +70,17 @@ on the microcontroller should take about 10 seconds.
 
 ```
 cd lib && cargo test
+```
+
+### Converting and Uploading Textures
+
+Move your texture to the `texconv` folder. Run `texconv.html` in your browser.
+A file called `texture.rgb` will be downloaded. The file can be included using:
+
+```rs
+FileTexture {
+    width: 1228, // set correct width here
+    height: 613, // set correct height here
+    rgbdata: include_bytes!("../../textures/texture.rgb")
+},
 ```
