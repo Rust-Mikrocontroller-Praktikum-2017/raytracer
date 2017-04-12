@@ -15,8 +15,8 @@ pub const SCENE_SPHERE: Scene = Scene {
             material: ModifiedPhongModel {
                 emission:     &NoTexture { color: VEC3_ZERO },
                 k_specular:   &NoTexture { color: VEC3_ZERO },
-                k_diffus:     &NoTexture { color: Vec3 { x: 0.50, y: 0.00, z: 0.00 } },
-                k_ambient:    &NoTexture { color: Vec3 { x: 0.50, y: 0.00, z: 0.00 } },
+                k_diffus:     &NoTexture { color: Vec3 { x: 0.70, y: 0.00, z: 0.05 } },
+                k_ambient:    &NoTexture { color: Vec3 { x: 0.20, y: 0.00, z: 0.20 } },
                 k_t:          &NoTexture { color: VEC3_ZERO },
 
                 phong_exponent: 1.0,
@@ -28,9 +28,9 @@ pub const SCENE_SPHERE: Scene = Scene {
             radius: 40.0,
             material: ModifiedPhongModel {
                 emission:     &NoTexture { color: VEC3_ZERO },
-                k_specular:   &NoTexture { color: Vec3 { x: 0.5, y: 0.5, z: 0.5 } },
-                k_diffus:     &NoTexture { color: Vec3 { x: 0.5, y: 0.0, z: 0.0 } },
-                k_ambient:    &NoTexture { color: Vec3 { x: 0.5, y: 0.0, z: 0.0 } },
+                k_specular:   &NoTexture { color: Vec3 { x: 0.7, y: 0.4, z: 0.4 } },
+                k_diffus:     &NoTexture { color: Vec3 { x: 0.4, y: 0.0, z: 0.0 } },
+                k_ambient:    &NoTexture { color: Vec3 { x: 0.1, y: 0.0, z: 0.0 } },
                 k_t:          &NoTexture { color: VEC3_ZERO },
 
                 phong_exponent: 4.0,
@@ -47,8 +47,8 @@ pub const SCENE_SPHERE: Scene = Scene {
             material: ModifiedPhongModel {
                 emission:     &NoTexture { color: VEC3_ZERO },
                 k_specular:   &NoTexture { color: VEC3_ZERO },
-                k_diffus:     &NoTexture { color: Vec3 { x: 0.0, y: 0.5, z: 0.0 } },
-                k_ambient:    &NoTexture { color: Vec3 { x: 0.0, y: 0.5, z: 0.0 } },
+                k_diffus:     &NoTexture { color: Vec3 { x: 0.0, y: 0.7, z: 0.7 } },
+                k_ambient:    &NoTexture { color: Vec3 { x: 0.0, y: 0.1, z: 0.1 } },
                 k_t:          &NoTexture { color: VEC3_ZERO },
 
                 phong_exponent: 4.0,
