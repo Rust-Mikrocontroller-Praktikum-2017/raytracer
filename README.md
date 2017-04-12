@@ -20,8 +20,8 @@ runtime.
 
 ### Features and Showcase
 
-Swipe left or right to rotate the camera around the scene. Swipe up or down to
-zoom in or out.
+Swipe left, right, up or down to rotate the camera around the scene. Use the button
+on the backside of the board to cycle through the available scenes.
 
 ![increasing reflectivity](./showcase/increasing_reflectivity.png)
 
@@ -42,7 +42,10 @@ cd desktop && cargo run
 
 ### Building for the Stm32f7 Microcontroller
 
-Run the commands below and [upload the program as described here](https://github.com/embed-rs/stm32f7-discovery/blob/master/README.md).
+Run the commands below and [upload the program as described
+here](https://github.com/embed-rs/stm32f7-discovery/blob/master/README.md).
+Compiling in release mode reduces the time taken for rendering tasks
+significantly.
 
 ```
 cd stm32f7 && xargo build --release
