@@ -1,6 +1,5 @@
 use vector::Vec3;
 use texture::{Texture, TextureMapping};
-use colors::{RED, WHITE};
 use intersection::Intersectable;
 
 pub struct NoTexture {
