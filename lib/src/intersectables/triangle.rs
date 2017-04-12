@@ -113,6 +113,25 @@ impl<'a> Intersectable for Triangle<'a> {
         let dist_c = self.c.sub(center).length();
         max(max(dist_a, dist_b), dist_c)
     }
+
+    //fn has_surface_area(&self) -> bool {
+        //// constructor disallows degenerate triangles
+        //true
+    //}
+
+    //fn sample_area_light(&self) -> Vec3 {
+        //// TODO: mirror instead of rejection sampling
+        //// TODO: improve this dirty code
+        //let random_1 :f32 = 1.0;
+        //let random_2 :f32 = 1.0;
+
+        //while random_1 + random_2 > 1.0 {
+            //random_1 = u32_to_f32(RANDOM.as_mut_ref().next_u32());
+            //random_2 = u32_to_f32(RANDOM.as_mut_ref().next_u32());
+        //}
+
+        //self.a.add(self.vec_ab.mult(random_1)).add(self.vec_ac(mult(random_2)))
+    //}
 }
 
 #[cfg(test)]
