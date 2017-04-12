@@ -54,7 +54,9 @@ pub fn render(display :&mut Display, cam :&Camera, scene :&Scene) {
 fn read_latlong_map(map :&Texture, ray: &Ray) -> Vec3 {
     let tetha = arccos(ray.direction.z);
     let phi = atan2(ray.direction.y, ray.direction.x);
-    map.get_texel(tetha/PI, phi/TWOPI)
+    let theta01 = (1.0 + tetha/PI) * 0.5;
+    let phi01 = (1.0 + phi/TWOPI) * 0.5;
+    map.get_texel(theta01, phi01)
 }
 
 fn raytrace(ray: &Ray, cam: &Camera, scene: &Scene, inside: bool, depth: u8) -> Vec3 {
