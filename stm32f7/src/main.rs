@@ -140,16 +140,14 @@ fn main(hw: board::Hardware) -> ! {
         x_resolution: 480,
         y_resolution: 272,
         supersampling: 1,
-        texture: &FileTexture{
-            width: 403,
-            height: 161,
-            rgbdata: include_bytes!("../../textures/sky.rgb")
+        texture: &NoTexture {
+            color: Vec3 { x: 0.1, y: 0.5, z: 0.8 }
         },
         iso: 100,
     };
 
     let mut cam_1 = PerspectiveCamera::new(
-        Vec3::new(-200.0,100.0,150.0),
+        Vec3::new(-250.0,103.0,150.0),
         Vec3::new(0.0,0.0,20.0),
         film_1
     );
