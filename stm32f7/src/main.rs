@@ -159,8 +159,8 @@ fn main(hw: board::Hardware) -> ! {
         y_resolution: 272,
         supersampling: 1,
         texture: &FileTexture{
-            width: 403,
-            height: 161,
+            width: 817,
+            height: 408,
             rgbdata: include_bytes!("../../textures/latlong_palace_small.rgb")
         },
         iso: 100,
