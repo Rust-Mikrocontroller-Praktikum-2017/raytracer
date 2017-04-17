@@ -23,6 +23,8 @@ mapping and supersampling is also supported.
 
 ### Showcase
 
+![Demo on controller](./showcase/embed.jpg)
+
 Swipe left, right, up or down to rotate the camera around the scene. Use the button
 on the backside of the board to cycle through the available scenes.
 
